@@ -46,6 +46,8 @@
 
 char *strsave(char *);
 struct termios orig_termios; /* Terminal IO Structure */
+char *loadPath;
+char prompt[32];
 
 void usage() {
     printf("\nUsage: ficl <options> where options are: \n\n");

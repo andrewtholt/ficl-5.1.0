@@ -1065,6 +1065,7 @@ struct ficlVm
     ficlWord      *runningWord;/* address of currently running word (often just *(ip-1) ) */
     ficlUnsigned   state;      /* compiling or interpreting        */
     ficlUnsigned   base;       /* number conversion base           */
+    ficlUnsigned   sealed;     /* ATH if 0 reset word list to default, else leave it alone */
     ficlStack     *dataStack;
     ficlStack     *returnStack;     /* return stack                     */
 #if FICL_WANT_FLOAT
@@ -1788,6 +1789,7 @@ typedef struct ficlFile
 {
     FILE *f;
     char filename[256];
+    int fd;
 } ficlFile;
 
 
