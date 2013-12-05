@@ -94,7 +94,11 @@ int main(int argc, char **argv) {
     */
     
     if( fileName != (char *)NULL ) {
-        sprintf(buffer, ".( loading %s ) cr load %s\n cr", fileName, fileName );
+        if( verbose == 0) {
+            sprintf(buffer, "load %s\n cr", fileName, fileName );
+        } else {
+            sprintf(buffer, ".( loading %s ) cr load %s\n cr", fileName, fileName );
+        }
         returnValue = ficlVmEvaluate(vm, buffer);
     }
 
