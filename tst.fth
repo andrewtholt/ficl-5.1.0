@@ -1,0 +1,2 @@
+
+: tst ." It works" cr ;
