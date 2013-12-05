@@ -1860,3 +1860,23 @@ FICL_PLATFORM_EXTERN int ficlLzUncompress(const unsigned char *compressed, unsig
 #endif
 
 #endif /* __FICL_H__ */
+
+#define OS_UNKNOWN 0
+#define OS_LINUX 1
+#define OS_DARWIN 2
+#define OS_FREEBSD 3
+#define OS_SOLARIS 4
+#define OS_UCLINUX 5
+#define OS_QNX 6
+
+#define CPU_UNKNOWN 0
+#define CPU_X86 1
+#define CPU_PPC 2
+#define CPU_8XX 3
+#define CPU_AMD64 4
+#define CPU_SPARC 5
+#define CPU_COLDFIRE 6
+#define CPU_ARM 7
+#define CPU_MIPS 8
+#define CPU_SH4A 9
+
