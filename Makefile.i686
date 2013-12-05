@@ -4,7 +4,7 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 TARGET= -Dlinux  # riscos MOTO_CPU32 
 SHFLAGS = -fPIC
-CFLAGS= $(SHFLAGS)
+CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
 CC = cc
 LIB = ar cr
@@ -53,4 +53,4 @@ unix.o: ficlplatform/unix.c $(HEADERS)
 #       generic cleanup code
 #
 clean:
-	rm -f *.o *.a libficl.* ficl
+	rm -f *.o *.a libficl.* ficl cscope.out
