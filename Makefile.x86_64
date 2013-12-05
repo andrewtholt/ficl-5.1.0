@@ -53,4 +53,4 @@ unix.o: ficlplatform/unix.c $(HEADERS)
 #       generic cleanup code
 #
 clean:
-	rm -f *.o *.a libficl.*
+	rm -f *.o *.a libficl.* cscope.out ficl
