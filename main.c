@@ -65,6 +65,8 @@ int main(int argc, char **argv) {
     int verbose=-1; // Default is to be talkative.
     char *fileName=(char *)NULL;
 
+    strcpy(prompt, FICL_PROMPT);
+
     i = tcgetattr( 0, &orig_termios); 
     while ((ch = getopt(argc,argv, "qh?df:sV")) != -1) {
         switch(ch) {
@@ -105,7 +107,8 @@ int main(int argc, char **argv) {
     }
 
     while (returnValue != FICL_VM_STATUS_USER_EXIT) {
-        fputs(FICL_PROMPT, stdout);
+//        fputs(FICL_PROMPT, stdout);
+        fputs(prompt, stdout);
         if (fgets(buffer, sizeof(buffer), stdin) == NULL) break;
         returnValue = ficlVmEvaluate(vm, buffer);
     }
