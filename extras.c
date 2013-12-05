@@ -2316,6 +2316,11 @@ static void athUname(ficlVm * vm) {
 }
 #endif
 
+extern int verbose;
+
+static void athVerboseQ(ficlVm *vm) {
+     ficlStackPushInteger(vm->dataStack, verbose);
+}
 /*
 #define OS_UNKNOWN 0
 #define OS_LINUX 1
@@ -3313,6 +3318,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 
     ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
+    
 
     /*
 #ifdef SERVENT

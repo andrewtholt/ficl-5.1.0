@@ -72,6 +72,8 @@ void usage() {
     
 }
 
+int verbose;
+
 int main(int argc, char **argv) {
     int returnValue = 0;
     char buffer[256];
@@ -80,11 +82,11 @@ int main(int argc, char **argv) {
 
     int i=0;
     int ch;
-    int verbose=-1; // Default is to be talkative.
     char *fileName=(char *)NULL;
     char *loadPath=(char *)NULL;
 
     strcpy(prompt, FICL_PROMPT);
+    verbose=-1; // Default is to be talkative.
 
     i = tcgetattr( 0, &orig_termios); 
     
