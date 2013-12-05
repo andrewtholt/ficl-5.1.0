@@ -82,10 +82,14 @@ int main(int argc, char **argv) {
     int ch;
     int verbose=-1; // Default is to be talkative.
     char *fileName=(char *)NULL;
+    char *loadPath=(char *)NULL;
 
     strcpy(prompt, FICL_PROMPT);
 
     i = tcgetattr( 0, &orig_termios); 
+    
+    loadPath = getenv("FICL_PATH");
+    
     while ((ch = getopt(argc,argv, "qh?df:sV")) != -1) {
         switch(ch) {
             case 'f':
