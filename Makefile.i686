@@ -29,7 +29,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
-main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
 	$(CC) main.o -o main -L. -lficl -lm
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
 
