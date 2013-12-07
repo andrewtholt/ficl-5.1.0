@@ -1,4 +1,9 @@
-
+Name: .features
+Stack: --
+Description:
+    Returns a list of the what features where enabled, and not enabled at 
+    compile time.
+    
 Name:	modbus-calc-crc
 Stack:	addr len -- crc-hi crc-lo
 Description:
