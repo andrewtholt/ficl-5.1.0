@@ -1,0 +1,622 @@
+
+Name:	modbus-calc-crc
+Stack:	addr len -- crc-hi crc-lo
+Description:
+	Calculate the CRC for a ModBus RTU.
+
+Name:	signal
+Stack:	signal --
+Description:
+	On reciept of the specified signal, run the default signal handler, 
+	which does nothing.  Errno indicates the reason for the interuption.
+	Signals that occur whilst the program is not blocked are ignored.
+
+Name:	alarm
+Stack:	seconds --
+Description:
+	Set an alarm to occur in the specified number of seconds.
+Note:
+	A signal handler for SIGALARM(14) needs to be in place or the program
+	will exit.  Of course this may be what you want,
+
+Name:	perror
+Stack:	--
+Description:
+	Print a descriptive error message for the current errno.
+
+Name:	clr-errno
+Stack:	--
+Description:
+	Set the errno to 0.  This prevents an old error being taken for a new
+	one.
+
+Name:	getenv
+Stack:	ptr addr len -- len
+Description:
+	Get the environment variable whose name is given by addr, len and place
+	the value at ptr, returning the length on the stack.
+
+Name:	errno
+Stack:	-- n
+Description:
+	Return the current value of errno.
+
+Name:	semtran
+Stack:	key -- semid
+Description:
+	Take the semaphore and return the identifier.  If the semaphore does not
+	already exists it is created with rw-rw-rw- permissions.
+Note:
+	See man semget.
+
+Name:	rmsem
+Stack:	sid -- f
+Description:
+	Delete the semaphore identified by sem, return false on success, and true
+	on failure.
+
+Name:	getsemvalue
+Stack:	sid -- n
+Description:
+	Return the current value of the semaphore sid.
+
+Name:	setsemvalue
+Stack:	n sid -- f
+Description:
+	Set the semaphore, sid, to the value n.  Return true on success, false on
+	failure.
+
+Name:	getsem
+Stack:	sid -- f
+Description:
+	Aquire the semaphore.  If nobody holds it then it is granted, otherwise
+	process blocks.  On an error return false, otherwise true.
+
+Name:	relsem
+Stack:	sid -- f
+Description:
+	Release the semaphore. On an error return false, and set errno,
+	otherwise true.
+
+Name:	shmget
+Stack:	key size flags -- shmid
+Description:
+	Get the shared memory id for the region having the given key, size and
+	flags.
+NOTE:
+	The flags are in octal, e.g. 1600 will create a segment, if it does not
+	already exist, that only processes owned by the user who created it can
+	read and write.  600 will fail, if the the segment does not exist.
+
+	See shmget(2).
+
+Name:	shmat
+Stack:	shmid -- ptr
+Description:
+	Attach the shared memory segment, shmid, to the processes address space
+	and return a pointer to it.
+
+Name:	shmdt
+Stack:	shmid -- f
+Description:
+	Dettach the shared memory segment, shmid, from the processes address space.
+	Returns false on success, true on failure.
+
+Name:	shmrm
+Stack:	shmid -- f
+Description:
+    Delete the shared memory segment from the system.
+	Returns false on success, true on failure.
+
+Name:	ms
+Stack:	n ---
+Description:
+	Pause for n milliseconds.
+
+Name:	create-vm
+Stack:	-- vm
+Description:
+	Create a new ficl virtual machine, and return an identifier.
+
+Name:	create-thread
+Stack:	addr len vm -- thread-id
+Description:
+	Run the ficl word given by addr, len in the context of the given ficl
+	virtual machine, and return it's thread id.
+
+Name:	delete-thread
+Stack:	thread-id --
+Description:
+	Delete the given thread.
+NOTE:
+	Not implemented.
+
+Name:	create-mutex
+Stack:	-- mutex-id
+Description:
+	Create a pthreads mutex and return its id.
+	See pthread_mutex_init(3).
+
+Name:	lock-mutex
+Stack:	mutex-id -- f
+Description:
+	The current thread will attempt to aquire the given mutex.  If the mutex
+	is currently held by another thread the current one will block.
+	Returns 0 on success, or an error number.
+
+Name:	trylock-mutex
+Stack:	mutex-id -- f
+Description:
+	The current thread will attempt to aquire the given mutex.  If the mutex
+	is currently held by another thread an error number is returned otherwise
+	returns 0.
+
+Name:	unlock-mutex
+Stack:	mutex-id -- f
+Description:
+	If the current thread holds the lock on mutex, then the unlock-mutex
+	function unlocks mutex-id.  Returns 0 on succes, or an error number.
+
+Name:	mkqueue
+Stack:	size -- qid
+Description:
+    Create a FIFO queue, for inter thread communications.
+
+Name:	qput
+Stack:	Q addr len -- qsize
+Description:
+    Place the memory block, on the queue, return current queue length.
+
+Name:	qget
+Stack:	Q addr -- 
+Description:
+    Take the message from the queue and copy it into the memory block.
+
+Name:	qempty?
+Stack:	Q -- flag
+Description:
+    Return true if the queue is empty.
+
+Name:	qfull?
+Stack:	Q -- flag
+Description:
+    Return true if the queue is full.
+
+Name:	size
+Stack:	Q -- len
+Description:
+    Return the current queue depth.
+
+Name:	socket
+Stack:	-- sock
+Description:
+	Return a new socket end point.
+
+Name:	socket-connect
+Stack:	hostname len port -- sock flag
+Description:
+	Connect to a socket.
+
+Name:	socket-bind
+Stack:	port socket -- flag
+Description:
+	Bind a port to a socket and return a new socket.  Returns zero on success,
+    ortherwis -1 and errno is set.
+
+
+Name:	socket-listen
+Stack:	sock --
+Description:
+	Listen on the socket for a connection request.
+
+Name:	socket-accept
+Stack:	sock -- sock1
+Description:
+	Accept a connection request, and return a new socket.
+
+Name:	socket-recv
+Stack:	addr len sock -- count
+Description:
+	Recieve data from sock and place in the buffer at addr, for a maximumm 
+	length of len.
+
+Name:	socket-send
+Stack:	addr len sock -- count
+Description:
+	Send len bytes of data to sock from the buffer at addr.
+
+Name:	socket-close
+Stack:	sock -- 
+Description:
+	Close the open socket, sock.
+
+Name:	os
+Stack:	--- n
+Description:
+    Returns an integer that indicates the operating system that is being run.
+
+    0 OS_UNKNOWN
+    1 OS_LINUX
+    2 OS_DARWIN
+    3 OS_FREEBSD
+    4 OS_SOLARIS
+    5 OS_UCLINUX
+
+Name:	cpu
+Stack:	--- n
+Description:
+    Returns an integer that indicates the operating system that is being run.
+
+    0 CPU_UNKNOWN
+    1 CPU_X86
+    2 CPU_PPC
+    3 CPU_8XX
+    4 CPU_AMD64
+    5 CPU_SPARC
+    6 CPU_COLDFIRE
+
+Name:	hostname
+Stack:	a n --- n
+Description:
+    Place the system hostname in the buffer a and return the length
+    of the string.
+
+Name:	uname 
+Stack:	---
+Description:
+    Display the data returned by the uname system call.  See uname(2).
+
+Name:	sp-connect
+Stack:	str len -- mbox TRUE | FALSE
+Description:
+    Connect to the spread server.  
+
+    The string is of the form user:spread-server, e.g:
+    s" andrew:4803@localhost"
+
+    A user name is a the clients unique, to this spread server, identifier 
+    an <spread> is the spread server. It can be a port number.
+
+    e.g. s" 4803"
+
+    or an explicit server name:
+
+    s" 4803@spread.sun.com"
+    s" 4803@192.168.12.3"
+
+    Returns a mailbox id, on success.
+
+
+Name:	sp-join
+Stack:	mbox addr n -- 
+Description:
+    Join the spread group whose name is given by addr n.
+
+Usage:
+    mbox s" simple_group"  sp-join
+
+Name:	sp-recv
+Stack:	mbox addr size --  len
+Description:
+    Recieve a message sent to the group this instance is a member.
+
+    The space at addr must be large enough to accomodate a message of
+    <size> bytes.
+    If no message is available will block.
+
+Name:	sp-send
+Stack:	mbox addr n grp len --
+Description:
+    Send the message at <addr> of length <len> to the group this instance is a
+    member of.
+
+Name:	sp-leave
+Stack:	mbox grp len -- fail_flag
+Description:
+    Leave the specified, subscribed to group, Using the previously opened
+    dynamic library identified by the handle lib (see dlopen)
+
+Name:	fd@
+Stack:	<file handle> -- <fd>
+Description:
+    Return the integer file descriptor associated with the ficl file handle.
+
+Name:	fcntl
+Stack:	<fd> <cmd> <arg> -- <status>
+Description:
+    Perform the requested operation on the open file given by file descriptor.
+    See fcntl(2)
+
+Name:	time
+Stack:	--- n
+Description:
+    Return Unix time, i.e. seconds since 1 Jan 1970
+
+Name:	date
+Stack:	n --- hh mm ss dd mon yyyy
+Description:
+    Take the number given by time and convert it into a date and time.
+
+Name:	.|
+Stack:	--
+Description:
+    Functions like ." ... " except the terminating char is |.
+
+    e.g.
+        .| "this is a test" |
+
+        Will print "this is a test" quotes and all.
+
+
+Name:	kill
+Stack:	signal pid -- f
+Description:
+    Send a signal to the process identified by pid.  Return 0 on success, -1 on failure.
+
+Name:	get-pid
+Stack:	--- pid
+Description:
+    Reurn my process id.
+
+Name:	sleep
+Stack:	sec ---
+Description:
+    Suspend execution fo the given number of seconds.
+
+Name:	dlopen
+Stack:	name len -- handle
+Description:
+    Open the dynamic library given by name and len, and return the handle.
+    Return 0 on failure.
+
+Name:	dlclose
+Stack:	handle -- flag
+Description:
+    Unload the the library whose handle is on the stack.  Returns 0 on failure.
+
+Name:	dlsym
+Stack:	name len handle -- ptr
+Description:
+    Return a pointer to the function given by name and len.
+    Returns 0 on failure.
+
+Name:	dlerror
+Stack:	--
+Description:
+    Prints an error message relating to the last dl error.
+
+Name:	servent REDUNDANT see popen
+Stack:	file len ---
+Description:
+    Executes a script whose name is given by file and len.  The scripts stdout
+    is interpreted as ficl commands.  Any errors will most likely crash ficl.
+
+Name:	gdbm-open
+Stack:	filename len flags max_key_length - ptr db 0|-1
+Description:
+    Open, or create a gdbm database.  Flags are the same as for file open, i.e
+    r/w and r/o.  On success ptr to a scratch area to hold a key, the db handle
+    and a false flag.  On failure true is returnd.
+
+Name:	gdbm-close
+Stack:	ptr db --
+Description:
+    Close a gdbm database.  ptr points to the key scratch area to be free'd
+
+Name:	gdbm-insert
+Stack:	keyPtr len value len db -- failureFlag
+Description:
+    Insert a new record.
+
+Name:	openqueue
+Stack:	id -- qid error-flag
+Description:
+    Open (creat if required) a SYSV message queue.
+
+Name:	msg-send
+Stack:	ptr len qid -- error-flag
+Description:
+    Send the message at address ptr, of length len to the queue identified by qid, returns true on error.
+
+Name:	msg-recv
+Stack:	ptr qid flags -- ptr len error-flag
+Description:
+    Take a message from the queue identified by qid and place it at the address given by ptr, returning the length, len.
+NOTES:
+    The value, IPC_NOWAIT is defined in lib.fth.
+    if called like this:
+        ptr qid 0 msg-recv
+
+    The caller will block until a message is available.
+
+    If like this:
+
+        load lib.fth
+        ptr qid IPC_NOWAIT msg-recv
+
+    Then msg-recv will return either with an error, or with a message.
+
+
+Name:	popen
+Stack:	cmd len --- stderr stdout stdin pid
+Description:
+    Start a process and open channels for stdin, stdout stderr.
+
+Name:	pclose
+Stack:	stdin stdout stderr pid --
+Description:
+    Close the channels and release any memory allocations created by popen.
+
+Name:	set-prompt 
+Stack:	c-addr n flag ---
+Description: 
+    Set the interactive prompt to the string specifiied, up to a maximum of 32 characters.  If the flag is true an end of line charcter is appended.
+
+Name:	reset-prompt
+Stack:	--
+Description:
+    Set the prompt back to the default, currently "ok> "
+
+Name:	modbus-new
+Stack:	tty len -- true| ctx false
+Description:
+    Create a new ModBus context for the serial port tty, return true on failure,
+    or false and a pointer on success.
+Bugs:
+    Serial port is always 9600, no parity, 8 data bits and 2 stop bits.
+
+Name:	modbus-new-net
+Stack:	ip-addr len port -- true| ctx false
+Description:
+    Connect to the ModBus/TCP server at the given address. 
+    Return true on failure, or false and a pointer on success.
+
+Name:	modbus-connect
+Stack:	ctx --
+Description:
+    Connect to the given ModBus context.
+Bugs:
+    1. Failure is not indicated, except by a message
+    2. It destroys the context on failure.
+
+Name:	modbus-set-slave
+Stack:	RTU-id ---
+Description:
+    Set ModBus RTU id.  Beahviour is different if the target is a RTU or TCP 
+    node, from the libmodbus docs:
+	
+	*RTU*::
+	Define the slave ID of the remote device to talk in master mode or set the
+	internal slave ID in slave mode. According to the protocol, a Modbus 
+    device must only accept message holding its slave number or the special 
+    broadcast number.
+	
+	*TCP*::
+	The slave number is only required in TCP if the message must reach a device
+	on a serial network. 
+    The special value 'MODBUS_TCP_SLAVE' (0xFF) can be used in TCP mode to 
+    restore the default value.
+
+Name:	modbus-read-input-bits
+Stack:	ctx address count buffer -- true| count false
+Description:
+    Using ModBus function 0x02 (Read input status) read 'coun' bits from
+    ModBus bit address 'address' into the holding area pointed to by
+    'buffer'
+
+Name:	modbus-read-registers 
+Stack:	ctx address count buffer -- true| count false
+Description:
+    Using ModBus function 0x03 (Read holding registers) read 'count' 16 bit
+    registers from ModBus register address 'address' into the holding area 
+    pointed to by 'buffer'
+
+Name:	modbus-read-input-registers
+Stack:	ctx address count buffer -- true| count false
+Description:
+    Using ModBus function 0x04 (Read input registers) read 'count' 16 bit
+    registers from ModBus register address 'address' into the holding area 
+    pointed to by 'buffer'
+
+Name:	modbus-write-coil
+Stack:	ctx address state -- true|false
+Description:
+    Using ModBus function 0x05 (Write single coil) set the coil given by
+    'address' to the state (0 indicates logical zero, -1 logical 1).
+    Returns true on failure.
+
+Name:	modbus-write-register
+Stack:	ctx address data -- true|false
+Description:
+    Using ModBus function 0x06 (Write single register) set the rgister at
+    'address' to the value 'data'.
+    Returns true on failure.
+
+Name:	modbus-close
+Stack:	ctx --
+Description:
+    Close the connection and release allocated resources.
+
+
+Name:	modbus-debug
+Stack:	flag --
+Description:
+    Enable or disable verbose debugging messages.
+
+Name:	modbus-error-recovery
+Stack:	flag
+Description:
+    Enable or disable ModBus error recovery.
+
+Name:	modbus-perror
+Stack:	--
+Description:
+    In the event of a midbus error calling this will display a brief 
+    description of the last error.
+
+Name:	redis-connect
+Stack:	addr len port time -- connect flag
+Description:
+    Connect to redis on the addres give by the string <addr len> on the given
+    port, and time out after <time> seconds.
+
+Name:	redis-ping
+Stack:	connect -- flag
+Description:
+    Return a, true on failure, flag for an attempt to contact redis.
+
+Name:	redis-cmd
+Stack:	connect addr len -- reply flag
+Description:
+    On success return the address of a redis reply structure and a false flag.
+    On success return true flag.
+
+Name:	redis-get-string
+Stack:	reply -- addr len
+Description:
+    Return a string from a redis reply structure.
+
+Name:	redis-get-type
+Stack:	reply -- int
+Description:
+    Return the type integer from a redis reply structure.
+
+Name:	redis-free-reply
+Stack:	reply --
+Description:
+    Free the memory allocated to a redis reply.
+
+Name:	redis-get-elements
+Stack:	reply -- len
+Description:
+    Return the length of the array in reply.
+
+Name:	redis-get-element
+Stack:	redis n -- addr len
+Description:
+    Return the nth element of the array.
+
+Name:	.redis-reply
+Stack:	reply ---
+Description:
+    Display each of the fields in the redis reply structure.
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
