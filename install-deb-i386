@@ -24,7 +24,7 @@ HERE=`pwd`
 DEST="./debian-i386/usr/local/bin"
 LIBS="./debian-i386/usr/local/lib"
 
-exit 0
+
 if [ ! -d ${DEST} ]; then
     mkdir -p ${DEST}
 fi
@@ -53,6 +53,6 @@ dpkg -b ./debian-i386 .
 
 # cd $ROOT
 # dpkg-scanpackages dists/main/test/binary-arm | gzip -c9 > ${ROOT}/dists/main/test/binary-arm/Packages.gz
-cd /net/imickey/Volumes/Share/debs
-dpkg-scanpackages i386 | gzip -c9 > i386/Packages.gz 
+# cd /net/imickey/Volumes/Share/debs
+# dpkg-scanpackages i386 | gzip -c9 > i386/Packages.gz 
 
