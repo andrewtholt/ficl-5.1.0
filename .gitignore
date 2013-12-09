@@ -19,3 +19,6 @@
 ficl
 main
 softcore/makesoftcore
+# Packages
+*.deb
+
