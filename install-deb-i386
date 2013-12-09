@@ -1,0 +1,58 @@
+#!/bin/sh
+
+set -x
+
+LEN=`getconf LONG_BIT`
+
+if [ $LEN -ne 32 ]; then
+    echo "Attempting to build on wrong platform."
+    exit -1
+fi
+
+
+echo "Build debian package"
+echo "First make everything."
+
+./build.sh
+# ./build.sh shared
+
+# make -f Makefile_min.linux
+# make -f Makefile_min.linux shared
+
+HERE=`pwd`
+
+DEST="./debian-i386/usr/local/bin"
+LIBS="./debian-i386/usr/local/lib"
+
+exit 0
+if [ ! -d ${DEST} ]; then
+    mkdir -p ${DEST}
+fi
+
+if [ ! -d ${LIBS} ]; then
+    mkdir -p ${LIBS}
+fi
+
+cp libficl.so.4.0.31 $LIBS
+cd $LIBS
+
+if [ ! -L libficl.so ]; then
+    ln -s libficl.so.4.0.31 libficl.so
+fi
+
+if [ ! -L libficl.so.4 ]; then
+    ln -s libficl.so.4.0.31 libficl.so.4
+fi
+cd $HERE
+
+strip ./ficl
+cp ./ficl ${DEST}
+
+# dpkg -b ./debian-x86 ${ROOT}/dists/main/test/binary-x86
+dpkg -b ./debian-i386 .
+
+# cd $ROOT
+# dpkg-scanpackages dists/main/test/binary-arm | gzip -c9 > ${ROOT}/dists/main/test/binary-arm/Packages.gz
+cd /net/imickey/Volumes/Share/debs
+dpkg-scanpackages i386 | gzip -c9 > i386/Packages.gz 
+
