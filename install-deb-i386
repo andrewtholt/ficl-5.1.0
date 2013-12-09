@@ -33,15 +33,19 @@ if [ ! -d ${LIBS} ]; then
     mkdir -p ${LIBS}
 fi
 
-cp libficl.so.4.0.31 $LIBS
-cd $LIBS
+if [ ! -f libficl.so.4.1.0 ]; then
+    echo "No shared object."
+else
+    cp libficl.so.4.1.0 $LIBS
+    cd $LIBS
 
-if [ ! -L libficl.so ]; then
-    ln -s libficl.so.4.0.31 libficl.so
-fi
+    if [ ! -L libficl.so ]; then
+        ln -s libficl.so.4.1.0 libficl.so
+    fi
 
-if [ ! -L libficl.so.4 ]; then
-    ln -s libficl.so.4.0.31 libficl.so.4
+    if [ ! -L libficl.so.4 ]; then
+        ln -s libficl.so.4.1.0 libficl.so.4
+    fi
 fi
 cd $HERE
 
