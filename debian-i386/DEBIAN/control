@@ -3,6 +3,6 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: i386
-Version: 5.1.0
+Version: 5.2.0
 Description: ficl
  ficl
