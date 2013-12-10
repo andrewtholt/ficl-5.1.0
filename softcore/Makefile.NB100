@@ -1,0 +1,12 @@
+CC=m68k-uclinux-gcc
+SOURCES = softcore.fr ifbrack.fr prefix.fr ficl.fr jhlocal.fr marker.fr oo.fr classes.fr string.fr ficllocal.fr fileaccess.fr
+
+../softcore.c: makesoftcore $(SOURCES)
+	./makesoftcore $(SOURCES)
+
+makesoftcore: makesoftcore.c ../lzcompress.c ../bit.c
+	$(CC)  -o makesoftcore makesoftcore.c ../lzcompress.c ../bit.c
+
+clean: 
+	- rm -f ../softcore.c *.o makesoftcore
+

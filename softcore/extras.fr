@@ -1,0 +1,62 @@
+\ 
+\ : linux? ( --- T|F )
+\     os 1 =
+\ ;
+\ 
+\ : macos? ( --- T|F )
+\     os 2 = 
+\ ;
+\ 
+\ : freebsd? ( --- T|F )
+\     os 3 = 
+\ ;
+\ 
+\ : solaris? ( --- T|F )
+\     os 4 = 
+\ ;
+\ 
+\ : uclinux? ( --- T|F )
+\     os 5 = 
+\ ;
+\ 
+\ : qnx? ( --- T|F )
+\     os 6 = 
+\ ;
+
+: i486? ( --- T|F )
+    cpu 1 =
+;
+
+: powerpc? ( --- T|F )
+    cpu 2 =
+;
+
+: 8xx? ( --- T|F )
+    cpu 3 =
+;
+
+: amd64? ( --- T|F )
+    cpu 4 =
+;
+
+: sparc? ( --- T|F )
+    cpu 5 =
+;
+
+: coldfire? ( --- T|F )
+    cpu 6 =
+;
+
+: arm? ( --- T|F )
+    cpu 7 =
+;
+
+: mips? ( --- T|F )
+    cpu 8 =
+;
+
+: sh4? ( --- T|F )
+    cpu 9 =
+;
+
+
