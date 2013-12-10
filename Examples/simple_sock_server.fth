@@ -6,6 +6,10 @@
 -1 value run-flag
 
 : main
+    s" socket" environment? 0= abort" No socket env"
+    0= abort" Socket support not available."
+
+
     255 allocate abort" Buffer" to buffer
     buffer 255 erase
 
