@@ -1,4 +1,4 @@
-include lib.fth
+\ include lib.fth
 
 .( tst.fth ) cr
 
