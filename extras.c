@@ -426,6 +426,12 @@ static void athFeatures(ficlVm *vm) {
     printf("NOT FICL_WANT_MINIMAL\n");
 #endif
 
+#ifdef SERIAL
+    printf ("    SERIAL\n");
+#else
+    printf ("NOT SERIAL\n");
+#endif
+
 #ifdef REDIS
     printf ("    REDIS\n");
 #else
