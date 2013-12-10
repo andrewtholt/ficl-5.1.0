@@ -21,7 +21,7 @@
 
     buffer 255 sock2 socket-recv 
 
-    .s
+    buffer swap dump
 ;
 
 main
