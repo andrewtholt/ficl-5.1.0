@@ -7,7 +7,7 @@ ARCH=`uname -m`
 MAKEFILE=Makefile.${ARCH}
 
 if [ -f $MAKEFILE ]; then
-	make -f $MAKEFILE $1
+	make -f $MAKEFILE $*
 else
 	echo "$MAKEFILE does not exist."
 fi
