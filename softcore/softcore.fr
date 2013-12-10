@@ -3,7 +3,7 @@
 \ ** John Sadler (john_sadler@alum.mit.edu)
 \ ** September, 1998
 
-
+\ 
 \ ** ficl extras
 \ EMPTY cleans the parameter stack
 : empty   ( xn..x1 -- ) depth 0 ?do drop loop ;
@@ -43,7 +43,7 @@ decimal 32 constant bl
 
 
 \ ** CORE EXT
-.( loading CORE EXT words ) cr
+\ .( loading CORE EXT words ) cr
 0  constant false 
 false invert constant true 
 : <>   = 0= ; 
@@ -62,15 +62,46 @@ variable span
 
 \ ** TOOLS word set...
 : ?     ( addr -- )  @ . ;
-: dump  ( addr u -- )
-    0 ?do
-        dup c@ . 1+
-        i 7 and 7 = if cr endif
-    loop drop
+
+\ : dump  ( addr u -- )
+\     0 ?do
+\         dup c@ . 1+
+\         i 7 and 7 = if cr endif
+\     loop drop
+\ ;
+
+: range ( addr cnt -- addr addr+cnt )
+    over +
+;
+
+: mdump-ascii-line ( addr -- )
+    08 range swap do
+        bl 128 i c@ within if i c@ emit else ." ." then
+    loop
+;
+
+
+: mdump-hex-line ( addr -- )
+    base @ >r
+    hex
+    dup s>d <# # # # # # # # # #> type
+    ." :"
+    08 range swap do
+        i c@ s>d <# # # #> type space
+    loop
+    r> base !
+;
+
+: dump ( addr u -- )
+    over + swap do
+        i mdump-hex-line ." :"
+        i mdump-ascii-line cr
+    08 +loop
 ;
 
 \ ** SEARCH+EXT words and ficl helpers
-.( loading SEARCH & SEARCH-EXT words ) cr 
+\ .( loading SEARCH & SEARCH-EXT words ) cr 
+\
 \ BRAND-WORDLIST is a helper for ficl-named-wordlist. Usage idiom:
 \   wordlist dup create , brand-wordlist
 \ gets the name of the word made by create and applies it to the wordlist...

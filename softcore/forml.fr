@@ -1,6 +1,7 @@
 \ examples from FORML conference paper Nov 98
 \ sadler
-.( loading FORML examples ) cr
+\ .( loading FORML examples ) cr
+
 object --> sub c-example
              cell: .cell0
     c-4byte   obj: .nCells

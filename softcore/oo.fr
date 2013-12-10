@@ -3,7 +3,8 @@ S" FICL_WANT_OOP" ENVIRONMENT? drop [if]
 \ ** F I C L   O - O   E X T E N S I O N S
 \ ** john sadler aug 1998
 
-.( loading ficl O-O extensions ) cr
+\ .( loading ficl O-O extensions ) cr
+\
 17 ficl-vocabulary oop
 also oop definitions
 

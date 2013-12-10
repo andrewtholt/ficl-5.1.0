@@ -4,7 +4,7 @@ S" FICL_WANT_OOP" ENVIRONMENT? drop [if]
 \ john sadler  1 sep 98
 \ Needs oop.fr
 
-.( loading ficl utility classes ) cr
+\ .( loading ficl utility classes ) cr
 also oop definitions
 
 \ REF subclass holds a pointer to an object. It's

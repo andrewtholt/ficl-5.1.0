@@ -12,7 +12,8 @@ S" FICL_WANT_OOP" ENVIRONMENT? drop [if]
 \   str --> type  cr
 \
 
-.( loading ficl string class ) cr
+\ .( loading ficl string class ) cr
+\
 also oop definitions
 
 object subclass c-string

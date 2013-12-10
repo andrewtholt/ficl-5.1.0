@@ -6,18 +6,13 @@
 **
 ** Contributed by Larry Hastings, larry@hastings.org
 **/
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include "ficl.h"
+#include "../ficl.h"
 
 
-#ifndef SOFTCORE_OUT
-#define SOFTCORE_OUT "../softcore.c"
-#endif
- 
 void fprintDataAsHex(FILE *f, char *data, int length)
 	{
 	int i;
@@ -39,7 +34,7 @@ void fprintDataAsHex(FILE *f, char *data, int length)
 void fprintDataAsQuotedString(FILE *f, char *data)
 	{
 	int i;
-	int lineIsBlank = 1; /* true */
+	int lineIsBlank = FICL_TRUE;
 
 	while (*data)
 		{
@@ -47,7 +42,7 @@ void fprintDataAsQuotedString(FILE *f, char *data)
 			{
 			if (!lineIsBlank)
 				fprintf(f, "\\n\"\n");
-			lineIsBlank = 1; /* true */
+			lineIsBlank = FICL_TRUE;
 			}
 		else
 			{
@@ -55,7 +50,7 @@ void fprintDataAsQuotedString(FILE *f, char *data)
 				{
 				fputc('\t', f);
 				fputc('"', f);
-				lineIsBlank = 0; /* false */
+				lineIsBlank = FICL_FALSE;
 				}
 
 			if (*data == '"')
@@ -74,11 +69,11 @@ void fprintDataAsQuotedString(FILE *f, char *data)
 int main(int argc, char *argv[])
 	{
 	char *uncompressed = (char *)malloc(128 * 1024);
-	unsigned char *compressed;
+	char *compressed;
 	char *trace = uncompressed;
 	int i;
-	size_t compressedSize;
-	size_t uncompressedSize;
+	int compressedSize;
+	int uncompressedSize;
 	char *src, *dst;
 	FILE *f;
 	time_t currentTimeT;
@@ -171,10 +166,10 @@ int main(int argc, char *argv[])
 	}
 	*dst = 0;
 
-	f = fopen(SOFTCORE_OUT, "wt");
+	f = fopen("../softcore.c", "wt");
 	if (f == NULL)
 		{
-		printf("couldn't open " SOFTCORE_OUT " for writing!  giving up.\n");
+		printf("couldn't open ../softcore.c for writing!  giving up.\n");
 		exit(-1);
 		}
 

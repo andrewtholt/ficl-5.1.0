@@ -13,7 +13,7 @@ S" FICL_WANT_LOCALS" ENVIRONMENT? drop [if]
 \           4 = end of line
 \
 \ revised 2 June 2000 - { | a -- } now works correctly
-.( loading Johns-Hopkins locals ) cr
+\ .( loading Johns-Hopkins locals ) cr
 hide
 
 \ What does this do?  It's equivalent to "postpone 0", but faster.
