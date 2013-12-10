@@ -3377,6 +3377,31 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetConstant(environment, "max-char",          UCHAR_MAX);
     ficlDictionarySetConstant(environment, "max-n",             0x7fffffff);
     ficlDictionarySetConstant(environment, "max-u",             0xffffffff);
+
+#ifdef REDIS
+    ficlDictionarySetConstant(environment, "redis",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "redis",              FICL_FALSE);
+#endif
+
+#ifdef SOCKET
+    ficlDictionarySetConstant(environment, "socket",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "socket",              FICL_FALSE);
+#endif
+
+#ifdef MODBUS
+    ficlDictionarySetConstant(environment, "modbus",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "modbus",              FICL_FALSE);
+#endif
+
+#ifdef SPREAD
+    ficlDictionarySetConstant(environment, "spread",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "spread",              FICL_FALSE);
+#endif
+
 	{
 	ficl2Unsigned combined;
 	FICL_2UNSIGNED_SET(INT_MAX, UINT_MAX, combined);
