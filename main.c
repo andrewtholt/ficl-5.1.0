@@ -72,7 +72,7 @@ void usage() {
     
 }
 
-int verbose;
+extern int verbose;
 
 int main(int argc, char **argv) {
     int returnValue = 0;

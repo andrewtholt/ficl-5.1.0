@@ -2322,7 +2322,7 @@ static void athUname(ficlVm * vm) {
 }
 #endif
 
-extern int verbose;
+int verbose;
 
 static void athVerboseQ(ficlVm *vm) {
      ficlStackPushInteger(vm->dataStack, verbose);
