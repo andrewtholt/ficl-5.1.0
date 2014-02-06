@@ -27,9 +27,10 @@ void ficlBitSet(unsigned char *bits, size_t index, int value)
 void ficlBitGetString(unsigned char *destination, const unsigned char *source, int offset, int count, int destAlignment)
 	{
 	int bit = destAlignment - count;
-	while (count--)
+	while (count--) {
 		ficlBitSet(destination, bit++, ficlBitGet(source, offset++));
 	}
+}
 
 
 /*
