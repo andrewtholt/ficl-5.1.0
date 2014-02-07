@@ -4,16 +4,22 @@
 -1 value shm-size
 -1 value my-id
 
-1024 to shm-size
+: main
+    s" socket" environment? 0= abort" No sysv ipc env"
 
-999 shm-size 896 shmget to shmid
+    1024 to shm-size
 
-shmid shmat to ptr
+    999 shm-size 896 shmget to shmid
 
-shmid . cr
+    shmid shmat to ptr
 
-ptr 128 dump
+    shmid . cr
 
-shmid shmdt abort" Failed to release memory."
-shmid shmrm abort" Failed to delete memeory."
+    ptr 128 dump
+
+    shmid shmdt abort" Failed to release memory."
+    shmid shmrm abort" Failed to delete memeory."
+;
+
+main
 
