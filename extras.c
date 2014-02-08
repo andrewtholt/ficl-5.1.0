@@ -946,9 +946,7 @@ static void athStrsave(ficlVm * vm) {
 }
 
 #ifdef DYNLIB
-    static void
-athDlOpen(ficlVm * vm)
-{
+static void athDlOpen(ficlVm * vm) {
     int libLen;
     char *lib;
     void *res;
@@ -957,13 +955,17 @@ athDlOpen(ficlVm * vm)
     lib = ficlStackPopPointer(vm->dataStack);
 
     res=(void *)dlopen(lib,RTLD_LAZY );
+
     ficlStackPushPointer( vm->dataStack,res);
 
+    if( res == (void *)NULL ) {
+        ficlStackPushInteger(vm->dataStack,-1);
+    } else {
+        ficlStackPushInteger(vm->dataStack,0);
+    }
 }
 
-    static void
-athDlClose(ficlVm * vm)
-{
+static void athDlClose(ficlVm * vm) {
     int res;
     void *h;
 
@@ -974,20 +976,31 @@ athDlClose(ficlVm * vm)
 /*
    name len handle -- symbol_ptr
  */
-    static void
-athDlSym(ficlVm * vm)
-{
+static void athDlSym(ficlVm * vm) {
     void *sym, *h;
     char *symbol;
+    char *error;
+    char flag=0;
+
     int symbolLen = 0;
 
     h = ficlStackPopPointer( vm->dataStack);
     symbolLen = ficlStackPopInteger( vm->dataStack);
     symbol = ficlStackPopPointer(vm->dataStack);
 
+    error = dlerror();
     symbol = dlsym(h,symbol);
+    error = dlerror();
+
+    if( error != (char *)NULL ) {
+        fprintf(stderr,"%s\n",error);
+        flag=-1;
+    } else {
+        flag=0;
+    }
 
     ficlStackPushPointer( vm->dataStack,symbol);
+    ficlStackPushInteger( vm->dataStack,flag);
 
 }
 
