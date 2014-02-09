@@ -3408,6 +3408,12 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetConstant(environment, "spread",              FICL_FALSE);
 #endif
 
+#ifdef DYNLIB
+    ficlDictionarySetConstant(environment, "dynlib",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "dynlib",              FICL_FALSE);
+#endif
+
 	{
 	ficl2Unsigned combined;
 	FICL_2UNSIGNED_SET(INT_MAX, UINT_MAX, combined);
