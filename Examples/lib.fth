@@ -202,4 +202,12 @@ create
     depth 0 do drop loop 
 ;
 
+: 32-bit? ( -- flag )
+\ *G Return tru if 32 bit
+    1 cells 8 * 32 =
+;
 
+: 64-bit? ( -- flag )
+\ *G Return tru if 32 bit
+    1 cells 8 * 64 =
+;
