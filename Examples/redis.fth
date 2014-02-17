@@ -87,6 +87,11 @@
 ;
 
 : tst
+    s" redis" environment if ." Redis known ..." then
+
+    0= abort" ... but unavailable"
+
+    ." ... and available." cr
     redis-connect-local
     
     abort" redis-connect failed" to redis
