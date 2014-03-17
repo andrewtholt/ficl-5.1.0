@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
 
     if( fileName != (char *)NULL ) {
         if( verbose == 0) {
-            sprintf(buffer, "load %s\n cr", fileName, fileName );
+            sprintf(buffer, "load %s\n cr", fileName );
         } else {
             sprintf(buffer, ".( loading %s ) cr load %s\n cr", fileName, fileName );
         }
