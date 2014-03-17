@@ -27,6 +27,7 @@ done
 MAKEFILE=Makefile.${ARCH}
 
 if [ -f $MAKEFILE ]; then
+    echo "Building with $MAKEFILE"
 	make -f $MAKEFILE $ARGS
 else
 	echo "$MAKEFILE does not exist."
