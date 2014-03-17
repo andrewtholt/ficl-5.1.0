@@ -51,6 +51,7 @@ char prompt[32];
 
 void usage() {
     printf("\nUsage: ficl <options> where options are: \n\n");
+    printf("\t-c <cmd>\tExecute the command and exit.\n");
     printf("\t-f <file>\tLoad this file at startup\n");
     printf("\t-h|?\t\tThis help.\n");
     printf("\t-q\t\tSupress startup messages.");
@@ -84,6 +85,7 @@ int main(int argc, char **argv) {
     int ch;
     char *fileName=(char *)NULL;
     char *loadPath=(char *)NULL;
+    char *cmd=(char *)NULL;
 
     strcpy(prompt, FICL_PROMPT);
     verbose=-1; // Default is to be talkative.
@@ -92,8 +94,12 @@ int main(int argc, char **argv) {
 
     loadPath = getenv("FICL_PATH");
 
-    while ((ch = getopt(argc,argv, "qh?df:sV")) != -1) {
+    while ((ch = getopt(argc,argv, "c:qh?df:sV")) != -1) {
         switch(ch) {
+            case 'c':
+                cmd=strsave(optarg);
+                printf("%s\n",cmd);
+                break;
             case 'f':
                 fileName=strsave(optarg);
                 break;
@@ -120,6 +126,11 @@ int main(int argc, char **argv) {
     /*
      ** load files specified on command-line
      */
+
+    if( cmd != (char *)NULL ) {
+        returnValue = ficlVmEvaluate(vm, cmd);
+        exit(returnValue);
+    }
 
     if( fileName != (char *)NULL ) {
         if( verbose == 0) {
