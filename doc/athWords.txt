@@ -280,7 +280,7 @@ Description:
     s" andrew:4803@localhost"
 
     A user name is a the clients unique, to this spread server, identifier 
-    an <spread> is the spread server. It can be a port number.
+    and <spread> is the spread server. It can be a port number.
 
     e.g. s" 4803"
 
