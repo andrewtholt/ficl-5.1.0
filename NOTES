@@ -1,3 +1,5 @@
+Te set up an initial repository
+
 git add *
 git commit -m "Create"
 git push -u origin master

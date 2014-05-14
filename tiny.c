@@ -49,29 +49,6 @@ struct termios orig_termios; /* Terminal IO Structure */
 char *loadPath;
 char prompt[32];
 
-void usage() {
-    printf("\nUsage: ficl <options> where options are: \n\n");
-    printf("\t-c <cmd>\tExecute the command and exit.\n");
-    printf("\t-f <file>\tLoad this file at startup\n");
-    printf("\t-h|?\t\tThis help.\n");
-    printf("\t-q\t\tSupress startup messages.");
-
-    printf("\n");
-
-    printf("NOTES:\n");
-    printf("\t-d is used with -f in the case where the program will be run as a\n");
-    printf("\tbackground task, or started by a system script.\n\n");
-
-    printf("\tThe environment variable FICL_PATH controls the locations searched for\n");
-    printf("\tfiles.  It is a : seperated list of directories, e.g\n\n");
-
-    printf("\t\t/usr/local/lib/ficl:/home/fred/ficl/lib:.\n\n");
-
-    printf("\tTo display the options that were selected at build time, enter:\n\n");
-
-    printf("\t\t.features\n\n");
-
-}
 
 extern int verbose;
 
@@ -85,7 +62,6 @@ int main(int argc, char **argv) {
     int ch;
     char *fileName=(char *)NULL;
     char *loadPath=(char *)NULL;
-    char *cmd=(char *)NULL;
 
     strcpy(prompt, FICL_PROMPT);
     verbose=-1; // Default is to be talkative.
@@ -94,25 +70,6 @@ int main(int argc, char **argv) {
 
     loadPath = getenv("FICL_PATH");
 
-    while ((ch = getopt(argc,argv, "c:qh?df:sV")) != -1) {
-        switch(ch) {
-            case 'c':
-                cmd=strsave(optarg);
-                printf("%s\n",cmd);
-                break;
-            case 'f':
-                fileName=strsave(optarg);
-                break;
-            case 'h':
-            case '?':
-                usage();
-                exit(0);
-                break;
-            case 'q':
-                verbose=0;
-                break;
-        }
-    }
 
     system = ficlSystemCreate(NULL);
     ficlSystemCompileExtras(system);
@@ -121,24 +78,6 @@ int main(int argc, char **argv) {
     if(verbose !=0) {
         returnValue = ficlVmEvaluate(vm, ".ver .( " __DATE__ " ) cr quit");
         // returnValue = ficlVmEvaluate(vm, ".ver cr quit");
-    }
-
-    /*
-     ** load files specified on command-line
-     */
-
-    if( cmd != (char *)NULL ) {
-        returnValue = ficlVmEvaluate(vm, cmd);
-        exit(returnValue);
-    }
-
-    if( fileName != (char *)NULL ) {
-        if( verbose == 0) {
-            sprintf(buffer, "load %s\n cr", fileName );
-        } else {
-            sprintf(buffer, ".( loading %s ) cr load %s\n cr", fileName, fileName );
-        }
-        returnValue = ficlVmEvaluate(vm, buffer);
     }
 
     while (returnValue != FICL_VM_STATUS_USER_EXIT) {

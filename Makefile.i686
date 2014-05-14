@@ -6,6 +6,7 @@ TARGET= -DLINUX -DSYSV_IPC -DSOCKET # -DDYNLIB # riscos MOTO_CPU32
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
+LDFLAGS=-Wl,--no-as-needed
 CC = cc
 LIB = ar cr
 RANLIB = ranlib
@@ -17,6 +18,9 @@ all:	ficl lib
 
 ficl: main.o $(HEADERS) libficl.a
 	$(CC) main.o -o ficl -L. -lficl -lm -ldl
+
+ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
+	$(CC) $(LDFLAGS) main.o -o ficls -lm -ldl -L. -lficl
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
@@ -58,7 +62,7 @@ clean:
 	rm -f *.o *.a libficl.* ficl cscope.out
 
 
-install:        ficl libficl.so.$(MAJOR).$(MINOR)
+install:        ficl libficl.so.$(MAJOR).$(MINOR) libficl.a
 	cp ./ficl /usr/local/bin
 	cp ficl.h /usr/local/include
 	cp ficllocal.h /usr/local/include
@@ -66,6 +70,7 @@ install:        ficl libficl.so.$(MAJOR).$(MINOR)
 	mkdir -p /usr/local/include/ficlplatform
 	cp ficlplatform/unix.h /usr/local/include/ficlplatform
 	cp libficl.so.$(MAJOR).$(MINOR) /usr/local/lib
+	cp libficl.a /usr/local/lib
 	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so.$(MAJOR)
 	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so
 

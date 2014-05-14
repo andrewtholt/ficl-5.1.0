@@ -17,7 +17,7 @@ MINOR = 1.0
 all:	ficl lib
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm
+	$(CC) main.o -o ficl -L. -lficl -lm -lrt
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 

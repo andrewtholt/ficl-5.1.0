@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include<sys/time.h>
+#include <sys/time.h>
 
 #ifndef EMBEDDED
 #include <termios.h>
@@ -65,6 +65,7 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
 #if (defined(LINUX))
 #include <sys/mman.h>
+static int systemTick=0;
 #endif
 
 #if defined(SOLARIS) 
@@ -3155,6 +3156,52 @@ void athOpenSerialPort(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack,serPort);
 }
 #endif
+
+#ifdef LINUX
+static void athPrimitiveTick(ficlVm *vm) {
+    /*
+    ficlCell *pTick;
+         
+    FICL_STACK_CHECK(vm->dataStack, 0, 1);
+             
+    pTick = (ficlCell *)(&vm->tickCounter);
+    ficlStackPush(vm->dataStack, FICL_LVALUE_TO_CELL(pTick));
+    return;
+    */
+
+    ficlStackPushInteger(vm->dataStack, systemTick);
+
+}
+
+void timer_handler(int signum) {
+    printf("... tick ...\n");
+    systemTick++;
+}
+
+static void athStartTimer(ficlVm *vm) {
+    struct sigaction sa;
+    struct itimerval timer;
+
+    int interval=10;
+
+    /* get interval in ms */
+    interval = ficlStackPopInteger( vm->dataStack );
+
+    memset(&sa,0,sizeof(sa));
+    sa.sa_handler = &timer_handler;
+    sigaction(SIGVTALRM, &sa, NULL);
+
+    timer.it_value.tv_sec = 0;
+    timer.it_value.tv_usec = interval * 1000;
+
+    timer.it_interval.tv_sec = 0;
+    timer.it_interval.tv_usec = interval * 1000;
+
+    setitimer(ITIMER_VIRTUAL, &timer, NULL);
+    
+}
+#endif
+
 #ifdef REDIS
 void athConnectRedis(ficlVm *vm) {
     redisContext *c;
@@ -3586,6 +3633,9 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 #endif    
 #ifdef LINUX
     ficlDictionarySetPrimitive(dictionary, (char *)"mmap", athMmap, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "ticks",      athPrimitiveTick, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, (char *)"start-clock", athStartTimer , FICL_WORD_DEFAULT);
 #endif
 #ifdef SERIAL
     ficlDictionarySetPrimitive(dictionary, (char *)"open-serial", athOpenSerialPort, FICL_WORD_DEFAULT);

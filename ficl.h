@@ -1066,6 +1066,9 @@ struct ficlVm
     ficlUnsigned   state;      /* compiling or interpreting        */
     ficlUnsigned   base;       /* number conversion base           */
     ficlUnsigned   sealed;     /* ATH if 0 reset word list to default, else leave it alone */
+#ifdef LINUX
+    ficlUnsigned   tickCounter; /* ATH holds a tick counter. */
+#endif
     ficlStack     *dataStack;
     ficlStack     *returnStack;     /* return stack                     */
 #if FICL_WANT_FLOAT

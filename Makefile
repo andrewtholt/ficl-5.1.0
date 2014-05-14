@@ -1,17 +1,20 @@
-OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o softcore.o stack.o tools.o vm.o primitives.o bit.o lzuncompress.o unix.o utility.o hash.o callback.o word.o extras.o
+OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o softcore.o stack.o tools.o vm.o primitives.o bit.o lzuncompress.o unix.o utility.o hash.o callback.o word.o extras.o tiny.o
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
 #TARGET= -Dlinux  # riscos MOTO_CPU32 
 SHFLAGS = -fPIC
 CFLAGS= -O $(SHFLAGS) -Wall
-CPPFLAGS= $(TARGET) -I.
+CPPFLAGS= $(TARGET) -I. -DFICL_WANT_MINIMAL
 CC = cc
 LIB = ar cr
 RANLIB = ranlib
 
 MAJOR = 4
 MINOR = 1.0
+
+minficl: main.o $(HEADERS) libficl.a
+	$(CC) $(CFLAGS) $(LDFLAGS) tiny.o -o minficl -L. -lficl
 
 ficl: main.o $(HEADERS) libficl.a
 	$(CC) $(CFLAGS) $(LDFLAGS) main.o -o ficl -L. -lficl -lm
