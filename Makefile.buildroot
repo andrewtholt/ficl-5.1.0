@@ -53,7 +53,7 @@ unix.o: ficlplatform/unix.c $(HEADERS)
 #       generic cleanup code
 #
 clean:
-	rm -f *.o *.a libficl.* ficl cscope.out
+	rm -f *.o *.a libficl.* ficl cscope.out rm *.opk
 
 
 install:        ficl libficl.so.$(MAJOR).$(MINOR)
