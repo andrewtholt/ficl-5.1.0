@@ -86,7 +86,7 @@ int teCloseSerialPort(int iSerialPort)
 	int eJenzigError ;
 
 	eFlushSerialPort(iSerialPort);
-	close(iSerialPort);
+	eJenzigError=close(iSerialPort);
 
 	return eJenzigError;
 }
@@ -158,16 +158,14 @@ int iConfigureSerialPort(int iSerialPort, speed_t tSpeed)
 
 int eFlushSerialPort(int iSerialPort)
 {
-	int eJenzigError;
+	int eJenzigError=0;
 
 	int iBytesReceived;
 	char cByte;
 
-	do
-	{
+	do {
 		iBytesReceived = read(iSerialPort, &cByte, 1);
-	}
-	while (iBytesReceived > 0);
+	} while (iBytesReceived > 0);
 
 	return eJenzigError;
 }
