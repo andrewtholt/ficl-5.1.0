@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# set -x
+
+echo "Build opkg package"
+
+if [ ! -d ./opkg-arm/usr/local/bin ]; then
+    mkdir -p ./opkg-arm/usr/local/bin
+fi
+
+DESTDIR=opkg-arm
+# make -f Makefile_min.armlinux
+
+cp ./ficl ./opkg-arm/usr/local/bin
+
+if [ ! -d ./opkg-arm/CONTROL ]; then
+	echo "No CONTROL directory"
+	echo "Fatal Error"
+
+	exit 1
+fi
+
+opkg-build -O -o root -g root ./opkg-arm 
+
