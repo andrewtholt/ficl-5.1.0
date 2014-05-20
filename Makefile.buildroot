@@ -13,6 +13,7 @@ MINOR = 1.0
 all:	ficl lib
 
 ficl: main.o $(HEADERS) libficl.a
+	echo "FICL Make file :$(VORWERK):" > /tmp/crap.txt
 	$(CC) main.o -o ficl -L. -lficl -lm -ldl
 
 lib: libficl.so.$(MAJOR).$(MINOR)
