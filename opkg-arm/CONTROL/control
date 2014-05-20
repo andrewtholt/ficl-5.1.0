@@ -1,0 +1,17 @@
+Package: ficl
+Version: 5.1.7
+Depends: 
+Provides: 
+Source: package/base-files
+Section: misc
+Priority: optional
+Maintainer: Andrew
+Architecture: arm
+Description:  Forth, forked from ficl-4.0.3
+  5.0.0  Created package
+  5.0.0-1  Modified CPU to report sh4a (type 9)
+  5.1.1  Fixed create-file, it now does.
+  5.1.4 Added SOCKET and SYSV_IPC into config.
+  5.1.5 Added key.
+  5.1.6 File optional word set included.
+  5.1.7 Fixed bug in softcore dump definition
