@@ -1398,9 +1398,7 @@ static void athRmSem(ficlVm * vm) {
 /*
    Returns 0 on error, true on success.
  */
-    int
-semcall(int sid, int op)
-{
+int semcall(int sid, int op) {
     struct sembuf   sb;
 
     sb.sem_num = 0;
@@ -1409,12 +1407,11 @@ semcall(int sid, int op)
      * sb.sem_flg = IPC_NOWAIT;
      */
     sb.sem_flg = 0;
-    if (semop(sid, &sb, 1) == -1)
-    {
+
+    if (semop(sid, &sb, 1) == -1) {
         perror("ficl: semcall ");
         return (-1);
-    } else
-    {
+    } else {
         return (0);
     }
 }
