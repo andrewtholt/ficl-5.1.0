@@ -12,9 +12,9 @@ while getopts a:hx: flag; do
             ;;
         h)
             echo "Help."
-            echo "\t-a <makefile args>"
-            echo "\t-h\t\tHelp."
-            echo "\t-x <makefile arch>"
+            printf "\t-a <makefile args>\n"
+            printf "\t-h\t\tHelp.\n"
+            printf "\t-x <makefile arch>\n"
 
             exit 0
             ;;
@@ -28,7 +28,7 @@ MAKEFILE=Makefile.${ARCH}
 
 if [ -f $MAKEFILE ]; then
     echo "Building with $MAKEFILE"
-	make -f $MAKEFILE $ARGS
+	make -j 4 -f $MAKEFILE $ARGS
 else
 	echo "$MAKEFILE does not exist."
 fi
