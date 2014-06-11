@@ -1,0 +1,7 @@
+#!/bin/sh
+
+chown root:root /usr/local/bin
+chown root:root /usr/local/bin/ficl
+chmod 755 /usr/local/bin/ficl
+
+
