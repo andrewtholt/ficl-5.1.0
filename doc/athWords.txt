@@ -57,8 +57,7 @@ Note:
 Name:	rmsem
 Stack:	sid -- f
 Description:
-	Delete the semaphore identified by sem, return false on success, and true
-	on failure.
+	Delete the semaphore identified by sem, return false on success, and true on failure.
 
 Name:	getsemvalue
 Stack:	sid -- n
@@ -68,14 +67,12 @@ Description:
 Name:	setsemvalue
 Stack:	n sid -- f
 Description:
-	Set the semaphore, sid, to the value n.  Return true on success, false on
-	failure.
+	Set the semaphore, sid, to the value n.  Return true on success, false on failure.
 
 Name:	getsem
 Stack:	sid -- f
 Description:
-	Aquire the semaphore.  If nobody holds it then it is granted, otherwise
-	process blocks.  On an error return false, otherwise true.
+	Aquire the semaphore.  If nobody holds it then it is granted, otherwise process blocks.  On an error return false, otherwise true.
 
 Name:	relsem
 Stack:	sid -- f
@@ -86,8 +83,8 @@ Description:
 Name:	shmget
 Stack:	key size flags -- shmid
 Description:
-	Get the shared memory id for the region having the given key, size and
-	flags.
+	Get the shared memory id for the region having the given key, size and flags.
+
 NOTE:
 	The flags are in octal, e.g. 1600 will create a segment, if it does not
 	already exist, that only processes owned by the user who created it can
@@ -98,8 +95,7 @@ NOTE:
 Name:	shmat
 Stack:	shmid -- ptr
 Description:
-	Attach the shared memory segment, shmid, to the processes address space
-	and return a pointer to it.
+	Attach the shared memory segment, shmid, to the processes address space and return a pointer to it.
 
 Name:	shmdt
 Stack:	shmid -- f
