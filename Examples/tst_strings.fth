@@ -15,3 +15,10 @@ variable buffer
 
 ;
 
+: tst { string len buff size }
+    buff buff size + move
+;
+
+main
+
+

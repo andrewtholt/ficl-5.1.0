@@ -24,7 +24,6 @@
 ;
 
 
-
 \ delete deletes the first ( n ) bytes from a buffer and fills the 
 \ rest at the end with blanks. 
 
@@ -34,7 +33,6 @@
     THEN  
     + r> bl fill 
 ;
-
 
 \ insert inserts as string at the front of a buffer. 
 \ The remaining bytes are moved on.
