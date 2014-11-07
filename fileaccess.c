@@ -60,17 +60,17 @@ static void ficlFileOpen(ficlVm *vm, char *writeMode) /* ( c-addr u fam -- filei
     strcat(mode, (fam & FICL_FAM_BINARY) ? "b" : "t");
 
     f = fopen(filename, mode);
-    if (f == NULL)
+    if (f == NULL) {
         ficlStackPushPointer(vm->dataStack, NULL);
-    else
-        {
+    } else {
         ficlFile *ff = (ficlFile *)malloc(sizeof(ficlFile));
         strcpy(ff->filename, filename);
         ff->f = f;
+        ff->fd = fileno(f);
         ficlStackPushPointer(vm->dataStack, ff);
 
         fseek(f, 0, SEEK_SET);
-        }
+    }
     pushIor(vm, f != NULL);
 	
 EXIT:

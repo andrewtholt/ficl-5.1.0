@@ -3126,6 +3126,23 @@ void athMmap(ficlVm *vm) {
 
 #endif
 
+#ifdef LINUX
+void athIoctl(ficlVm *vm) {
+    
+    int fd=-1;
+    void *cmd = -1;
+    int data = -1;
+    int ret = -1;
+
+    data = ficlStackPopInteger(vm->dataStack) ;
+    cmd = ficlStackPopInteger(vm->dataStack) ;
+    fd = ficlStackPopInteger(vm->dataStack) ;
+
+    ret = ioctl(fd, cmd, data);
+    ficlStackPushInteger(vm->dataStack,ret);
+}
+#endif
+
 #ifdef SERIAL
 #warning "Serial comms selected."
 /*
@@ -3629,6 +3646,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, (char *)"i2c-read", athI2cRead, FICL_WORD_DEFAULT);
 #endif    
 #ifdef LINUX
+    ficlDictionarySetPrimitive(dictionary, (char *)"ioctl", athIoctl, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mmap", athMmap, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "ticks",      athPrimitiveTick, FICL_WORD_DEFAULT);
 
