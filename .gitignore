@@ -17,6 +17,7 @@
 *.out
 *.app
 ficl
+ficls
 minficl
 main
 softcore/makesoftcore
