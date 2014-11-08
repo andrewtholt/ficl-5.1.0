@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+# set -x
 
 LEN=`getconf LONG_BIT`
 
@@ -49,8 +49,14 @@ else
 fi
 cd $HERE
 
-strip ./ficl
 cp ./ficl ${DEST}
+strip ${DEST}/ficl
+
+if [ -x ./ficls ]; then
+    echo "And a stic executable too."
+    cp ./ficls ${DEST}
+    strip ${DEST}/ficls
+fi
 
 # dpkg -b ./debian-x86 ${ROOT}/dists/main/test/binary-x86
 dpkg -b ./debian-i386 .
