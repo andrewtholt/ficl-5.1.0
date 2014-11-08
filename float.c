@@ -48,7 +48,8 @@
 #include <math.h>
 #include "ficl.h"
 
-#if FICL_WANT_FLOAT
+#if FICL_WANT_FLOAT==1
+#warning "HERE"
 
 
 /*******************************************************************
@@ -239,6 +240,9 @@ typedef enum _floatParseState
     FPS_STARTEXP,
     FPS_INEXP
 } FloatParseState;
+
+#warning "Waht am I doing here ?"
+#warning #FICL_WANT_FLOAT
 
 /**************************************************************************
                      f i c l P a r s e F l o a t N u m b e r
