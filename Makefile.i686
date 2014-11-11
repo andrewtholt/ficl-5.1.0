@@ -24,7 +24,7 @@ ficl: main.o $(HEADERS) libficl.a
 #
 ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
 #	$(CC) $(LDFLAGS) main.o -o ficls -lm -ldl -L. -lficl
-	$(CC) --static main.o -o ficls -L. -lficl
+	$(CC) --static main.o -o ficls -L. -lficl -lm
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
