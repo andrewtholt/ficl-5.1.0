@@ -2,7 +2,7 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET -DDYNLIB 
+TARGET= -DLINUX # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET -DDYNLIB 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
@@ -14,11 +14,11 @@ RANLIB = ranlib
 MAJOR = 4
 MINOR = 1.0
 
-all:	lib ficl ficls
+all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
 #	$(CC) main.o -o ficl -L. -lficl -lm -ldl
-	$(CC) main.o -o ficl -L. -lficl -ldl
+	$(CC) main.o -o ficl -L. -lficl -lm
 #
 # Build statically linked ficls.
 #
@@ -37,7 +37,7 @@ libficl.a: $(OBJECTS)
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
+#	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
 	$(CC) main.o -o main -L. -lficl -lm

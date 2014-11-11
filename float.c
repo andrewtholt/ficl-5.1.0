@@ -4,7 +4,7 @@
 ** ANS Forth FLOAT word-set written in C
 ** Author: Guy Carver & John Sadler (john_sadler@alum.mit.edu)
 ** Created: Apr 2001
-** $Id: float.c,v 1.10 2010/09/13 18:43:04 asau Exp $
+** $Id: float.c,v 1.1 2007/07/07 17:31:20 andrewh Exp $
 *******************************************************************/
 /*
 ** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
@@ -48,8 +48,7 @@
 #include <math.h>
 #include "ficl.h"
 
-#if FICL_WANT_FLOAT==1
-#warning "HERE"
+#if FICL_WANT_FLOAT
 
 
 /*******************************************************************
@@ -241,9 +240,6 @@ typedef enum _floatParseState
     FPS_INEXP
 } FloatParseState;
 
-#warning "Waht am I doing here ?"
-#warning #FICL_WANT_FLOAT
-
 /**************************************************************************
                      f i c l P a r s e F l o a t N u m b e r
 ** vm -- Virtual Machine pointer.
@@ -408,12 +404,12 @@ int ficlVmParseFloatNumber( ficlVm *vm, ficlString s)
 
 static void ficlPrimitiveFLocalParen(ficlVm *vm)
 {
-   ficlLocalParen(vm, 0, 1);
+   ficlLocalParen(vm, FICL_FALSE, FICL_TRUE);
 }
 
 static void ficlPrimitiveF2LocalParen(ficlVm *vm)
 {
-   ficlLocalParen(vm, 1, 1);
+   ficlLocalParen(vm, FICL_TRUE, FICL_TRUE);
 }
 
 #endif /* FICL_WANT_LOCALS */

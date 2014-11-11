@@ -4,6 +4,8 @@
 
 ARCH=`uname -m`
 
+echo "building for $ARCH"
+
 
 while getopts a:hx: flag; do
     case $flag in
