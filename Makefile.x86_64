@@ -32,7 +32,7 @@ libficl.a: $(OBJECTS)
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
+#	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
 	$(CC) main.o -o main -L. -lficl -lm
