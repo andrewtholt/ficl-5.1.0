@@ -241,7 +241,10 @@ ficlSystem *ficlSystemCreate(ficlSystemInformation *fsi)
 	ADD_COMPILE_STRING(FICL_PLATFORM_ARCHITECTURE);
 	ADD_COMPILE_STRING(FICL_PLATFORM_OS);
 
+    /* ATH testing */
+    #if FICL_WANT_SOFTWORDS
     ficlSystemCompileSoftCore(system);
+    #endif
     ficlSystemDestroyVm(system->vmList);
 
 	if (ficlSystemGlobal == NULL)
