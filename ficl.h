@@ -252,7 +252,7 @@ extern "C" {
 ** Contributed by Larry Hastings.
 */
 #if !defined (FICL_WANT_LZ_SOFTCORE)
-#define FICL_WANT_LZ_SOFTCORE (0)
+#define FICL_WANT_LZ_SOFTCORE (1)
 #endif /* FICL_WANT_LZ_SOFTCORE */
 
 
@@ -263,7 +263,7 @@ extern "C" {
 ** Contributed by Larry Hastings
 */
 #if !defined (FICL_WANT_FILE)
-#define FICL_WANT_FILE (0)
+#define FICL_WANT_FILE (1)
 #endif /* FICL_WANT_FILE */
 
 /*
@@ -272,7 +272,7 @@ extern "C" {
 ** Contributed by Guy Carver
 */
 #if !defined (FICL_WANT_FLOAT)
-#define FICL_WANT_FLOAT (0)
+#define FICL_WANT_FLOAT (1)
 #endif /* FICL_WANT_FLOAT */
 
 /*
@@ -280,7 +280,7 @@ extern "C" {
 ** Inludes a simple source level debugger
 */
 #if !defined (FICL_WANT_DEBUGGER)
-#define FICL_WANT_DEBUGGER (0)
+#define FICL_WANT_DEBUGGER (1)
 #endif /* FICL_WANT_DEBUGGER */
 
 /*
@@ -300,7 +300,7 @@ extern "C" {
 ** approach of an array of CELLs instead.
 */
 #if !defined FICL_WANT_USER
-#define FICL_WANT_USER (0)
+#define FICL_WANT_USER (1)
 #endif /* FICL_WANT_USER */
 
 /* 
@@ -309,7 +309,7 @@ extern "C" {
 ** and a private dictionary for local variable compilation.
 */
 #if !defined FICL_WANT_LOCALS
-#define FICL_WANT_LOCALS (0)
+#define FICL_WANT_LOCALS (1)
 #endif /* FICL_WANT_LOCALS */
 
 /*
@@ -326,7 +326,7 @@ extern "C" {
 ** Controls inclusion of all softwords in softcore.c.
 */
 #if !defined (FICL_WANT_SOFTWORDS)
-#define FICL_WANT_SOFTWORDS (0)
+#define FICL_WANT_SOFTWORDS (1)
 #endif /* FICL_WANT_SOFTWORDS */
 
 /*
