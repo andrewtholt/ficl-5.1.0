@@ -20,7 +20,10 @@ MINOR = 1.0
 all:	lib ficl
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -lrt
+	$(CC) main.o -o ficl -L. -lficl # -lm -lrt
+
+ficls: main.o $(HEADERS) libficl.a
+	$(CC) --static main.o -o ficls -L. -lficl # -lm -lrt
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
@@ -33,7 +36,6 @@ libficl.a: $(OBJECTS)
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-#	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
 	$(CC) main.o -o main -L. -lficl -lm
