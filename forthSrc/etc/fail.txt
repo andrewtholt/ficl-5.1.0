@@ -1,0 +1,12 @@
+
+ ######    ##       #    #       ######  #####
+ #        #  #      #    #       #       #    #
+ #####   #    #     #    #       #####   #    #
+ #       ######     #    #       #       #    #
+ #       #    #     #    #       #       #    #
+ #       #    #     #    ######  ######  #####
+
+You are not permitted to connect to this service.
+
+This attempt has been logged.
+
