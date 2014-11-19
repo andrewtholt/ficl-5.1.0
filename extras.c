@@ -1711,9 +1711,7 @@ static void athFiclFileDump(ficlVm *vm)
     printf("fd    : %d\n",a->fd);
 }
 
-    static void
-athMs(ficlVm * vm)
-{
+static void athMs(ficlVm * vm) {
     int             ms;
     int i;
     int status;
