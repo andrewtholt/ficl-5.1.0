@@ -7,7 +7,7 @@ ARCH=`uname -m`
 echo "building for $ARCH"
 
 
-while getopts a:hx: flag; do
+while getopts a:hx:o: flag; do
     case $flag in
         a)
             ARGS=$OPTARG
@@ -16,17 +16,21 @@ while getopts a:hx: flag; do
             echo "Help."
             printf "\t-a <makefile args>\n"
             printf "\t-h\t\tHelp.\n"
+            printf "\t-o <variant>\tOption.\n"
             printf "\t-x <makefile arch>\n"
 
             exit 0
             ;;
+        o)
+            OPT=_${OPTARG}
+            ;;
         x)
-            ARCH=$OPTARG
+            ARCH=${OPTARG}
             ;;
     esac
 done
 
-MAKEFILE=Makefile.${ARCH}
+MAKEFILE=Makefile.${ARCH}${OPT}
 
 if [ -f $MAKEFILE ]; then
     echo "Building with $MAKEFILE"
