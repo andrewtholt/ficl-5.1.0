@@ -488,6 +488,12 @@ static void athFeatures(ficlVm *vm) {
     printf("NOT WANT_FLOAT\n");
 #endif
 
+#if FICL_WANT_DEBUGGER
+    printf("    WANT_DEBUGGER\n");
+#else
+    printf("NOT WANT_DEBUGGER\n");
+#endif
+
 #if SPREAD
     printf("    SPREAD\n");
 #else
