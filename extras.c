@@ -3134,12 +3134,12 @@ void athMmap(ficlVm *vm) {
 void athIoctl(ficlVm *vm) {
     
     int fd=-1;
-    void *cmd = -1;
+    void *cmd = (void *)-1;
     int data = -1;
     int ret = -1;
 
     data = ficlStackPopInteger(vm->dataStack) ;
-    cmd = ficlStackPopInteger(vm->dataStack) ;
+    cmd = (void *)ficlStackPopInteger(vm->dataStack) ;
     fd = ficlStackPopInteger(vm->dataStack) ;
 
     ret = ioctl(fd, cmd, data);
