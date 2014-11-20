@@ -9,9 +9,10 @@
 : bounds ( addr len -- addr+len addr )
     over + swap
 ;
-
-\ ( addr len char -- str+i len-i )
-
+\ 
+\ Return the address, and length follwoing the first occurence
+\ of the character, c
+\
 : scan  { addr len c -- addr+i len-i }
     len 0 do
         addr i + c@ c = if
@@ -22,15 +23,14 @@
     loop
     i .
 ;
-
-
+\
 \ delete deletes the first ( n ) bytes from a buffer and fills the 
 \ rest at the end with blanks. 
-
+\
 : delete   ( addr u n - )  
     over min >r  r@ - ( left over )  dup 0> IF  
         2dup swap dup  r@ +  -rot swap move  
-    THEN  
+    then  
     + r> bl fill 
 ;
 
@@ -64,7 +64,9 @@
 \ $@len returns just the length of a string. 
 : $@len ( addr - u )  @ @ ;
 
-\  $!len changes the length of a string. Therefore we must change the memory area and adjust address and count cell as well. 
+\  $!len changes the length of a string. 
+\ Therefore we must change the memory area and adjust address and count cell as well. 
+\
 : $!len ( u addr - )  
   over $padding over @ swap resize throw over ! @ ! ;
 
