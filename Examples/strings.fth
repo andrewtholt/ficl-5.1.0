@@ -1,3 +1,6 @@
+
+load lib.fth
+
 : off  
   false swap ! 
 ;
@@ -6,9 +9,6 @@
     true swap ! 
 ;
 
-: bounds ( addr len -- addr+len addr )
-    over + swap
-;
 \ 
 \ Return the address, and length follwoing the first occurence
 \ of the character, c

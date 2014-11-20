@@ -83,5 +83,8 @@ create mask 1 , 2 , 4 , 8 , 0x10 , 0x20 , 0x40 , 0x80 , 0x100 , 0x200 , 0x400 , 
     swap 2dup erase
 ;
 
+: bounds ( addr len -- addr+len addr )
+    over + swap
+;
 
 
