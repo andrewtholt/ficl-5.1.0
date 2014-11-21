@@ -16,7 +16,7 @@ while getopts a:hx:o: flag; do
             echo "Help."
             printf "\t-a <makefile args>\n"
             printf "\t-h\t\tHelp.\n"
-            printf "\t-o <variant>\tOption.\n"
+            printf "\t-o <variant>\tBuild a variant based on an architecture\n"
             printf "\t-x <makefile arch>\n"
 
             exit 0

@@ -1715,11 +1715,18 @@ static void athMs(ficlVm * vm) {
     int             ms;
     int i;
     int status;
+#ifdef LINUX
+    struct timespec tim,tim2;
+#endif
 
     ms = ficlStackPopInteger(vm->dataStack);
     for (i=0;i < ms; i++) {
 #ifdef LINUX
         usleep(1000);
+
+        tim.tv_sec=0;
+        tim.tv_nsec=( 1000 * 1000 * ms );
+        (void) nanosleep(&tim,&tim2);
 #else
         if ( usleep(1000) < 0)
             return;
@@ -1966,7 +1973,8 @@ static void athSetPrompt(ficlVm *vm)
     int len;
     int crFlag = 0;
 
-    bzero(prompt,32);
+    memset(prompt,0x00, 32);
+//    bzero(prompt,32);
 
     crFlag = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
@@ -1984,7 +1992,8 @@ static void athResetPrompt(ficlVm *vm)
 {
     extern char prompt[];
 
-    bzero(prompt,32);
+    memset(prompt,0x00, 32);
+//    bzero(prompt,32);
 
     strcpy(prompt,FICL_PROMPT);
 }

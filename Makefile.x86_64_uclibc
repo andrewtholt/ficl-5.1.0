@@ -15,13 +15,13 @@ RANLIB = ranlib
 
 MAJOR = 4
 MINOR = 1.0
-LIBS=-L. -lficl -lm -lrt -L/usr/x86_64-linux-uclibc/usr/lib
+LIBS=-L/usr/x86_64-linux-uclibc/usr/lib -lc -lm -lrt -L. -lficl
 
 all:	lib ficl
 
 ficl: main.o $(HEADERS) libficl.a
 #	$(CC) main.o -o ficl -L. -lficl -lm -lrt
-	$(CC) main.o -o ficl $(LIBS)
+	$(CC) main.o /usr/x86_64-linux-uclibc/usr/lib/crt1.o -o ficl $(LIBS)
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
