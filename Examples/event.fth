@@ -48,12 +48,19 @@ event-test constant /buffer
     endcase
 ;
 
+: .key-event { ptr }
+    ." EV_KEY " 
+    ptr ev-code drop w@ ." Key code " .
+    ptr ev-value drop w@  0 = if ." Key release" else ." key press" then cr
+
+;
+
 : .event { addr }
     addr ev-type drop w@ 
     case
         EV_SYN of ." EV_SYN " endof
         EV_REL of buffer .rel  endof
-        EV_KEY of ." EV_KEY rx " addr ev-code drop w@ . cr endof
+        EV_KEY of addr .key-event endof
     endcase
 
     cr
