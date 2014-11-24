@@ -576,9 +576,7 @@ static void athPrimitiveDollarSystem(ficlVm * vm) {
  */
 #define BUFFER_SIZE 256
 
-    char           *
-pathToFile(char *fname)
-{
+char           *pathToFile(char *fname) {
     int             i;
     int             fd;
     extern char    *loadPath;
@@ -595,8 +593,8 @@ pathToFile(char *fname)
 
     tok = (char *) strtok(path, ":");
     i = 0;
-    for (; tok != (char *) NULL;)
-    {
+
+    for (; tok != (char *) NULL;) {
         strcpy(scr, tok);
         strcat(scr, "/");
         strcat(scr, fname);
@@ -604,8 +602,8 @@ pathToFile(char *fname)
         scratch = strsave(scr);
 
         fd = open(scratch, O_RDONLY);
-        if (fd >= 0)
-        {
+
+        if (fd >= 0) {
             close(fd);
             return (scratch);
         }
@@ -633,7 +631,8 @@ static void ficlDollarPrimitiveLoad(ficlVm * vm) {
     nameLen = ficlStackPopInteger(vm->dataStack);
     ptr=ficlStackPopPointer(vm->dataStack);
     name=strtok(ptr," ");
-    name[strlen(name)] = '\0';
+//    name[strlen(name)] = '\0';
+    name[nameLen] = '\0';
 
     scratch = pathToFile(name);
 

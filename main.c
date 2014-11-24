@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     int i=0;
     int ch;
     char *fileName=(char *)NULL;
-    char *loadPath=(char *)NULL;
+//    char *loadPath=(char *)NULL;
     char *cmd=(char *)NULL;
 
     strcpy(prompt, FICL_PROMPT);
