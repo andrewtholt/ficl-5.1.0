@@ -76,7 +76,10 @@ event-test constant /buffer
     /buffer allocate abort" Allocate failed." to buffer
     buffer /buffer erase
 
-    s" /dev/input/event3" r/o open-file abort" Open failed" to file
+    \ Change the device to reflect your system config.
+    \ TODO: pass this in as a parameter, or get it from the environment.
+    \
+    s" /dev/input/event17" r/o open-file abort" Open failed" to file
     file fd@ to fd
 ;
 
