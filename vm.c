@@ -2746,8 +2746,7 @@ int ficlVmExecuteString(ficlVm *vm, ficlString s)
         break;
 
     case FICL_VM_STATUS_QUIT:
-        if (vm->state == FICL_VM_STATE_COMPILE)
-        {
+        if (vm->state == FICL_VM_STATE_COMPILE) {
             ficlDictionaryAbortDefinition(dictionary);
 #if FICL_WANT_LOCALS
             ficlDictionaryEmpty(system->locals, system->locals->forthWordlist->size);
@@ -2760,8 +2759,7 @@ int ficlVmExecuteString(ficlVm *vm, ficlString s)
     case FICL_VM_STATUS_ABORT:
     case FICL_VM_STATUS_ABORTQ:
     default:    /* user defined exit code?? */
-        if (vm->state == FICL_VM_STATE_COMPILE)
-        {
+        if (vm->state == FICL_VM_STATE_COMPILE) {
             ficlDictionaryAbortDefinition(dictionary);
 #if FICL_WANT_LOCALS
             ficlDictionaryEmpty(system->locals, system->locals->forthWordlist->size);
