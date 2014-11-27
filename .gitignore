@@ -29,3 +29,5 @@ softcore/makesoftcore
 .settings
 *.c~
 .gdb_history
+*.swp
+
