@@ -365,7 +365,7 @@ Description:
     Suspend execution fo the given number of seconds.
 
 Name:	dlopen
-Stack:	name len -- handle
+Stack:	name len -- handle error-flag
 Description:
     Open the dynamic library given by name and len, and return the handle.
     Return 0 on failure.
