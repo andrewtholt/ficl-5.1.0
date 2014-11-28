@@ -1,3 +1,12 @@
+\ 
+\ Dynamic library 
+\ 
+\ Initialise a structure and call functions dynamically
+\ 
+\ A C function declared "void name(void)" only needs to 
+\ define the library and function name as the in & out params
+\ default to 0.
+\ 
 load lib.fth
 load struct.fth
 
@@ -115,15 +124,18 @@ endstruct /dynamic
     fred (dllookup)
 ;
 
-create-struct fred
+create-struct test1
 
-s" libmine.so" fred set-lib-name
-s" test1" fred set-func-name
-3 fred set-inputs
-1 fred set-outputs
-fred setup-func
+s" libmine.so" test1 set-lib-name
+s" test1" test1 set-func-name
+3 test1 set-inputs
+1 test1 set-outputs
+test1 setup-func
 
 
-fred /dynamic dump
+test1 /dynamic dump
 
-fred dynamic-dump
+test1 dynamic-dump
+
+5 1 1 test1 get-func-ptr dlexec
+

@@ -952,6 +952,48 @@ static void athStrsave(ficlVm * vm) {
 }
 
 #ifdef DYNLIB
+#define MAX_ARGS 5
+
+// arg0 ... argn <res_count> <arg_count> <function ptr>
+// 
+static void athDlExec(ficlVm * vm) {
+    int i;
+    int argCount=0;
+    int resCount=0;
+
+    void *(*func)();
+    void *args[MAX_ARGS];
+    void *res;
+
+    func = ficlStackPopPointer(vm->dataStack);
+    argCount = ficlStackPopInteger(vm->dataStack);
+    resCount = ficlStackPopInteger(vm->dataStack);
+
+    for (i=0; i < argCount;i++) {
+        args[i]  = ficlStackPopPointer(vm->dataStack);
+    }
+
+    if ( 0 == argCount && 0 == resCount ) {
+        (*func)();
+    } else {
+        if(argCount > 0 ) {
+            switch(argCount) {
+                case 1:
+                    res=(*func)(args[0]);
+                    break;
+                case 2:
+                    res=(*func)(args[1],args[0]);
+                    break;
+                default:
+                    printf("Too many args\n");
+                    break;
+            }
+            ficlStackPushPointer( vm->dataStack,res);
+        }
+    }
+
+}
+
 static void athDlOpen(ficlVm * vm) {
     int libLen;
     char *lib;
@@ -3536,6 +3578,7 @@ ficlDictionarySetPrimitive(dictionary, "simpl-detach", athSimplDetach, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "dlclose", athDlClose, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "dlsym", athDlSym, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "dlerror", athDlError, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "dlexec", athDlExec, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef DB
