@@ -962,6 +962,10 @@ static void athDlOpen(ficlVm * vm) {
 
     res=(void *)dlopen(lib,RTLD_LAZY );
 
+    if(!res) {
+        printf("%s\n", dlerror());
+    }
+
     ficlStackPushPointer( vm->dataStack,res);
 
     if( res == (void *)NULL ) {
