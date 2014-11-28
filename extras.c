@@ -974,7 +974,7 @@ static void athDlExec(ficlVm * vm) {
     }
 
     if ( 0 == argCount && 0 == resCount ) {
-        (*func)();
+        (void)(*func)();
     } else {
         if(argCount > 0 ) {
             switch(argCount) {
@@ -984,11 +984,41 @@ static void athDlExec(ficlVm * vm) {
                 case 2:
                     res=(*func)(args[1],args[0]);
                     break;
+                case 3:
+                    res=(*func)(args[2],args[1],args[0]);
+                    break;
+                case 4:
+                    res=(*func)(args[3],args[2],args[1],args[0]);
+                    break;
+                case 5:
+                    res=(*func)(args[4],args[3],args[2],args[1],args[0]);
+                    break;
                 default:
                     printf("Too many args\n");
                     break;
             }
             ficlStackPushPointer( vm->dataStack,res);
+        } else {
+            switch(argCount) {
+                case 1:
+                    (void)(*func)(args[0]);
+                    break;
+                case 2:
+                    (void)(*func)(args[1],args[0]);
+                    break;
+                case 3:
+                    (void)(*func)(args[2],args[1],args[0]);
+                    break;
+                case 4:
+                    (void)(*func)(args[3],args[2],args[1],args[0]);
+                    break;
+                case 5:
+                    (void)(*func)(args[4],args[3],args[2],args[1],args[0]);
+                    break;
+                default:
+                    printf("Too many args\n");
+                    break;
+            }
         }
     }
 

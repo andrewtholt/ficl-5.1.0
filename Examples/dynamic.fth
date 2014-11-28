@@ -124,18 +124,21 @@ endstruct /dynamic
     fred (dllookup)
 ;
 
-create-struct test1
+create-struct (test1)
 
-s" libmine.so" test1 set-lib-name
-s" test1" test1 set-func-name
-3 test1 set-inputs
-1 test1 set-outputs
-test1 setup-func
+s" libmine.so" (test1) set-lib-name
+s" test1" (test1) set-func-name
+3 (test1) set-inputs
+1 (test1) set-outputs
+(test1) setup-func
 
 
-test1 /dynamic dump
+(test1) /dynamic dump
 
-test1 dynamic-dump
+(test1) dynamic-dump
 
-5 1 1 test1 get-func-ptr dlexec
+: test1
+1 1 (test1) get-func-ptr dlexec
+;
 
+5 test1
