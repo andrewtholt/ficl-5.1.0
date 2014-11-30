@@ -2,7 +2,7 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET -DDYNLIB 
+TARGET= -DLINUX -DDYNLIB # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
@@ -17,8 +17,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-#	$(CC) main.o -o ficl -L. -lficl -lm -ldl
-	$(CC) main.o -o ficl -L. -lficl -lm
+	$(CC) main.o -o ficl -L. -lficl -lm -ldl	
 #
 # Build statically linked ficls.
 #
@@ -78,4 +77,7 @@ install:        ficl libficl.so.$(MAJOR).$(MINOR) libficl.a
 	cp libficl.a /usr/local/lib
 	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so.$(MAJOR)
 	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so
+	mkdir -p /usr/local/lib/ficl
+	cp Lib/* /usr/local/lib/ficl
+
 
