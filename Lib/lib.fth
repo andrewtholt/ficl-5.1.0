@@ -8,6 +8,8 @@
 4 constant CPU_AMD64
 5 constant CPU_SPARC
 6 constant CPU_COLDFIRE
+7 constant CPU_ARM
+8 constant CPU_MIPS 
 
 0 constant OS_UNKNOWN
 1 constant OS_LINUX
@@ -15,6 +17,7 @@
 3 constant OS_FREEBSD
 4 constant OS_SOLARIS
 5 constant OS_UCLINUX
+6 constant OS_QNX
 \
 \ Mask for setting, clearing and testing 16 bit values.
 \
