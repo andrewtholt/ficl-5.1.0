@@ -2466,7 +2466,7 @@ static void athCpu(ficlVm * vm) {
     } else if ( (strcasecmp(buf.machine, "Power Macintosh") == 0) || (strcasecmp(buf.machine, "ppc") == 0) )
     {
         cpu = CPU_PPC;
-    } else if ((strcasecmp(buf.machine, "armv5tel") == 0) || !strcmp(buf.machine,"armv7l")) {
+    } else if ((strcasecmp(buf.machine, "armv5tel") == 0) || !strcmp(buf.machine,"armv7l") || !strcmp(buf.machine,"armv6l")) {
         cpu = CPU_ARM;
     } else if (strcasecmp(buf.machine, "m68knommu") == 0) {
         cpu = CPU_COLDFIRE;
