@@ -2,10 +2,10 @@
 
 # set -x
 
-ARCH=`uname -m`
-
-echo "building for $ARCH"
-
+if [ -z "$ARCH" ] ;then
+    ARCH=`uname -m`
+    echo "building for $ARCH"
+fi
 
 while getopts a:hx:o: flag; do
     case $flag in
@@ -18,6 +18,9 @@ while getopts a:hx:o: flag; do
             printf "\t-h\t\tHelp.\n"
             printf "\t-o <variant>\tBuild a variant based on an architecture\n"
             printf "\t-x <makefile arch>\n"
+
+            printf "\nThe follwing environment files effect behavior:\n\n"
+            printf "\tARCH\tBuild for the specified architecture.\n"
 
             exit 0
             ;;
