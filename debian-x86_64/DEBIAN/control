@@ -1,0 +1,9 @@
+Package: ficl
+Section: misc
+Priority: extra
+Maintainer: Andrew Holt
+Architecture: x86-64
+Version: 5.2.1
+Description: ficl
+ ficl - Forth Inspired Control Language
+ 5.2.1 8 Nov 2014 - Configured for a minimal build, plus a static executable ficls
