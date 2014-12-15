@@ -67,6 +67,10 @@ void usage() {
 
     printf("\t\t/usr/local/lib/ficl:/home/fred/ficl/lib:.\n\n");
 
+
+    printf("\n\tFor Example;\n");
+    printf("\n\t\texport FICL_PATH=\"/usr/local/lib/ficl:.\"\n\n");
+
     printf("\tTo display the options that were selected at build time, enter:\n\n");
 
     printf("\t\t.features\n\n");
