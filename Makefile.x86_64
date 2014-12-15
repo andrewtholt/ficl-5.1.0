@@ -76,4 +76,9 @@ install:	ficl libficl.so.$(MAJOR).$(MINOR)
 	cp Lib/* /usr/local/lib/ficl
 
 deb:	ficl
-	./install-deb-x86_64 
+	./install-deb-x87_64 
+
+help:
+	@echo "Targets:"
+	@printf "\tficl\tExecutable.\n"
+	@printf "\tdeb\tDebian package.\n"
