@@ -75,3 +75,5 @@ install:	ficl libficl.so.$(MAJOR).$(MINOR)
 	mkdir -p /usr/local/lib/ficl
 	cp Lib/* /usr/local/lib/ficl
 
+deb:	ficl
+	./install-deb-x86_64 
