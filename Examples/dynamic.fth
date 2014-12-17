@@ -121,26 +121,27 @@ endstruct /dynamic
 
 : setup-func { fred }
 \    fred (open-lib)
-\    fred (dllookup)
+    fred (dllookup)
 ;
 
 create-struct (test1)
 
 -1 value libmine
-s" libmine.so" dlopen
+s" libmine.so" dlopen abort" Failed to open lib." to libmine
 
-s" libmine.so" (test1) set-lib-name abort" Failed to open libmine.so" 
-    to libmine
+\ s" libmine.so" (test1) set-lib-name abort" Failed to open libmine.so" 
+\    to libmine
 
 s" test1" (test1) set-func-name
 3 (test1) set-inputs
 1 (test1) set-outputs
 (test1) setup-func
 
+(test1) dynamic-dump
+bye
 
 (test1) /dynamic dump
 
-(test1) dynamic-dump
 
 : test1
 1 1 (test1) get-func-ptr dlexec
