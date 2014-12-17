@@ -196,6 +196,10 @@ create
     > invert and
 ;
 
+: bounds  
+  over + swap 
+; 
+
 : [defined]  
     bl word find nip 0<> 
 ; immediate 
@@ -210,4 +214,4 @@ create (newline) 1 c, 10 c,
 
 : newline (newline) count ;
 
-
+: cell 1 cells ;
