@@ -19,9 +19,6 @@ load struct.fth
 ;
 
 struct 
-\    cell field lib-name
-\    cell field lib-len
-\    cell field lib-handle
     cell field func-name
     cell field func-len
     cell field func-ptr
@@ -95,14 +92,19 @@ endstruct /dynamic
 
 create-struct (test1)
 
+: define-function { func-name len ins outs handle func-struct }
+    func-name len func-struct set-func-name
+    ins func-struct set-inputs
+    outs func-struct set-outputs
+    func-struct handle setup-func
+;
+
 -1 value libmine
 s" libmine.so" dlopen abort" Failed to open lib." to libmine
 
-s" test1" (test1) set-func-name
-1 (test1) set-inputs
-1 (test1) set-outputs
+s" test1" 1 1 libmine (test1) define-function
 
-(test1) libmine setup-func
+
 (test1) dynamic-dump
 (test1) /dynamic dump
 \ 
