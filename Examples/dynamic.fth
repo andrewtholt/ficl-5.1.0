@@ -101,13 +101,10 @@ endstruct /dynamic
 \     swap set-lib-handle
 \ ;
 \ 
-\ : (dllookup) { fred }
-\     fred get-lib-handle 0= abort" Library not opened"
-\ 
-\     fred get-func-name fred get-lib-handle dlsym abort" Lookup failed"
-\     fred set-func-ptr
-\     
-\ ;
+: (dllookup) { fred handle }
+    fred get-func-name fred handle dlsym abort" Lookup failed"
+    fred set-func-ptr
+;
 \ 
 : dynamic-dump { fred }
     cr
