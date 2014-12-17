@@ -90,7 +90,6 @@ endstruct /dynamic
     fred handle (dllookup)
 ;
 
-create-struct (test1)
 
 : define-function { func-name len ins outs handle func-struct }
     func-name len func-struct set-func-name
@@ -102,8 +101,8 @@ create-struct (test1)
 -1 value libmine
 s" libmine.so" dlopen abort" Failed to open lib." to libmine
 
+create-struct (test1)
 s" test1" 1 1 libmine (test1) define-function
-
 
 (test1) dynamic-dump
 (test1) /dynamic dump
