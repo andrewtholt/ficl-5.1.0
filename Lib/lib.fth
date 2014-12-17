@@ -25,8 +25,6 @@
 \ SYSV IPC definitions
 \
 0x800 constant IPC_NOWAIT \ 004000 octal
-
-.( here ) cr
 \
 \ Mask for settin, clearing and testing 16 bit values.
 \
@@ -197,5 +195,16 @@ create
     swap r> \ flag min n
     > invert and
 ;
+
+: [defined]  
+    bl word find nip 0<> 
+; immediate 
+
+: [undefined] 
+    postpone [defined] 
+    0= 
+; immediate
+
+
 
 
