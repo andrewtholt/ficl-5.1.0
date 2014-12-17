@@ -206,6 +206,8 @@ create
 ; immediate
 
 \ Create  a counted string holding the newline sequence
-create newline 1 c, 10 c,
+create (newline) 1 c, 10 c,
+
+: newline (newline) count ;
 
 
