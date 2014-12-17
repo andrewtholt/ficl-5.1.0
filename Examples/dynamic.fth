@@ -116,9 +116,8 @@ endstruct /dynamic
     ." Outputs         : " fred get-outputs . cr
 ;
 
-: setup-func { fred }
-\    fred (open-lib)
-    fred (dllookup)
+: setup-func { fred handle }
+    fred handle (dllookup)
 ;
 
 create-struct (test1)
@@ -126,13 +125,10 @@ create-struct (test1)
 -1 value libmine
 s" libmine.so" dlopen abort" Failed to open lib." to libmine
 
-\ s" libmine.so" (test1) set-lib-name abort" Failed to open libmine.so" 
-\    to libmine
-
 s" test1" (test1) set-func-name
 3 (test1) set-inputs
 1 (test1) set-outputs
-(test1) setup-func
+(test1) libmine setup-func
 
 (test1) dynamic-dump
 bye
