@@ -30,4 +30,4 @@ softcore/makesoftcore
 *.c~
 .gdb_history
 *.swp
-
+.c9
