@@ -1069,6 +1069,7 @@ static void athDlSym(ficlVm * vm) {
     h = ficlStackPopPointer( vm->dataStack);
     symbolLen = ficlStackPopInteger( vm->dataStack);
     symbol = ficlStackPopPointer(vm->dataStack);
+    symbol[symbolLen]=0x00;
 
     error = dlerror();
     symbol = dlsym(h,symbol);
