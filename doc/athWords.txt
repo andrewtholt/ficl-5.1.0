@@ -376,10 +376,10 @@ Description:
     Unload the the library whose handle is on the stack.  Returns 0 on failure.
 
 Name:	dlsym
-Stack:	name len handle -- ptr
+Stack:	name len handle -- ptr flag
 Description:
-    Return a pointer to the function given by name and len.
-    Returns 0 on failure.
+    Return a pointer to the function given by name and len and a 
+    failure flag.  i.e. Flag is non-zero on failure.
 
 Name:	dlerror
 Stack:	--
