@@ -1,7 +1,6 @@
 load lib.fth
 load struct.fth
 
-: char 1 chars ;
 struct 
     cell field func-name
     cell field func-len

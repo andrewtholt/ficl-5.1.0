@@ -215,3 +215,5 @@ create (newline) 1 c, 10 c,
 : newline (newline) count ;
 
 : cell 1 cells ;
+
+: char 1 chars ;
