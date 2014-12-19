@@ -10,9 +10,8 @@ struct
 endstruct /dynamic
 
 
-: mkfunc ( result-cnt arg-cnt func-name len handle -- )
+: mkfunc ( result-cnt arg-cnt func-ptr -- )
 create 
-    dlsym abort" Failed to find function." \ rc ac fp
     rot ,
     swap ,
     ,
@@ -20,7 +19,7 @@ does>
     dup @ 
     swap cell+ dup @
     swap cell+ @ 
-    dlexec
+\    dlexec
 ;
 
 : tst ( a b c  -- )
@@ -34,4 +33,24 @@ does>
     swap cell+ @
 ;
 
-
+\ 
+\ s" libser.so" dlopen abort" What." value libser
+\ 
+\ 1 2 s" u16OpenSerialPort" libser dlsym abort" Not found" mkfunc openSerialPort
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
+\ 
