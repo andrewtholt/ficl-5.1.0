@@ -19,28 +19,18 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/*
-char *strsave(char *s) {
-    char           *p;
-
-    if ((p = (char *) malloc(strlen(s) + 1)) != NULL)
-        strcpy(p, s);
-    return (p);
-}
-*/
-
-
 //-----------------------------------------------------------------------------
 // Name: u16OpenSerialPort
 // 
 // Description:	Opens the serial port for comminucation 
 //
 // Returns: 
-//		jen_fd:	The file descriptor for the serial port
+//		fd:	The file descriptor for the serial port
 //
 //-----------------------------------------------------------------------------
-int u16OpenSerialPort(char *acSerialPortName, speed_t tBaudRate)
-{	
+
+int u16OpenSerialPort(char *acSerialPortName, speed_t tBaudRate) {	
+
 	int iSerialPort;
     int fd=-1;
 
@@ -60,7 +50,7 @@ int u16OpenSerialPort(char *acSerialPortName, speed_t tBaudRate)
 	printf("serial: Opening Serial Port (%d)\n", fd); 
 
 	//-------------------------------------
-	// Then initialise UART to Jennic chip
+	// Then initialise UART.
 	//-------------------------------------
 	iConfigureSerialPort(fd, tBaudRate);
 
@@ -71,32 +61,31 @@ int u16OpenSerialPort(char *acSerialPortName, speed_t tBaudRate)
 //-----------------------------------------------------------------------------
 // Name: 	teCloseSerialPort()
 //
-// Description: This function waits for input on socket and the serial port.
-//	When something arrives, it gets processed. Then the function returns. 
-//	The function should get called again to wait for the next message.
+// Description: This function flushes, and then closes the serial port.
 //
 // Parameters:
 //		iSerialPort: The serial port file descriptor
 //
 // Returns:
+//      Error value.    
 //		
 //-----------------------------------------------------------------------------
-int teCloseSerialPort(int iSerialPort)
-{
-	int eJenzigError ;
+
+int teCloseSerialPort(int iSerialPort) {
+
+	int eSerialError ;
 
 	eFlushSerialPort(iSerialPort);
-	eJenzigError=close(iSerialPort);
+	eSerialError=close(iSerialPort);
 
-	return eJenzigError;
+	return eSerialError;
 }
 
 
 //-----------------------------------------------------------------------------
 // Name: init_serial_port()
 //
-// Description: This function initialises the serial port for communication with
-// 	The Jennic.
+// Description: This function initialises the serial port.
 //
 // Parameters:
 //	Fd: The file descriptor for the serial port we are using.
@@ -104,8 +93,8 @@ int teCloseSerialPort(int iSerialPort)
 // Returns:
 //		0
 //-----------------------------------------------------------------------------
-int iConfigureSerialPort(int iSerialPort, speed_t tSpeed)
-{
+
+int iConfigureSerialPort(int iSerialPort, speed_t tSpeed) {
 	int iBits;
 	struct termios tty;
 
@@ -116,8 +105,7 @@ int iConfigureSerialPort(int iSerialPort, speed_t tSpeed)
 	cfsetospeed(&tty, tSpeed);
     cfsetispeed(&tty, tSpeed);
   
-	switch (iBits)
-	{
+	switch (iBits) {
 		case '5':
 		  tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS5;
 		  break;
@@ -156,9 +144,8 @@ int iConfigureSerialPort(int iSerialPort, speed_t tSpeed)
 	return 0;
 }
 
-int eFlushSerialPort(int iSerialPort)
-{
-	int eJenzigError=0;
+int eFlushSerialPort(int iSerialPort) {
+	int eSerialError=0;
 
 	int iBytesReceived;
 	char cByte;
@@ -167,5 +154,5 @@ int eFlushSerialPort(int iSerialPort)
 		iBytesReceived = read(iSerialPort, &cByte, 1);
 	} while (iBytesReceived > 0);
 
-	return eJenzigError;
+	return eSerialError;
 }
