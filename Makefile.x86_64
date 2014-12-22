@@ -70,6 +70,7 @@ install:	ficl libficl.so.$(MAJOR).$(MINOR)
 	mkdir -p /usr/local/include/ficlplatform
 	cp ficlplatform/unix.h /usr/local/include/ficlplatform
 	cp libficl.so.$(MAJOR).$(MINOR) /usr/local/lib
+	cp libficl.a /usr/local/lib
 	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so.$(MAJOR)
 	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so
 	mkdir -p /usr/local/lib/ficl
