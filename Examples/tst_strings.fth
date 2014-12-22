@@ -1,4 +1,4 @@
-include strings.fth
+include ./strings.fth
 
 variable ptr
 variable buffer
@@ -11,13 +11,13 @@ variable buffer
 
     s" World" buffer @ swap move
 
-    s" This is a test" ptr $!
+    s" This is a test" buffer $!
 
 ;
 
-: tst { string len buff size }
-    buff buff size + move
-;
+\ : tst { string len buff size -- }
+\    buff buff size + move
+\ ;
 
 main
 

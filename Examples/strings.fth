@@ -51,7 +51,7 @@ load lib.fth
 
 : $! ( addr1 u addr2 - )
     dup @ if
-    dup @ free throw
+        dup @ free throw
     then
     over $padding allocate throw over ! @
     over >r rot over cell+ 
