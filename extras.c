@@ -2041,10 +2041,10 @@ static void athSleep(ficlVm *vm)
     (void) sleep(ficlStackPopInteger(vm->dataStack));
 }
 
-
+char prompt[32];
 static void athSetPrompt(ficlVm *vm)
 {
-    extern char prompt[];
+//    extern char prompt[];
     char *ptr;
     int len;
     int crFlag = 0;
@@ -2410,7 +2410,7 @@ athUnseal(ficlVm * vm)
 static void athUname(ficlVm * vm) {
     struct utsname  buf;
     int             res;
-    extern char    *loadPath;
+//    extern char    *loadPath;
 
     res = uname(&buf);
     printf("System name :%s\n", buf.sysname);
@@ -2418,7 +2418,7 @@ static void athUname(ficlVm * vm) {
     printf("Release     :%s\n", buf.release);
     printf("Version     :%s\n", buf.version);
     printf("Machine     :%s\n", buf.machine);
-    printf("Load        :%s\n", loadPath);
+//    printf("Load        :%s\n", loadPath);
 }
 #endif
 

@@ -47,7 +47,7 @@
 char *strsave(char *);
 struct termios orig_termios; /* Terminal IO Structure */
 char *loadPath;
-char prompt[32];
+// char prompt[32];
 
 void usage() {
     printf("\nUsage: ficl <options> where options are: \n\n");
@@ -84,6 +84,8 @@ int main(int argc, char **argv) {
     char buffer[256];
     ficlVm *vm;
     ficlSystem *system;
+
+    extern char prompt[];
 
     int i=0;
     int ch;
