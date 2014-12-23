@@ -128,7 +128,7 @@ void fatal(char *message) {
 
 #ifndef EMBEDDED
 /* put terminal in raw mode - see termio(7I) for modes */
-
+#ifdef FRED
 void tty_raw(void) {
     struct termios  raw;
 
@@ -190,6 +190,7 @@ int tty_reset(void) {
     }
     return 0;
 }
+#endif // fred
 #endif
 
 int kbhit() {
@@ -249,10 +250,10 @@ char keystroke(int t) {
     }
     return (buf[next++]);
 }
-#define EMPTY '\0'
-static char cbuf = EMPTY;
+// #define EMPTY '\0'
+// static char cbuf = EMPTY;
 
-
+#ifdef FRED
 static void athGetkey(ficlVm * vm) {
 
     int i;
@@ -269,7 +270,6 @@ static void athGetkey(ficlVm * vm) {
         nonblock(0);
         i=fgetc(stdin);
         nonblock(1);
-        //        i=keystroke(1);
         tty_reset();
         ficlStackPushInteger(vm->dataStack, i);
 
@@ -294,6 +294,7 @@ static void athQkey(ficlVm * vm) {
     nonblock(1);    
 
 }
+#endif
 
 static void athStdoutFlush(ficlVm * vm) {
     fflush( (FILE *)NULL );
@@ -566,7 +567,7 @@ static void athPrimitiveDollarSystem(ficlVm * vm) {
     ficlStackPushInteger(vm->dataStack, status);
 }
 
-
+#ifdef FRED
 /*
  ** Ficl add-in to load a text file and execute it...
  ** Cheesy, but illustrative.
@@ -631,7 +632,6 @@ static void ficlDollarPrimitiveLoad(ficlVm * vm) {
     nameLen = ficlStackPopInteger(vm->dataStack);
     ptr=ficlStackPopPointer(vm->dataStack);
     name=strtok(ptr," ");
-//    name[strlen(name)] = '\0';
     name[nameLen] = '\0';
 
     scratch = pathToFile(name);
@@ -645,17 +645,11 @@ static void ficlDollarPrimitiveLoad(ficlVm * vm) {
     } else {
         strcpy(fullName, scratch);
     }
-
     /*
      ** get the file's size and make sure it exists
      */
-
-    /*
-       f = fopen(name, "r");
-     */
     f = fopen(fullName, "r");
-    if (!f)
-    {
+    if (!f) {
         sprintf(buffer, "Unable to open file %s", name);
         ficlVmTextOut(vm, buffer);
         ficlVmTextOut(vm, FICL_COUNTED_STRING_GET_POINTER(*counted));
@@ -666,8 +660,7 @@ static void ficlDollarPrimitiveLoad(ficlVm * vm) {
     vm->sourceId.p = (void *) f;
 
     /* feed each line to ficlExec */
-    while (fgets(buffer, BUFFER_SIZE, f))
-    {
+    while (fgets(buffer, BUFFER_SIZE, f)) {
         int             length = strlen(buffer) - 1;
 
         line++;
@@ -681,8 +674,7 @@ static void ficlDollarPrimitiveLoad(ficlVm * vm) {
         FICL_STRING_SET_LENGTH(s, length + 1);
         result = ficlVmExecuteString(vm, s);
         /* handle "bye" in loaded files. --lch */
-        switch (result)
-        {
+        switch (result) {
             case FICL_VM_STATUS_OUT_OF_TEXT:
                 break;
             case FICL_VM_STATUS_USER_EXIT:
@@ -743,9 +735,7 @@ static void ficlPrimitiveLoad(ficlVm * vm) {
     ficlDollarPrimitiveLoad(vm);
 }
 
-    static void
-ficlDollarPrimitiveLoadDir(ficlVm * vm)
-{
+static void ficlDollarPrimitiveLoadDir(ficlVm * vm) {
     char           *dirName, *fileName;
     char            buffer[255];
 
@@ -765,6 +755,7 @@ ficlDollarPrimitiveLoadDir(ficlVm * vm)
     ficlDollarPrimitiveLoad(vm);
 }
 
+#endif // FRED
 
 
 
@@ -3485,7 +3476,7 @@ void athRedisDisplayReply(ficlVm *vm) {
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
-    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
+//    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
     
@@ -3495,8 +3486,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 ficlDictionarySetPrimitive(dictionary, "servent", athServent, FICL_WORD_DEFAULT);
 #endif
      */
-    ficlDictionarySetPrimitive(dictionary, (char *)"key", athGetkey, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, (char *)"?key", athQkey, FICL_WORD_DEFAULT);
+//    ficlDictionarySetPrimitive(dictionary, (char *)"key", athGetkey, FICL_WORD_DEFAULT);
+//    ficlDictionarySetPrimitive(dictionary, (char *)"?key", athQkey, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"stdout-flush", athStdoutFlush, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"zmove", athZmove, FICL_WORD_DEFAULT);
@@ -3534,9 +3525,9 @@ ficlDictionarySetPrimitive(dictionary, "simpl-detach", athSimplDetach, FICL_WORD
 #endif
      */
 
-    ficlDictionarySetPrimitive(dictionary, (char *)"load", ficlPrimitiveLoad, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, (char *)"$load", ficlDollarPrimitiveLoad, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, (char *)"$load-dir", ficlDollarPrimitiveLoadDir, FICL_WORD_DEFAULT);
+//    ficlDictionarySetPrimitive(dictionary, (char *)"load", ficlPrimitiveLoad, FICL_WORD_DEFAULT);
+//    ficlDictionarySetPrimitive(dictionary, (char *)"$load", ficlDollarPrimitiveLoad, FICL_WORD_DEFAULT);
+//    ficlDictionarySetPrimitive(dictionary, (char *)"$load-dir", ficlDollarPrimitiveLoadDir, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"spewhash", ficlPrimitiveSpewHash, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"system", ficlPrimitiveSystem, FICL_WORD_DEFAULT);

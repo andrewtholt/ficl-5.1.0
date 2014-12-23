@@ -39,14 +39,24 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 #include "ficl.h"
 
 #include <termios.h>
+static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
 char *strsave(char *);
+static void ficlDollarPrimitiveLoad(ficlVm *);
+static void ficlPrimitiveLoad(ficlVm *);
+void ficlSystemCompileMain(ficlSystem *);
+static void athGetkey(ficlVm *);
+static void athQkey(ficlVm *);
+int tty_reset(void);
+
 struct termios orig_termios; /* Terminal IO Structure */
 char *loadPath;
+#define BUFFER_SIZE 256
 // char prompt[32];
 
 void usage() {
@@ -158,3 +168,300 @@ int main(int argc, char **argv) {
     return 0;
 }
 
+#ifndef EMBEDDED
+/* put terminal in raw mode - see termio(7I) for modes */
+
+void tty_raw(void) {
+    struct termios  raw;
+
+    extern struct termios orig_termios; /* TERMinal I/O Structure */
+
+    raw = orig_termios; /* copy original and then modify below */
+
+    /*
+     * input modes - clear indicated ones giving: no break, no CR to NL,
+     * no parity check, no strip char, no start/stop output (sic) control
+     */
+    raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
+
+    /*
+     * output modes - clear giving: no post processing such as NL to
+     * CR+NL
+     */
+    raw.c_oflag &= ~(OPOST);
+
+    /* control modes - set 8 bit chars */
+    raw.c_cflag |= (CS8);
+
+    /*
+     * local modes - clear giving: echoing off, canonical off (no erase
+     * with backspace, ^U,...),  no extended functions, no signal chars
+     * (^Z,^C)
+     */
+    raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+
+    /*
+     * control chars - set return condition: min number of bytes and
+     * timer
+     */
+    //    raw.c_cc[VMIN] = 5;
+    //    raw.c_cc[VTIME] = 8;    /* after 5 bytes or .8 seconds after first byte seen      */
+    //    raw.c_cc[VMIN] = 0;
+    //    raw.c_cc[VTIME] = 0;    /* immediate - anything       */
+    //    raw.c_cc[VMIN] = 2;
+    //    raw.c_cc[VTIME] = 0;    /* after two bytes, no timer  */
+    //    raw.c_cc[VMIN] = 0;
+    //    raw.c_cc[VTIME] = 8;    /* after a byte or .8 seconds */
+
+    /* put terminal in raw mode after flushing */
+    if (tcsetattr(ttyfd, TCSAFLUSH, &raw) < 0)
+        fatal("can't set raw mode");
+}
+/*
+ ** Ficl add-in to load a text file and execute it...
+ ** Cheesy, but illustrative.
+ ** Line oriented... filename is newline (or NULL) delimited.
+ ** Example:
+ **    load test.f
+ */
+
+char           *pathToFile(char *fname) {
+    int             i;
+    int             fd;
+    extern char    *loadPath;
+    char            path[255];
+    char            scr[255];
+    char           *scratch;
+    char           *tok;
+    char           *dirs[32];
+
+    if ((loadPath == (char *) NULL) || (*fname == '/') || (*fname == '.'))
+        return (fname);
+
+    strcpy(path, loadPath);
+
+    tok = (char *) strtok(path, ":");
+    i = 0;
+
+    for (; tok != (char *) NULL;) {
+        strcpy(scr, tok);
+        strcat(scr, "/");
+        strcat(scr, fname);
+
+        scratch = strsave(scr);
+
+        fd = open(scratch, O_RDONLY);
+
+        if (fd >= 0) {
+            close(fd);
+            return (scratch);
+        }
+        tok = (char *) strtok(NULL, ":");
+    }
+    return (NULL);
+}
+
+static void ficlDollarPrimitiveLoad(ficlVm * vm) {
+    char            buffer[BUFFER_SIZE];
+    char            filename[BUFFER_SIZE];
+    char            fullName[255];
+
+    char           *scratch;
+    ficlCountedString *counted = (ficlCountedString *) filename;
+    int             line = 0;
+    FILE           *f;
+    int             result = 0;
+    ficlCell        oldSourceId;
+    ficlString      s;
+    int             nameLen;
+    char           *name;
+    char *ptr=(char *)NULL;
+
+    nameLen = ficlStackPopInteger(vm->dataStack);
+    ptr=ficlStackPopPointer(vm->dataStack);
+    name=strtok(ptr," ");
+    name[nameLen] = '\0';
+
+    scratch = pathToFile(name);
+
+    if (scratch == (char *) NULL) {
+        sprintf(buffer, "File not found :%s", name);
+        ficlVmTextOut(vm, buffer);
+        ficlVmTextOut(vm, FICL_COUNTED_STRING_GET_POINTER(*counted));
+        ficlVmTextOut(vm, "\n");
+        ficlVmThrow(vm, FICL_VM_STATUS_QUIT);
+    } else {
+        strcpy(fullName, scratch);
+    }
+    /*
+     ** get the file's size and make sure it exists
+     */
+    f = fopen(fullName, "r");
+    if (!f) {
+        sprintf(buffer, "Unable to open file %s", name);
+        ficlVmTextOut(vm, buffer);
+        ficlVmTextOut(vm, FICL_COUNTED_STRING_GET_POINTER(*counted));
+        ficlVmTextOut(vm, "\n");
+        ficlVmThrow(vm, FICL_VM_STATUS_QUIT);
+    }
+    oldSourceId = vm->sourceId;
+    vm->sourceId.p = (void *) f;
+
+    /* feed each line to ficlExec */
+    while (fgets(buffer, BUFFER_SIZE, f)) {
+        int             length = strlen(buffer) - 1;
+
+        line++;
+        if (length <= 0)
+            continue;
+
+        if (buffer[length] == '\n')
+            buffer[length--] = '\0';
+
+        FICL_STRING_SET_POINTER(s, buffer);
+        FICL_STRING_SET_LENGTH(s, length + 1);
+        result = ficlVmExecuteString(vm, s);
+        /* handle "bye" in loaded files. --lch */
+        switch (result) {
+            case FICL_VM_STATUS_OUT_OF_TEXT:
+                break;
+            case FICL_VM_STATUS_USER_EXIT:
+                exit(0);
+                break;
+
+            default:
+                vm->sourceId = oldSourceId;
+                fclose(f);
+                ficlVmThrowError(vm, "Error loading file <%s> line %d", FICL_COUNTED_STRING_GET_POINTER(*counted), line);
+                break;
+        }
+    }
+    /*
+     ** Pass an empty line with SOURCE-ID == -1 to flush
+     ** any pending REFILLs (as required by FILE wordset)
+     */
+    vm->sourceId.i = -1;
+    FICL_STRING_SET_FROM_CSTRING(s, "");
+    ficlVmExecuteString(vm, s);
+
+    vm->sourceId = oldSourceId;
+    fclose(f);
+
+    /* handle "bye" in loaded files. --lch */
+    if (result == FICL_VM_STATUS_USER_EXIT)
+        ficlVmThrow(vm, FICL_VM_STATUS_USER_EXIT);
+    return;
+}
+
+static void ficlPrimitiveLoad(ficlVm * vm) {
+    char            buffer[BUFFER_SIZE];
+    char            filename[BUFFER_SIZE];
+    char            scratch[255];
+    char            tmp[255];
+
+    extern char    *loadPath;
+    char           *name;
+    char           *tok;
+    char           *dirs[32];
+
+    int             i = 0;
+    int             fd;
+
+
+    ficlCountedString *counted = (ficlCountedString *) filename;
+    ficlVmGetString(vm, counted, '\n');
+
+    if (FICL_COUNTED_STRING_GET_LENGTH(*counted) <= 0) {
+        ficlVmTextOut(vm, "Warning (load): nothing happened\n");
+        return;
+    }
+    name = FICL_COUNTED_STRING_GET_POINTER(*counted);
+
+
+    ficlStackPushPointer(vm->dataStack, name);
+    ficlStackPushInteger(vm->dataStack, FICL_COUNTED_STRING_GET_LENGTH(*counted));
+    ficlDollarPrimitiveLoad(vm);
+}
+
+static void ficlDollarPrimitiveLoadDir(ficlVm * vm) {
+    char           *dirName, *fileName;
+    char            buffer[255];
+
+    int             dirLen, fileLen;
+
+    fileLen = ficlStackPopInteger(vm->dataStack);
+    fileName = ficlStackPopPointer(vm->dataStack);
+    fileName[fileLen] = '\0';
+
+    dirLen = ficlStackPopInteger(vm->dataStack);
+    dirName = ficlStackPopPointer(vm->dataStack);
+    dirName[dirLen] = '\0';
+
+    sprintf(buffer, "%s/%s", dirName, fileName);
+    ficlStackPushPointer(vm->dataStack, buffer);
+    ficlStackPushInteger(vm->dataStack, strlen(buffer));
+    ficlDollarPrimitiveLoad(vm);
+}
+
+#define EMPTY '\0'
+static char cbuf = EMPTY;
+static void athGetkey(ficlVm * vm) {
+
+    int i;
+    extern struct termios orig_termios; /* TERMinal I/O Structure */
+
+    i = tcgetattr( ttyfd, &orig_termios);
+
+    if( cbuf != EMPTY ) {
+        ficlStackPushInteger(vm->dataStack, cbuf);
+        cbuf = EMPTY ;
+    } else {
+
+        tty_raw();
+        nonblock(0);
+        i=fgetc(stdin);
+        nonblock(1);
+        tty_reset();
+        ficlStackPushInteger(vm->dataStack, i);
+
+    }
+}
+
+
+static void athQkey(ficlVm * vm) {
+
+    tty_raw();
+    nonblock(0);
+
+    if(kbhit() !=0 )
+    {
+        cbuf=fgetc(stdin);
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        cbuf = EMPTY;
+        ficlStackPushInteger(vm->dataStack,0);
+    }
+    tty_reset();
+    nonblock(1);    
+
+}
+
+int tty_reset(void) {
+    extern struct termios orig_termios; /* TERMinal I/O Structure */
+
+    /* flush and reset */
+    if (tcsetattr(ttyfd, TCSAFLUSH, &orig_termios) < 0) {
+        return -1;
+    }
+    return 0;
+}
+
+void ficlSystemCompileMain(ficlSystem * system) {
+    ficlDictionary *dictionary = ficlSystemGetDictionary(system);
+
+    ficlDictionarySetPrimitive(dictionary, (char *)"load", ficlPrimitiveLoad, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"$load", ficlDollarPrimitiveLoad, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"key", athGetkey, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"?key", athQkey, FICL_WORD_DEFAULT);
+}
+#endif
