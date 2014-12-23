@@ -30,6 +30,7 @@ softcore/makesoftcore
 *.c~
 .gdb_history
 *.swp
+.*-swp
 .c9
 html
 latex
