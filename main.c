@@ -132,6 +132,7 @@ int main(int argc, char **argv) {
 
     system = ficlSystemCreate(NULL);
     ficlSystemCompileExtras(system);
+    ficlSystemCompileMain(system);
     vm = ficlSystemCreateVm(system);
 
     if(verbose !=0) {
