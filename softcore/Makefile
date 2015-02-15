@@ -4,7 +4,7 @@ SOURCES = softcore.fr ifbrack.fr prefix.fr ficl.fr jhlocal.fr marker.fr oo.fr cl
 	./makesoftcore $(SOURCES)
 
 makesoftcore: makesoftcore.c ../lzcompress.c ../bit.c
-	cc -o makesoftcore makesoftcore.c ../lzcompress.c ../bit.c
+	cc -g -o makesoftcore makesoftcore.c ../lzcompress.c ../bit.c
 
 clean: 
 	- rm -f ../softcore.c *.o makesoftcore

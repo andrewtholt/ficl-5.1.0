@@ -2,7 +2,7 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX # -DSYSV_IPC -DSOCKET # -DDYNLIB # riscos MOTO_CPU32 
+TARGET= -DLINUX -DFICL_WANT_SMALL # -DSYSV_IPC -DSOCKET # -DDYNLIB # riscos MOTO_CPU32 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
@@ -13,10 +13,10 @@ RANLIB = ranlib
 MAJOR = 4
 MINOR = 1.0
 
-all:	ficl lib
+all:	lib ficl
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -ldl
+	$(CC) main.o -o ficl -L. -lficl # -lm -ldl
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
@@ -29,7 +29,7 @@ libficl.a: $(OBJECTS)
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
-	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
+#	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
 	$(CC) main.o -o main -L. -lficl -lm
