@@ -1,20 +1,22 @@
 OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o softcore.o stack.o tools.o vm.o primitives.o bit.o lzuncompress.o unix.o utility.o hash.o callback.o word.o extras.o libser.o
 HEADERS= ficl.h ficlplatform/unix.h
+
+BASE=$(HOME)/Source/buildroot/output/host/usr/bin
+
 #
 # Flags for shared library
 TARGET= -DLINUX -DSYSV_IPC -DSOCKET # -DDYNLIB # riscos MOTO_CPU32 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
-CC=$(BASE)/i386-linux-gcc
-LIB=$(BASE)/i386-linux-ar cr
-RANLIB=$(BASE)/i386-linux-ranlib
+CC=$(BASE)/arm-linux-gcc
+LIB=$(BASE)/arm-linux-ar cr
+RANLIB=$(BASE)/arm-linux-ranlib
 
-LIBS=-L. -lficl -lm -ldl -L/home/andrewh/Source/buildroot-2013.11/output/host/usr/lib
+LIBS=-L. -lficl -lm -ldl -L(HOME)/Source/buildroot-2013.11/output/host/usr/lib
 MAJOR = 4
 MINOR = 1.0
 
-BASE=/home/andrewh/Source/buildroot-2013.11/output/host/usr/bin
 
 all:	ficl lib
 
@@ -37,6 +39,10 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
 	$(CC) main.o -o main -L. -lficl -lm
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
+
+ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
+#   $(CC) $(LDFLAGS) main.o -o ficls -lm -ldl -L. -lficl
+	$(CC) --static main.o -o ficls -L. -lficl -lm
 
 unix.o: ficlplatform/unix.c $(HEADERS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ ficlplatform/unix.c
