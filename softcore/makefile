@@ -7,5 +7,5 @@ makesoftcore: makesoftcore.c ../lzcompress.c ../bit.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -I.. -o makesoftcore makesoftcore.c ../lzcompress.c ../bit.c
 
 clean: 
-	- rm ../softcore.c *.o makesoftcore
+	rm -f ../softcore.c *.o makesoftcore
 
