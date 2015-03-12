@@ -607,7 +607,10 @@ char           *pathToFile(char *fname) {
         if (fd >= 0) {
             close(fd);
             return (scratch);
+        } else {
+            free(scratch);
         }
+
         tok = (char *) strtok(NULL, ":");
     }
     return (NULL);
