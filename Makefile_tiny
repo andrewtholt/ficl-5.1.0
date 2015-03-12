@@ -18,6 +18,9 @@ all:	lib ficl
 ficl: main.o $(HEADERS) libficl.a
 	$(CC) main.o -o ficl -L. -lficl # -lm -ldl
 
+ficls:	main.o $(HEADERS) libficl.a
+	$(CC) --static main.o -o ficls -L. -lficl -lm
+
 lib: libficl.so.$(MAJOR).$(MINOR)
 
 # static library build
