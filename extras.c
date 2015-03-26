@@ -408,6 +408,12 @@ static void athFeatures(ficlVm *vm) {
     printf("NOT SOLARIS\n");
 #endif
 
+#ifdef MTHREAD
+    printf("    MTHREAD\n");
+#else
+    printf("NOT MTHREAD\n");
+#endif
+
 
 #ifdef QNX
     printf("    QNX\n");
