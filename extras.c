@@ -3482,13 +3482,61 @@ void athRedisDisplayReply(ficlVm *vm) {
 }
 #endif
 
+#if FICL_WANT_FILE
+void athRead(ficlVm *vm) {
+    ssize_t size;
+    size_t count;
+    void *buf;
+    int fd;
+    extern int errno;
+
+    count = ficlStackPopInteger(vm->dataStack);
+    buf   = (void *)ficlStackPopPointer(vm->dataStack) ;
+    fd    = ficlStackPopInteger(vm->dataStack);
+
+    size = read(fd,buf,count);
+    if( size < 0) {
+        ficlStackPushInteger(vm->dataStack, errno);
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, size);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+
+}
+
+void athWrite(ficlVm *vm) {
+    ssize_t size;
+    size_t count;
+    void *buf;
+    int fd;
+    extern int errno;
+
+    count = ficlStackPopInteger(vm->dataStack);
+    buf   = (void *)ficlStackPopPointer(vm->dataStack) ;
+    fd    = ficlStackPopInteger(vm->dataStack);
+
+    size = write(fd,buf,count);
+    if( (size < 0) || ( (size == 0) && (errno !=0 ) ) ) {
+        ficlStackPushInteger(vm->dataStack, errno);
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, size);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+}
+
+#endif
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
 //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
-    
+#ifdef FICL_WANT_FILE
+    ficlDictionarySetPrimitive(dictionary, (char *)"read",  athRead,  FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"write", athWrite, FICL_WORD_DEFAULT);
+#endif
 
     /*
 #ifdef SERVENT
