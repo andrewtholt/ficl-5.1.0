@@ -3,7 +3,7 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: i386
-Version: 5.2.1
+Version: 5.2.2
 Description: ficl
  ficl - Forth Inspired Control Language
  5.2.1 8 Nov 2014 - Configured for a minimal build, plus a static executable ficls

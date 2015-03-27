@@ -53,7 +53,7 @@ cp ./ficl ${DEST}
 strip ${DEST}/ficl
 
 if [ -x ./ficls ]; then
-    echo "And a stic executable too."
+    echo "And a static executable too."
     cp ./ficls ${DEST}
     strip ${DEST}/ficls
 fi
