@@ -4,7 +4,7 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 TARGET= -DLINUX -DDYNLIB # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET 
 SHFLAGS = -fPIC
-CFLAGS= $(SHFLAGS) -g
+CFLAGS= $(SHFLAGS) -g -m32
 CPPFLAGS= $(TARGET) -I.
 LDFLAGS=-Wl,--no-as-needed
 CC = cc
@@ -34,7 +34,7 @@ libficl.a: $(OBJECTS)
 
 # shared library build
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
+	$(CC) -m32 -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
 #	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
