@@ -3549,7 +3549,7 @@ void athInotifyInit(ficlVm *vm) {
 }
 
 /*
- * inotify_init() call
+ * inotify_add_watch() call
  *
  * @param[in] fd 
  * @param[in] pathname len 
@@ -3566,13 +3566,13 @@ void athInotifyAddWatch(ficlVm *vm) {
     int mask;
     int wd;
 
-    fd = ficlStackPopInteger(vm->dataStack);
-    path = (void *)ficlStackPopPointer(vm->dataStack) ;
+    mask = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
+    path = (void *)ficlStackPopPointer(vm->dataStack) ;
+    fd = ficlStackPopInteger(vm->dataStack);
 
     path[len]='\0';
 
-    mask = ficlStackPopInteger(vm->dataStack);
     wd = inotify_add_watch(fd,path,mask);
 
     if(wd < 0 ) {
@@ -3582,7 +3582,28 @@ void athInotifyAddWatch(ficlVm *vm) {
         ficlStackPushInteger(vm->dataStack, 0);
     }
 }
+/*
+ * inotify_rm_watch() call
+ *
+ * @param[in] fd 
+ * @param[in] wd
+ * @return on success - wd 0
+ * @return on failure - -1
+ *
+ * inotify_rm_watch( fd, wd );
+ */
+void athInotifyRmWatch(ficlVm *vm) {
+    int wd;
+    int fd;
+    int res;
 
+    wd = ficlStackPopInteger(vm->dataStack);
+    fd = ficlStackPopInteger(vm->dataStack);
+
+    res = inotify_rm_watch( fd, wd );
+
+    ficlStackPushInteger(vm->dataStack, res);
+}
 #endif
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
@@ -3593,6 +3614,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 #ifdef FICL_WANT_FILE
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-init",  athInotifyInit,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-add-watch",  athInotifyAddWatch,  FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"inotify-rm-watch",  athInotifyRmWatch,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"read",  athRead,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"write", athWrite, FICL_WORD_DEFAULT);
 #endif
