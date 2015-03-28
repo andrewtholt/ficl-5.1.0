@@ -1,5 +1,5 @@
 Package: ficl
-Version: 5.1.7
+Version: 5.2.3
 Depends: 
 Provides: 
 Source: package/base-files
