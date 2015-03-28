@@ -3483,6 +3483,8 @@ void athRedisDisplayReply(ficlVm *vm) {
 #endif
 
 #if FICL_WANT_FILE
+#include <sys/inotify.h>
+
 void athRead(ficlVm *vm) {
     ssize_t size;
     size_t count;
@@ -3526,6 +3528,61 @@ void athWrite(ficlVm *vm) {
     }
 }
 
+/**
+ * inotify_init() call
+ *
+ * @param None
+ * @return on success - fd 0
+ * @return on failure - -1
+ *
+ */
+void athInotifyInit(ficlVm *vm) {
+    int fd;
+    
+    fd = inotify_init();
+    if(fd) {
+        ficlStackPushInteger(vm->dataStack, fd);
+        ficlStackPushInteger(vm->dataStack, 0);
+    } else {
+        ficlStackPushInteger(vm->dataStack, -1);
+    }
+}
+
+/*
+ * inotify_init() call
+ *
+ * @param[in] fd 
+ * @param[in] pathname len 
+ * @param[in] mask
+ * @return on success - wd 0
+ * @return on failure - -1
+ *
+ * int inotify_add_watch(int fd, const char *pathname, uint32_t mask);
+ */
+void athInotifyAddWatch(ficlVm *vm) {
+    int fd;
+    char *path;
+    int len;
+    int mask;
+    int wd;
+
+    fd = ficlStackPopInteger(vm->dataStack);
+    path = (void *)ficlStackPopPointer(vm->dataStack) ;
+    len = ficlStackPopInteger(vm->dataStack);
+
+    path[len]='\0';
+
+    mask = ficlStackPopInteger(vm->dataStack);
+    wd = inotify_add_watch(fd,path,mask);
+
+    if(wd < 0 ) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, wd);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+}
+
 #endif
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
@@ -3534,6 +3591,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE
+    ficlDictionarySetPrimitive(dictionary, (char *)"inotify-init",  athInotifyInit,  FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"inotify-add-watch",  athInotifyAddWatch,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"read",  athRead,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"write", athWrite, FICL_WORD_DEFAULT);
 #endif
