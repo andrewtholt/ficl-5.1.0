@@ -3552,12 +3552,11 @@ void athInotifyInit(ficlVm *vm) {
  * inotify_add_watch() call
  *
  * @param[in] fd 
- * @param[in] pathname len 
+ * @param[in[ pathname len 
  * @param[in] mask
  * @return on success - wd 0
  * @return on failure - -1
  *
- * int inotify_add_watch(int fd, const char *pathname, uint32_t mask);
  */
 void athInotifyAddWatch(ficlVm *vm) {
     int fd;
