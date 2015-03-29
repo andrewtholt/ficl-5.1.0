@@ -3618,11 +3618,6 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"write", athWrite, FICL_WORD_DEFAULT);
 #endif
 
-    /*
-#ifdef SERVENT
-ficlDictionarySetPrimitive(dictionary, "servent", athServent, FICL_WORD_DEFAULT);
-#endif
-     */
 //    ficlDictionarySetPrimitive(dictionary, (char *)"key", athGetkey, FICL_WORD_DEFAULT);
 //    ficlDictionarySetPrimitive(dictionary, (char *)"?key", athQkey, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"stdout-flush", athStdoutFlush, FICL_WORD_DEFAULT);
