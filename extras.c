@@ -3586,7 +3586,7 @@ void athInotifyAddWatch(ficlVm *vm) {
  *
  * @param[in] fd 
  * @param[in] wd
- * @return on success - wd 0
+ * @return on success -  0
  * @return on failure - -1
  *
  * inotify_rm_watch( fd, wd );

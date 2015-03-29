@@ -602,9 +602,35 @@ Stack:	reply ---
 Description:
     Display each of the fields in the redis reply structure.
 
-Name:	
-Stack:	
+Name:	read
+Stack:	fd addr len -- -1 | len 0
 Description:
+    Read from the fd into the buffer no more than len bytes.  
+    On success the length and a false flag, on error return a true flag.
+
+Name:	write
+Stack:	fd addr len -- len 0 | errno -1
+Description:
+    Write data to the file, from the buffer len bytes.  
+    Return errno and a true flag on error, on success the number of bytes 
+    written and a false flag.
+
+Name:   inotify-init
+Stack:	-- fd 0 | -1
+Description:
+    Return a file descriptor and a false flag, on error return a true flag.
+
+Name:	inotify-add-watch
+Stack:	fd path len mask -- wd 0 | -1
+Description:
+    Given the file descriptor from inotify-init and a file path, 
+    the mask defines what will be watched.  See inotify_add_watch.
+    Return a watch descriptor and a false flag on success.
+
+Name:	inotify-rm-watch
+Stack:	fd wd -- 0 | -1
+Description:
+    Stop watching for inotify events.  
 
 Name:	
 Stack:	
