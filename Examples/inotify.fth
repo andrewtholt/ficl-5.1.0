@@ -26,11 +26,22 @@
 0X80000000 constant IN_ONESHOT
 0XFFF constant IN_ALL_EVENTS
 
+0xff constant NAME_MAX
+
+
 
 -1 value fd
 -1 value wd
 -1 value buffer
 255 constant /buffer
+
+struct
+  (int) chars field inotify-wd
+  (int) chars field inotify-mask
+  (int) chars field inotify-cookie
+  (int) chars field inotify-len      \ name length
+  NAME_MAX chars field inotify-name  \ name of file
+endstruct inotify-event
 
 \  struct inotify_event
 \  {
