@@ -1,3 +1,6 @@
+load lib.fth
+load struct.fth
+
 0X01 constant _SYS_INOTIFY_H
 0X01 constant IN_ACCESS
 0X02 constant IN_MODIFY
@@ -41,7 +44,7 @@ struct
   (int) chars field inotify-cookie
   (int) chars field inotify-len      \ name length
   NAME_MAX chars field inotify-name  \ name of file
-endstruct inotify-event
+endstruct /inotify-event
 
 \  struct inotify_event
 \  {
@@ -57,13 +60,15 @@ endstruct inotify-event
 
 \   wd = inotify_add_watch( fd, "/tmp", IN_CREATE | IN_DELETE );
 
-    fd s" /tmp" IN_CREATE IN_DELETE or inotify-add-watch abort" inotify-add-watch" to wd
+\    fd s" /tmp" IN_CREATE IN_DELETE or inotify-add-watch abort" inotify-add-watch" to wd
+    fd s" /tmp" IN_CREATE inotify-add-watch abort" inotify-add-watch" to wd
 
-    /buffer allocate abort" allocate failed" to buffer
-    buffer /buffer erase
-    fd buffer 128 read
+    /inotify-event allocate abort" allocate failed" to buffer
+    buffer /inotify-event erase
+    fd buffer /inotify-event read
+    buffer /inotify-event dump
 
-    fd wd inotify-rm-watch abort" inotify-rm-watch failed." 
+\    fd wd inotify-rm-watch abort" inotify-rm-watch failed." 
 ;
 
 init
