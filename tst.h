@@ -1,3 +1,4 @@
+#define FRED
 
 #define TEST1 1 /* test */
 
