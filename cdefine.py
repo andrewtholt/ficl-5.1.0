@@ -52,8 +52,8 @@ def main():
 
             v=pline.split(" ",2)
 
-            print v
-            print len(v)
+#            print v
+#            print len(v)
 
             if len(v) == 2:
                 v.append( "0xffffffff")
