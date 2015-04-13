@@ -1,496 +1,2468 @@
-<
-<>
-<#
-=
->
--
-,
-;
-:
-!
-?
-/
-.
-."
-.(
-'
-(
-(;)
-(.")
-[
-[']
-]
-{
-{{
-@
-*
-*/
-**
-**
-**
-**
-\
-#
-#>
-+
-+!
-0<
-0<>
-0=
-0>
-1-
-1+
-2-
-2!
-2/
-2@
-2*
-2+
-2constant
-(2constant)
-2drop
-2dup
-2literal
-(2literal)
-2local
-(2local)
-(@2Local)
-(@2Local0)
-2over
-2>r
-2r>
-2r@
-2rot
-2swap
-2value
-2variable
-8xx?
-abort
-abort"
-abs
-accept
-add-cr
-add-parse-step
-again
-alarm
-align
-aligned
-allocate
-allot
-also
-amd64?
-and
-arm?
-base
-begin
-bin
-bl
->body
-body>
-(branch)
-(branch0)
-(branch0-final)
-(branch-final)
-brand-wordlist
-bsd?
-bye
-(c")
-c,
-c!
-c"
-c@
-case
-catch
-cd
-cell-
-cell+
-cells
-char
-(char)
-(char*)
-[char]
-char+
-chars
-clock
-clocks/sec
-close-file
-clr-errno
-coldfire?
-(colon)
-compare
-compare-insensitive
-compile,
-compile-only
-constant
-(constant)
-convert
-count
-cpu
-cr
-create
-(create)
-create-file
-darwin?
-date
-debug
-debug-xt
-decimal
-definitions
-delete-file
-depth
-dlclose
-dlerror
-dlexec
-dlopen
-dlsym
-dnegate
-do
-?do
-(?do)
-(do)
-do-does
-(does)
-does>
-doLocal
-do-vocabulary
-drop
-dump
-dump-fd
-dup
-?dup
-elapsed
-else
-[else]
-emit
-empty
-endcase
-endif
-[endif]
-end-locals
-endof
-end-prefixes
-.env
-env-2constant
-env-constant
-environment?
-erase
-errno
-evaluate
-execute
-exit
-(exit)
-exit-inner
-expect
-f<
-f=
-f>
-f-
-f!
-f/
-f.
-f@
-f*
-f+
-f+!
-f0<
-f0=
-f0>
-f2!
-f2@
-f2constant
-(f2constant)
-f2drop
-f2dup
-(f2local)
-(@f2Local)
-f2over
-f2swap
-f2value
-fallthrough
-false
-fcntl
-fconstant
-(fconstant)
-fd@
-fdepth
-fdrop
-fdup
-f?dup
-fe.
-.features
-f-i
-f/i
-f*i
-f+i
-ficl-named-wordlist
-ficl-set-current
-ficl-vocabulary
-ficl-wordlist
-file-position
-file-size
-file-status
-fill
-find
-fliteral
-(fliteral)
->float
-?float
-float>
-float>int
-(flocal)
-(@fLocal)
-flush-file
-fm/mod
-fnegate
-forget
-forget-wid
-forth
-forth-wordlist
-fover
-fpick
-free
-froll
-f-roll
-frot
-f-rot
-f.s
-fswap
-fvalue
-get-current
-getenv
-get-order
-get-pid
-hash
-.hash
-here
-hex
-hidden
-hide
-hold
-hostname
-i
-if
-[if]
-i-f
-i/f
-immediate
->in
-include
-included
-include-file
-inotify-add-watch
-inotify-init
-inotify-rm-watch
-(int)
-interpret
-int>float
-invert
-ioctl
-j
-k
-key
-?key
-kill
-last-signal
-last-word
-leave
-(link)
-linux?
-literal
-(literal)
-load
-$load
-local
-(@local)
-(local)
-(@local0)
-(@local1)
-locals|
-lookup
-loop
-(+loop)
-(loop)
-+loop
-lshift
-m*
-marker
-max
-mdump-ascii-line
-mdump-hex-line
-min
-mips?
-mmap
-mod
-/mod
-*/mod
-move
-ms
->name
-negate
-nip
-:noname
-now
->number
-?number
-nUser
-?object
-objectify
-of
-(of)
-only
-on-step
-oo
-oop
-open-file
-or
-order
-os
-over
-pad
-parse
-parse-order
-(parse-step)
-parse-word
-pclose
-perror
-pick
-popen
-postpone
-ppc?
-?prefix
-<prefixes>
-previous
-pwd
-q!
-q@
-QNX?
-quit
->r
-r>
-r@
-random
-range
-read
-read-file
-read-line
-recurse
-refill
-rename-file
-repeat
-reposition-file
-reset-prompt
-resize
-resize-file
-r/o
-roll
--roll
-rot
--rot
--rot
-r.s
-rshift
-r/w
-.s
-#s
-s"
-save-current
-s>d
-seal
->search
-search>
-search-wordlist
-see
-seed-random
-see-xt
-set-current
-set-order
-set-prompt
-sfind
-sh4a?
-show-prefixes
-sign
-signal
-sleep
-sliteral
-sm/rem
-solaris?
-source
-source-id
-space
-spaces
-span
-sparc?
-spewhash
-sprintf
-.s-simple
-start-clock
-start-prefixes
-state
-stdout-flush
-step-break
-strcat
-strcpy
-strdup
-/string
-strlen
-strsave
-strtok
-swap
-system
-$system
-__tempbase
-then
-[then]
-throw
-ticks
-time
-to
-(to2Local)
-(To2Local0)
-(toF2Local)
-(toFLocal)
-(toLocal)
-(toLocal0)
-(toLocal1)
--trailing
-true
-tuck
-type
-u<
-u.
-uclinux?
-um*
-um/mod
-uname
-(unlink)
-unloop
-unseal
-until
-user
-user
-(user)
-value
-variable
-(variable)
-.ver
-verbose?
-vocabulary
-w!
-w@
-while
-wid-get-name
-wid-set-name
-wid-set-super
-within
-w/o
-word
-?word
-wordlist
-words
-write
-write-file
-write-line
-x.
-x86?
-xor
-zmove
+Name:	<
+Stack:	
+Description:	
+Notes:	
+
+Name:	<>
+Stack:	
+Description:	
+Notes:	
+
+Name:	<#
+Stack:	
+Description:	
+Notes:	
+
+Name:	=
+Stack:	
+Description:	
+Notes:	
+
+Name:	>
+Stack:	
+Description:	
+Notes:	
+
+Name:	-
+Stack:	
+Description:	
+Notes:	
+
+Name:	,
+Stack:	
+Description:	
+Notes:	
+
+Name:	;
+Stack:	
+Description:	
+Notes:	
+
+Name:	:
+Stack:	
+Description:	
+Notes:	
+
+Name:	!
+Stack:	
+Description:	
+Notes:	
+
+Name:	?
+Stack:	
+Description:	
+Notes:	
+
+Name:	/
+Stack:	
+Description:	
+Notes:	
+
+Name:	.
+Stack:	
+Description:	
+Notes:	
+
+Name:	."
+Stack:	
+Description:	
+Notes:	
+
+Name:	.(
+Stack:	
+Description:	
+Notes:	
+
+Name:	'
+Stack:	
+Description:	
+Notes:	
+
+Name:	(
+Stack:	
+Description:	
+Notes:	
+
+Name:	(;)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(.")
+Stack:	
+Description:	
+Notes:	
+
+Name:	[
+Stack:	
+Description:	
+Notes:	
+
+Name:	[']
+Stack:	
+Description:	
+Notes:	
+
+Name:	]
+Stack:	
+Description:	
+Notes:	
+
+Name:	{
+Stack:	
+Description:	
+Notes:	
+
+Name:	{{
+Stack:	
+Description:	
+Notes:	
+
+Name:	@
+Stack:	
+Description:	
+Notes:	
+
+Name:	*
+Stack:	
+Description:	
+Notes:	
+
+Name:	*/
+Stack:	
+Description:	
+Notes:	
+
+Name:	**
+Stack:	
+Description:	
+Notes:	
+
+Name:	**
+Stack:	
+Description:	
+Notes:	
+
+Name:	**
+Stack:	
+Description:	
+Notes:	
+
+Name:	**
+Stack:	
+Description:	
+Notes:	
+
+Name:	\
+Stack:	
+Description:	
+Notes:	
+
+Name:	#
+Stack:	
+Description:	
+Notes:	
+
+Name:	#>
+Stack:	
+Description:	
+Notes:	
+
+Name:	+
+Stack:	
+Description:	
+Notes:	
+
+Name:	+!
+Stack:	
+Description:	
+Notes:	
+
+Name:	0<
+Stack:	
+Description:	
+Notes:	
+
+Name:	0<>
+Stack:	
+Description:	
+Notes:	
+
+Name:	0=
+Stack:	
+Description:	
+Notes:	
+
+Name:	0>
+Stack:	
+Description:	
+Notes:	
+
+Name:	1-
+Stack:	
+Description:	
+Notes:	
+
+Name:	1+
+Stack:	
+Description:	
+Notes:	
+
+Name:	2-
+Stack:	
+Description:	
+Notes:	
+
+Name:	2!
+Stack:	
+Description:	
+Notes:	
+
+Name:	2/
+Stack:	
+Description:	
+Notes:	
+
+Name:	2@
+Stack:	
+Description:	
+Notes:	
+
+Name:	2*
+Stack:	
+Description:	
+Notes:	
+
+Name:	2+
+Stack:	
+Description:	
+Notes:	
+
+Name:	2constant
+Stack:	
+Description:	
+Notes:	
+
+Name:	2drop
+Stack:	
+Description:	
+Notes:	
+
+Name:	2dup
+Stack:	
+Description:	
+Notes:	
+
+Name:	2literal
+Stack:	
+Description:	
+Notes:	
+
+Name:	2local
+Stack:	
+Description:	
+Notes:	
+
+Name:	2over
+Stack:	
+Description:	
+Notes:	
+
+Name:	2>r
+Stack:	
+Description:	
+Notes:	
+
+Name:	2r>
+Stack:	
+Description:	
+Notes:	
+
+Name:	2r@
+Stack:	
+Description:	
+Notes:	
+
+Name:	2rot
+Stack:	
+Description:	
+Notes:	
+
+Name:	2swap
+Stack:	
+Description:	
+Notes:	
+
+Name:	2value
+Stack:	
+Description:	
+Notes:	
+
+Name:	2variable
+Stack:	
+Description:	
+Notes:	
+
+Name:	8xx?
+Stack:	
+Description:	
+Notes:	
+
+Name:	abort
+Stack:	
+Description:	
+Notes:	
+
+Name:	abort"
+Stack:	
+Description:	
+Notes:	
+
+Name:	abs
+Stack:	
+Description:	
+Notes:	
+
+Name:	accept
+Stack:	
+Description:	
+Notes:	
+
+Name:	add-cr
+Stack:	
+Description:	
+Notes:	
+
+Name:	add-parse-step
+Stack:	
+Description:	
+Notes:	
+
+Name:	again
+Stack:	
+Description:	
+Notes:	
+
+Name:	alarm
+Stack:	seconds --
+Description:	
+    Set an alarm to occur in the specified number of seconds.
+Notes:	
+    A signal handler for SIGALARM(14) needs to be in place or 
+    the program will exit.  Of course this may be what you want.
+
+
+Name:	align
+Stack:	
+Description:	
+Notes:	
+
+Name:	aligned
+Stack:	
+Description:	
+Notes:	
+
+Name:	allocate
+Stack:	
+Description:	
+Notes:	
+
+Name:	allot
+Stack:	
+Description:	
+Notes:	
+
+Name:	also
+Stack:	
+Description:	
+Notes:	
+
+Name:	amd64?
+Stack:	
+Description:	
+Notes:	
+
+Name:	and
+Stack:	
+Description:	
+Notes:	
+
+Name:	arm?
+Stack:	
+Description:	
+Notes:	
+
+Name:	base
+Stack:	
+Description:	
+Notes:	
+
+Name:	begin
+Stack:	
+Description:	
+Notes:	
+
+Name:	bin
+Stack:	
+Description:	
+Notes:	
+
+Name:	bl
+Stack:	
+Description:	
+Notes:	
+
+Name:	>body
+Stack:	
+Description:	
+Notes:	
+
+Name:	body>
+Stack:	
+Description:	
+Notes:	
+
+Name:	brand-wordlist
+Stack:	
+Description:	
+Notes:	
+
+Name:	bsd?
+Stack:	
+Description:	
+Notes:	
+
+Name:	bye
+Stack:	
+Description:	
+Notes:	
+
+Name:	(c")
+Stack:	
+Description:	
+Notes:	
+
+Name:	c,
+Stack:	
+Description:	
+Notes:	
+
+Name:	c!
+Stack:	
+Description:	
+Notes:	
+
+Name:	c"
+Stack:	
+Description:	
+Notes:	
+
+Name:	c@
+Stack:	
+Description:	
+Notes:	
+
+Name:	case
+Stack:	
+Description:	
+Notes:	
+
+Name:	catch
+Stack:	
+Description:	
+Notes:	
+
+Name:	cd
+Stack:	
+Description:	
+Notes:	
+
+Name:	cell-
+Stack:	
+Description:	
+Notes:	
+
+Name:	cell+
+Stack:	
+Description:	
+Notes:	
+
+Name:	cells
+Stack:	
+Description:	
+Notes:	
+
+Name:	char
+Stack:	
+Description:	
+Notes:	
+
+Name:	(char)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(char*)
+Stack:	
+Description:	
+Notes:	
+
+Name:	[char]
+Stack:	
+Description:	
+Notes:	
+
+Name:	char+
+Stack:	
+Description:	
+Notes:	
+
+Name:	chars
+Stack:	
+Description:	
+Notes:	
+
+Name:	clock
+Stack:	-- n
+Description:
+    Returns an approximation of processor time used
+    by the program.
+
+Notes:	
+    See clock(3)
+
+Name:	clocks/sec
+Stack:	
+Description:	
+Notes:	
+
+Name:	close-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	clr-errno
+Stack:	--
+Description:	
+    Set errno to 0.
+Notes:	
+
+Name:	coldfire?
+Stack:	-- true|false
+Description:	
+    Return tru if running on a coldfire MCU.
+Notes:	
+
+Name:	compare
+Stack:	
+Description:	
+Notes:	
+
+Name:	compare-insensitive
+Stack:	
+Description:	
+Notes:	
+
+Name:	compile,
+Stack:	
+Description:	
+Notes:	
+
+Name:	compile-only
+Stack:	
+Description:	
+Notes:	
+
+Name:	constant
+Stack:	
+Description:	
+Notes:	
+
+Name:	(constant)
+Stack:	
+Description:	
+Notes:	
+
+Name:	convert
+Stack:	
+Description:	
+Notes:	
+
+Name:	count
+Stack:	
+Description:	
+Notes:	
+
+Name:	cpu
+Stack:	-- n
+Description:	
+    Returns an integer that indicates the operating system that is being run.
+Notes:	Valid returns are
+    0 CPU_UNKNOWN
+    1 CPU_X86
+    2 CPU_PPC
+    3 CPU_8XX
+    4 CPU_AMD64
+    5 CPU_SPARC
+    6 CPU_COLDFIRE
+
+Name:	cr
+Stack:	
+Description:	
+Notes:	
+
+Name:	create
+Stack:	
+Description:	
+Notes:	
+
+Name:	create-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	darwin?
+Stack:	-- true|false
+Description:	
+    Retruns true if the OS is derived from  Mac OSX 
+Notes:	
+
+Name:	date
+Stack:	
+Description:	
+Notes:	
+
+Name:	debug
+Stack:	
+Description:	
+Notes:	
+
+Name:	debug-xt
+Stack:	
+Description:	
+Notes:	
+
+Name:	decimal
+Stack:	
+Description:	
+Notes:	
+
+Name:	definitions
+Stack:	
+Description:	
+Notes:	
+
+Name:	delete-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	depth
+Stack:	
+Description:	
+Notes:	
+
+Name:	dlclose
+Stack:	
+Description:	
+Notes:	
+
+Name:	dlerror
+Stack:	
+Description:	
+Notes:	
+
+Name:	dlexec
+Stack:	
+Description:	
+Notes:	
+
+Name:	dlopen
+Stack:	
+Description:	
+Notes:	
+
+Name:	dlsym
+Stack:	
+Description:	
+Notes:	
+
+Name:	dnegate
+Stack:	
+Description:	
+Notes:	
+
+Name:	do
+Stack:	
+Description:	
+Notes:	
+
+Name:	?do
+Stack:	
+Description:	
+Notes:	
+
+Name:	(?do)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(do)
+Stack:	
+Description:	
+Notes:	
+
+Name:	do-does
+Stack:	
+Description:	
+Notes:	
+
+Name:	(does)
+Stack:	
+Description:	
+Notes:	
+
+Name:	does>
+Stack:	
+Description:	
+Notes:	
+
+Name:	doLocal
+Stack:	
+Description:	
+Notes:	
+
+Name:	do-vocabulary
+Stack:	
+Description:	
+Notes:	
+
+Name:	drop
+Stack:	
+Description:	
+Notes:	
+
+Name:	dump
+Stack:	
+Description:	
+Notes:	
+
+Name:	dump-fd
+Stack:	fh --
+Description:	
+    Displays the FILE pointer, file name and file
+    descriptor.
+Notes:	e.g
+    FILE *: eb1e60
+    Name  : /tmp/tst.txt
+    fd    : 3
+
+Name:	dup
+Stack:	
+Description:	
+Notes:	
+
+Name:	?dup
+Stack:	
+Description:	
+Notes:	
+
+Name:	elapsed
+Stack:	-- n
+Description:	
+    Return the time in milliseconds since Jan 1 1970.  Can be used to
+    construct an interval timer.
+Notes:	
+
+Name:	else
+Stack:	
+Description:	
+Notes:	
+
+Name:	[else]
+Stack:	
+Description:	
+Notes:	
+
+Name:	emit
+Stack:	
+Description:	
+Notes:	
+
+Name:	empty
+Stack:	
+Description:	
+Notes:	
+
+Name:	endcase
+Stack:	
+Description:	
+Notes:	
+
+Name:	endif
+Stack:	
+Description:	
+Notes:	
+
+Name:	[endif]
+Stack:	
+Description:	
+Notes:	
+
+Name:	end-locals
+Stack:	
+Description:	
+Notes:	
+
+Name:	endof
+Stack:	
+Description:	
+Notes:	
+
+Name:	end-prefixes
+Stack:	
+Description:	
+Notes:	
+
+Name:	.env
+Stack:	
+Description:	
+Notes:	
+
+Name:	env-2constant
+Stack:	
+Description:	
+Notes:	
+
+Name:	env-constant
+Stack:	
+Description:	
+Notes:	
+
+Name:	environment?
+Stack:	
+Description:	
+Notes:	
+
+Name:	erase
+Stack:	
+Description:	
+Notes:	
+
+Name:	errno
+Stack:	
+Description:	
+Notes:	
+
+Name:	evaluate
+Stack:	
+Description:	
+Notes:	
+
+Name:	execute
+Stack:	
+Description:	
+Notes:	
+
+Name:	exit
+Stack:	
+Description:	
+Notes:	
+
+Name:	(exit)
+Stack:	
+Description:	
+Notes:	
+
+Name:	exit-inner
+Stack:	
+Description:	
+Notes:	
+
+Name:	expect
+Stack:	
+Description:	
+Notes:	
+
+Name:	f<
+Stack:	
+Description:	
+Notes:	
+
+Name:	f=
+Stack:	
+Description:	
+Notes:	
+
+Name:	f>
+Stack:	
+Description:	
+Notes:	
+
+Name:	f-
+Stack:	
+Description:	
+Notes:	
+
+Name:	f!
+Stack:	
+Description:	
+Notes:	
+
+Name:	f/
+Stack:	
+Description:	
+Notes:	
+
+Name:	f.
+Stack:	
+Description:	
+Notes:	
+
+Name:	f@
+Stack:	
+Description:	
+Notes:	
+
+Name:	f*
+Stack:	
+Description:	
+Notes:	
+
+Name:	f+
+Stack:	
+Description:	
+Notes:	
+
+Name:	f+!
+Stack:	
+Description:	
+Notes:	
+
+Name:	f0<
+Stack:	
+Description:	
+Notes:	
+
+Name:	f0=
+Stack:	
+Description:	
+Notes:	
+
+Name:	f0>
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2!
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2@
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2constant
+Stack:	
+Description:	
+Notes:	
+
+Name:	(f2constant)
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2drop
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2dup
+Stack:	
+Description:	
+Notes:	
+
+Name:	(f2local)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(@f2Local)
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2over
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2swap
+Stack:	
+Description:	
+Notes:	
+
+Name:	f2value
+Stack:	
+Description:	
+Notes:	
+
+Name:	fallthrough
+Stack:	
+Description:	
+Notes:	
+
+Name:	false
+Stack:	
+Description:	
+Notes:	
+
+Name:	fcntl
+Stack:	
+Description:	
+Notes:	
+
+Name:	fconstant
+Stack:	
+Description:	
+Notes:	
+
+Name:	(fconstant)
+Stack:	
+Description:	
+Notes:	
+
+Name:	fd@
+Stack:	file_handle -- fd
+Description:	
+    Get a file descriptor from a ficl file handle.
+Notes:	
+
+Name:	fdepth
+Stack:	
+Description:	
+Notes:	
+
+Name:	fdrop
+Stack:	
+Description:	
+Notes:	
+
+Name:	fdup
+Stack:	
+Description:	
+Notes:	
+
+Name:	f?dup
+Stack:	
+Description:	
+Notes:	
+
+Name:	fe.
+Stack:	
+Description:	
+Notes:	
+
+Name:	.features
+Stack:	--
+Description:	
+    List the optional features compiled in.
+Notes:	
+
+Name:	f-i
+Stack:	
+Description:	
+Notes:	
+
+Name:	f/i
+Stack:	
+Description:	
+Notes:	
+
+Name:	f*i
+Stack:	
+Description:	
+Notes:	
+
+Name:	f+i
+Stack:	
+Description:	
+Notes:	
+
+Name:	ficl-named-wordlist
+Stack:	
+Description:	
+Notes:	
+
+Name:	ficl-set-current
+Stack:	
+Description:	
+Notes:	
+
+Name:	ficl-vocabulary
+Stack:	
+Description:	
+Notes:	
+
+Name:	ficl-wordlist
+Stack:	
+Description:	
+Notes:	
+
+Name:	file-position
+Stack:	
+Description:	
+Notes:	
+
+Name:	file-size
+Stack:	
+Description:	
+Notes:	
+
+Name:	file-status
+Stack:	
+Description:	
+Notes:	
+
+Name:	fill
+Stack:	
+Description:	
+Notes:	
+
+Name:	find
+Stack:	
+Description:	
+Notes:	
+
+Name:	fliteral
+Stack:	
+Description:	
+Notes:	
+
+Name:	(fliteral)
+Stack:	
+Description:	
+Notes:	
+
+Name:	>float
+Stack:	
+Description:	
+Notes:	
+
+Name:	?float
+Stack:	
+Description:	
+Notes:	
+
+Name:	float>
+Stack:	
+Description:	
+Notes:	
+
+Name:	float>int
+Stack:	
+Description:	
+Notes:	
+
+Name:	(flocal)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(@fLocal)
+Stack:	
+Description:	
+Notes:	
+
+Name:	flush-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	fm/mod
+Stack:	
+Description:	
+Notes:	
+
+Name:	fnegate
+Stack:	
+Description:	
+Notes:	
+
+Name:	forget
+Stack:	
+Description:	
+Notes:	
+
+Name:	forget-wid
+Stack:	
+Description:	
+Notes:	
+
+Name:	forth
+Stack:	
+Description:	
+Notes:	
+
+Name:	forth-wordlist
+Stack:	
+Description:	
+Notes:	
+
+Name:	fover
+Stack:	
+Description:	
+Notes:	
+
+Name:	fpick
+Stack:	
+Description:	
+Notes:	
+
+Name:	free
+Stack:	
+Description:	
+Notes:	
+
+Name:	froll
+Stack:	
+Description:	
+Notes:	
+
+Name:	f-roll
+Stack:	
+Description:	
+Notes:	
+
+Name:	frot
+Stack:	
+Description:	
+Notes:	
+
+Name:	f-rot
+Stack:	
+Description:	
+Notes:	
+
+Name:	f.s
+Stack:	
+Description:	
+Notes:	
+
+Name:	fswap
+Stack:	
+Description:	
+Notes:	
+
+Name:	fvalue
+Stack:	
+Description:	
+Notes:	
+
+Name:	get-current
+Stack:	
+Description:	
+Notes:	
+
+Name:	getenv
+Stack:	
+Description:	
+Notes:	
+
+Name:	get-order
+Stack:	
+Description:	
+Notes:	
+
+Name:	get-pid
+Stack:	
+Description:	
+Notes:	
+
+Name:	hash
+Stack:	
+Description:	
+Notes:	
+
+Name:	.hash
+Stack:	
+Description:	
+Notes:	
+
+Name:	here
+Stack:	
+Description:	
+Notes:	
+
+Name:	hex
+Stack:	
+Description:	
+Notes:	
+
+Name:	hidden
+Stack:	
+Description:	
+Notes:	
+
+Name:	hide
+Stack:	
+Description:	
+Notes:	
+
+Name:	hold
+Stack:	
+Description:	
+Notes:	
+
+Name:	hostname
+Stack:	-- len
+Description:	
+    Returns the name of the system to PAD, length
+    at TOS.
+Notes:	
+    May change this to require an place to store this.
+
+Name:	i
+Stack:	
+Description:	
+Notes:	
+
+Name:	if
+Stack:	
+Description:	
+Notes:	
+
+Name:	[if]
+Stack:	
+Description:	
+Notes:	
+
+Name:	i-f
+Stack:	
+Description:	
+Notes:	
+
+Name:	i/f
+Stack:	
+Description:	
+Notes:	
+
+Name:	immediate
+Stack:	
+Description:	
+Notes:	
+
+Name:	>in
+Stack:	
+Description:	
+Notes:	
+
+Name:	include
+Stack:	
+Description:	
+Notes:	
+
+Name:	included
+Stack:	
+Description:	
+Notes:	
+
+Name:	include-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	inotify-add-watch
+Stack:	fd path len mask -- wd 0 | -1
+Description:	
+    Given the file descriptor from inotify-init and a file path, 
+    the mask defines what will be watched.  
+    See inotify_add_watch(2).  
+    Return a watch descriptor and a false flag on success.
+Notes:	
+
+Name:	inotify-init
+Stack:	-- fd 0 | -1
+Description:	
+    Return a file descriptor and a false flag, on error return a true flag.
+Notes:	
+
+Name:	inotify-rm-watch
+Stack:	inotify-rm-watch
+Description:	
+    Stop watching for inotify events.
+Notes:	
+
+Name:	(int)
+Stack:	
+Description:	
+Notes:	
+
+Name:	interpret
+Stack:	
+Description:	
+Notes:	
+
+Name:	int>float
+Stack:	
+Description:	
+Notes:	
+
+Name:	invert
+Stack:	
+Description:	
+Notes:	
+
+Name:	ioctl
+Stack:	
+Description:	
+Notes:	
+
+Name:	j
+Stack:	-- n
+Description:	
+    Loop counter.
+Notes:	
+
+Name:	k
+Stack:	-- n
+Description:	
+    Loop counter.
+Notes:	
+
+Name:	key
+Stack:	
+Description:	
+Notes:	
+
+Name:	?key
+Stack:	
+Description:	
+Notes:	
+
+Name:	kill
+Stack:	signal pid --
+Description:	
+    Send signal to proceess pid.
+Notes:	
+
+Name:	last-signal
+Stack:	-- n
+Description:	
+    Return the signal number for tha last signal recieved.
+    and set to 0.
+Notes:	
+
+Name:	last-word
+Stack:	
+Description:	
+Notes:	
+
+Name:	leave
+Stack:	
+Description:	
+Notes:	
+
+Name:	(link)
+Stack:	
+Description:	
+Notes:	
+
+Name:	linux?
+Stack:	-- true|false
+Description:	
+    True if running linux.
+Notes:	
+
+Name:	literal
+Stack:	
+Description:	
+Notes:	
+
+Name:	(literal)
+Stack:	
+Description:	
+Notes:	
+
+Name:	load
+Stack:	
+Description:	
+Notes:	
+
+Name:	$load
+Stack:	
+Description:	
+Notes:	
+
+Name:	local
+Stack:	
+Description:	
+Notes:	
+
+Name:	(@local)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(local)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(@local0)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(@local1)
+Stack:	
+Description:	
+Notes:	
+
+Name:	locals|
+Stack:	
+Description:	
+Notes:	
+
+Name:	lookup
+Stack:	
+Description:	
+Notes:	
+
+Name:	loop
+Stack:	
+Description:	
+Notes:	
+
+Name:	(+loop)
+Stack:	
+Description:	
+Notes:	
+
+Name:	(loop)
+Stack:	
+Description:	
+Notes:	
+
+Name:	+loop
+Stack:	
+Description:	
+Notes:	
+
+Name:	lshift
+Stack:	
+Description:	
+Notes:	
+
+Name:	m*
+Stack:	
+Description:	
+Notes:	
+
+Name:	marker
+Stack:	
+Description:	
+Notes:	
+
+Name:	max
+Stack:	
+Description:	
+Notes:	
+
+Name:	mdump-ascii-line
+Stack:	
+Description:	
+Notes:	
+
+Name:	mdump-hex-line
+Stack:	
+Description:	
+Notes:	
+
+Name:	min
+Stack:	
+Description:	
+Notes:	
+
+Name:	mips?
+Stack:	
+Description:	
+Notes:	
+
+Name:	mmap
+Stack:	
+Description:	
+Notes:	
+
+Name:	mod
+Stack:	
+Description:	
+Notes:	
+
+Name:	/mod
+Stack:	
+Description:	
+Notes:	
+
+Name:	*/mod
+Stack:	
+Description:	
+Notes:	
+
+Name:	move
+Stack:	
+Description:	
+Notes:	
+
+Name:	ms
+Stack:	
+Description:	
+Notes:	
+
+Name:	>name
+Stack:	
+Description:	
+Notes:	
+
+Name:	negate
+Stack:	
+Description:	
+Notes:	
+
+Name:	nip
+Stack:	
+Description:	
+Notes:	
+
+Name:	:noname
+Stack:	
+Description:	
+Notes:	
+
+Name:	now
+Stack:	
+Description:	
+Notes:	
+
+Name:	>number
+Stack:	
+Description:	
+Notes:	
+
+Name:	?number
+Stack:	
+Description:	
+Notes:	
+
+Name:	nUser
+Stack:	
+Description:	
+Notes:	
+
+Name:	?object
+Stack:	
+Description:	
+Notes:	
+
+Name:	objectify
+Stack:	
+Description:	
+Notes:	
+
+Name:	of
+Stack:	
+Description:	
+Notes:	
+
+Name:	(of)
+Stack:	
+Description:	
+Notes:	
+
+Name:	only
+Stack:	
+Description:	
+Notes:	
+
+Name:	on-step
+Stack:	
+Description:	
+Notes:	
+
+Name:	oo
+Stack:	
+Description:	
+Notes:	
+
+Name:	oop
+Stack:	
+Description:	
+Notes:	
+
+Name:	open-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	or
+Stack:	
+Description:	
+Notes:	
+
+Name:	order
+Stack:	
+Description:	
+Notes:	
+
+Name:	os
+Stack:	-- n
+Description:	
+    Returns an integer that indicates the operating system that is being run.
+Notes:	Valid results are
+    0 OS_UNKNOWN
+    1 OS_LINUX
+    2 OS_DARWIN
+    3 OS_FREEBSD
+    4 OS_SOLARIS
+    5 OS_UCLINUX
+
+Name:	over
+Stack:	
+Description:	
+Notes:	
+
+Name:	pad
+Stack:	
+Description:	
+Notes:	
+
+Name:	parse
+Stack:	
+Description:	
+Notes:	
+
+Name:	parse-order
+Stack:	
+Description:	
+Notes:	
+
+Name:	(parse-step)
+Stack:	
+Description:	
+Notes:	
+
+Name:	parse-word
+Stack:	
+Description:	
+Notes:	
+
+Name:	pclose
+Stack:	
+Description:	
+Notes:	
+
+Name:	perror
+Stack:	
+Description:	
+Notes:	
+
+Name:	pick
+Stack:	
+Description:	
+Notes:	
+
+Name:	popen
+Stack:	cmd len --- stderr stdout stdin pid
+Description:	
+    Start a process and open channels for stdin, stdout stderr.
+Notes:	
+
+Name:	postpone
+Stack:	
+Description:	
+Notes:	
+
+Name:	ppc?
+Stack:	-- t|f
+Description:	
+    Return true if running on a PowerPC.
+Notes:	
+
+Name:	?prefix
+Stack:	
+Description:	
+Notes:	
+
+Name:	<prefixes>
+Stack:	
+Description:	
+Notes:	
+
+Name:	previous
+Stack:	
+Description:	
+Notes:	
+
+Name:	pwd
+Stack:	
+Description:	
+Notes:	
+
+Name:	q!
+Stack:	
+Description:	
+Notes:	
+
+Name:	q@
+Stack:	
+Description:	
+Notes:	
+
+Name:	QNX?
+Stack:	
+Description:	
+Notes:	
+
+Name:	quit
+Stack:	
+Description:	
+Notes:	
+
+Name:	>r
+Stack:	
+Description:	
+Notes:	
+
+Name:	r>
+Stack:	
+Description:	
+Notes:	
+
+Name:	r@
+Stack:	
+Description:	
+Notes:	
+
+Name:	random
+Stack:	
+Description:	
+Notes:	
+
+Name:	range
+Stack:	
+Description:	
+Notes:	
+
+Name:	read
+Stack:	fd addr len -- -1 | len 0
+Description:	
+    Read from the fd into the buffer no more than len bytes.  
+    On success the length and a false flag, on error return a true flag.
+Notes:	
+
+Name:	read-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	read-line
+Stack:	
+Description:	
+Notes:	
+
+Name:	recurse
+Stack:	
+Description:	
+Notes:	
+
+Name:	refill
+Stack:	
+Description:	
+Notes:	
+
+Name:	rename-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	repeat
+Stack:	
+Description:	
+Notes:	
+
+Name:	reposition-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	reset-prompt
+Stack:	
+Description:	
+Notes:	
+
+Name:	resize
+Stack:	
+Description:	
+Notes:	
+
+Name:	resize-file
+Stack:	
+Description:	
+Notes:	
+
+Name:	r/o
+Stack:	
+Description:	
+Notes:	
+
+Name:	roll
+Stack:	
+Description:	
+Notes:	
+
+Name:	-roll
+Stack:	
+Description:	
+Notes:	
+
+Name:	rot
+Stack:	
+Description:	
+Notes:	
+
+Name:	-rot
+Stack:	
+Description:	
+Notes:	
+
+Name:	-rot
+Stack:	
+Description:	
+Notes:	
+
+Name:	r.s
+Stack:	
+Description:	
+Notes:	
+
+Name:	rshift
+Stack:	
+Description:	
+Notes:	
+
+Name:	r/w
+Stack:	
+Description:	
+Notes:	
+
+Name:	.s
+Stack:	
+Description:	
+Notes:	
+
+Name:	#s
+Stack:	
+Description:	
+Notes:	
+
+Name:	s"
+Stack:	
+Description:	
+Notes:	
+
+Name:	save-current
+Stack:	
+Description:	
+Notes:	
+
+Name:	s>d
+Stack:	
+Description:	
+Notes:	
+
+Name:	seal
+Stack:	
+Description:	
+Notes:	
+
+Name:	>search
+Stack:	
+Description:	
+Notes:	
+
+Name:	search>
+Stack:	
+Description:	
+Notes:	
+
+Name:	search-wordlist
+Stack:	
+Description:	
+Notes:	
+
+Name:	see
+Stack:	
+Description:	
+Notes:	
+
+Name:	seed-random
+Stack:	
+Description:	
+Notes:	
+
+Name:	see-xt
+Stack:	
+Description:	
+Notes:	
+
+Name:	set-current
+Stack:	
+Description:	
+Notes:	
+
+Name:	set-order
+Stack:	
+Description:	
+Notes:	
+
+Name:	set-prompt
+Stack:	
+Description:	
+Notes:	
+
+Name:	sfind
+Stack:	addr len -- 0 0 |xt 1|xt -1
+Description:	
+    Search the vocabulary for the name id the counted string
+    addr len If the definition is found, return its execution token xt. 
+    If the definition is immediate, also return one (1), otherwise 
+    also return minus-one (-1). For a given string, the values returned 
+    by FIND while compiling may differ from those returned while 
+    not compiling. 
+Notes:	
+
+Name:	sh4a?
+Stack:	
+Description:	
+Notes:	
+
+Name:	show-prefixes
+Stack:	
+Description:	
+Notes:	
+
+Name:	sign
+Stack:	
+Description:	
+Notes:	
+
+Name:	signal
+Stack:	signal --
+Description:	
+    On reciept of the specified signal, run the default signal handler, 
+    which does nothing.  
+    Errno indicates the reason for the interuption.  
+    Signals that occur whilst the program is not blocked are ignored.
+Notes:	
+
+Name:	sleep
+Stack:	
+Description:	
+Notes:	
+
+Name:	sliteral
+Stack:	
+Description:	
+Notes:	
+
+Name:	sm/rem
+Stack:	
+Description:	
+Notes:	
+
+Name:	solaris?
+Stack:	
+Description:	
+Notes:	
+
+Name:	source
+Stack:	
+Description:	
+Notes:	
+
+Name:	source-id
+Stack:	
+Description:	
+Notes:	
+
+Name:	space
+Stack:	
+Description:	
+Notes:	
+
+Name:	spaces
+Stack:	
+Description:	
+Notes:	
+
+Name:	span
+Stack:	
+Description:	
+Notes:	
+
+Name:	sparc?
+Stack:	
+Description:	
+Notes:	
+
+Name:	spewhash
+Stack:	
+Description:	
+Notes:	
+
+Name:	sprintf
+Stack:	
+Description:	
+Notes:	
+
+Name:	.s-simple
+Stack:	
+Description:	
+Notes:	
+
+Name:	start-clock
+Stack:	
+Description:	
+Notes:	
+
+Name:	start-prefixes
+Stack:	
+Description:	
+Notes:	
+
+Name:	state
+Stack:	
+Description:	
+Notes:	
+
+Name:	stdout-flush
+Stack:	
+Description:	
+Notes:	
+
+Name:	step-break
+Stack:	
+Description:	
+Notes:	
+
+Name:	strcat
+Stack:	
+Description:	
+Notes:	
+
+Name:	strcpy
+Stack:	
+Description:	
+Notes:	
+
+Name:	strdup
+Stack:	
+Description:	
+Notes:	
+
+Name:	/string
+Stack:	
+Description:	
+Notes:	
+
+Name:	strlen
+Stack:	
+Description:	
+Notes:	
+
+Name:	strsave
+Stack:	
+Description:	
+Notes:	
+
+Name:	strtok
+Stack:	
+Description:	
+Notes:	
+
+Name:	swap
+Stack:	a b -- b a
+Description:	
+    Swap the top two stack entries.
+Notes:	
+
+Name:	system
+Stack:	
+Description:	
+Notes:	
+
+Name:	$system
+Stack:	
+Description:	
+Notes:	
+
+Name:	__tempbase
+Stack:	
+Description:	
+Notes:	
+
+Name:	then
+Stack:	
+Description:	
+Notes:	
+
+Name:	[then]
+Stack:	
+Description:	
+Notes:	
+
+Name:	throw
+Stack:	
+Description:	
+Notes:	
+
+Name:	ticks
+Stack:	
+Description:	
+Notes:	
+
+Name:	time
+Stack:	
+Description:	
+Notes:	
+
+Name:	to
+Stack:	
+Description:	
+Notes:	
+
+Name:	-trailing
+Stack:	
+Description:	
+Notes:	
+
+Name:	true
+Stack:	
+Description:	
+Notes:	
+
+Name:	tuck
+Stack:	
+Description:	
+Notes:	
+
+Name:	type
+Stack:	c-addr u --
+Description:	
+    If u is greater than zero, display the character string 
+    specified by c-addr and u.
+Notes:	
+
+Name:	u<
+Stack:	
+Description:	
+Notes:	
+
+Name:	u.
+Stack:	
+Description:	
+Notes:	
+
+Name:	uclinux?
+Stack:	
+Description:	
+Notes:	
+
+Name:	um*
+Stack:	
+Description:	
+Notes:	
+
+Name:	um/mod
+Stack:	
+Description:	
+Notes:	
+
+Name:	uname
+Stack:	--
+Description:	
+    Display a description of the running system (LINUX only)
+Notes:	e.g.
+    System name :Linux
+    Host name   :Intel-laptop
+    Release     :3.13.11-ckt16
+    Version     :#3 SMP Wed Apr 8 10:28:18 BST 2015
+    Machine     :x86_64
+
+
+Name:	(unlink)
+Stack:	
+Description:	
+Notes:	
+
+Name:	unloop
+Stack:	
+Description:	
+Notes:	
+
+Name:	unseal
+Stack:	
+Description:	
+Notes:	
+
+Name:	until
+Stack:	
+Description:	
+Notes:	
+
+Name:	user
+Stack:	
+Description:	
+Notes:	
+
+Name:	value
+Stack:	
+Description:	
+Notes:	
+
+Name:	variable
+Stack:	
+Description:	
+Notes:	
+
+Name:	.ver
+Stack:	
+Description:	
+    Display current version.
+Notes:	e.g.
+    Ficl version 5.2.4
+
+Name:	verbose?
+Stack:	
+Description:	
+Notes:	
+
+Name:	vocabulary
+Stack:	
+Description:	
+Notes:	
+
+Name:	w!
+Stack:	n addr --
+Description:	
+    Write the leas significant 16 bits of n to addr.
+Notes:	
+
+Name:	w@
+Stack:	addr -- unit16
+Description:	
+    Return 16 bit value from address
+Notes:	
+
+Name:	while
+Stack:	
+Description:	
+Notes:	
+
+Name:	wid-get-name
+Stack:	
+Description:	
+Notes:	
+
+Name:	wid-set-name
+Stack:	
+Description:	
+Notes:	
+
+Name:	wid-set-super
+Stack:	
+Description:	
+Notes:	
+
+Name:	within
+Stack:	
+Description:	
+Notes:	
+
+Name:	w/o
+Stack:	-- n
+Description:	
+    Used when opening a file with OPEN-FILE.  Opens
+    the file write only.
+Notes:	
+
+Name:	word
+Stack:	
+Description:	
+Notes:	
+
+Name:	?word
+Stack:	
+Description:	
+Notes:	
+
+Name:	wordlist
+Stack:	
+Description:	
+Notes:	
+
+Name:	words
+Stack:	--
+Description:	
+    List the defined words.
+Notes:	
+
+Name:	write
+Stack:	fd addr count -- errno true|written false
+Description:	
+    Unbuffered write.  Write count bytes starting at
+    addr to the file descriptor fd.  Return the rrno and tru on failure
+    and the number of bytes written on success.
+Notes:	
+    The file handle returned by OPEN-FILE cannot be used.  Get
+    the file descriptor with FD@
+
+Name:	write-file
+Stack:	addr n fh -- 0|ior
+Description:	
+    Write len bytes of data from addr.  Return an error code.
+    0 denotes scuccess.
+Notes:	
+
+Name:	write-line
+Stack:	addr n fh -- 0|ior
+Description:	
+    Write len bytes of data from addr with the line ending
+    character appended, and return an error code.
+    0 denotes scuccess.
+Notes:	
+
+Name:	x.
+Stack:	n --
+Description:	
+    Print TOS base 16.
+Notes:	
+
+Name:	x86?
+Stack:	-- t|f
+Description:	
+    Return trie if the CPU is an x86.
+Notes:	
+
+Name:	xor
+Stack:	
+Description:	
+Notes:	
+
+Name:	zmove
+Stack:	
+Description:	
+Notes:	
+
