@@ -1107,10 +1107,30 @@ static void athZmove(ficlVm *vm) {
     from = ficlStackPopPointer(vm->dataStack);
 
     ret = strncpy(to,from,len);
-    *(to + len) = (int)NULL;
+    *(to + len) = (char)NULL;
 
 }
+// 
+// Add an end of line char (0x0a) to a string.
+// Space must already exist for tis.
+//
+// Stack : addr len -- addr len+1
+//
+static void athAddCr(ficlVm *vm) {
+    char *from;
+    int len;
 
+    len = ficlStackPopInteger(vm->dataStack);
+    from = ficlStackPopPointer(vm->dataStack);
+
+    *(from + len) = (char)0x0a;
+
+    len++;
+
+    ficlStackPushPointer( vm->dataStack,from);
+    ficlStackPushInteger(vm->dataStack, len);
+
+}
 
 static void athSizeofInt(ficlVm *vm)
 {
@@ -3623,6 +3643,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"stdout-flush", athStdoutFlush, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"zmove", athZmove, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"add-cr", athAddCr, FICL_WORD_DEFAULT);
+
     ficlDictionarySetPrimitive(dictionary, (char *)"set-prompt", athSetPrompt, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"reset-prompt", athResetPrompt, FICL_WORD_DEFAULT);
 

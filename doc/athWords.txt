@@ -632,9 +632,13 @@ Stack:	fd wd -- 0 | -1
 Description:
     Stop watching for inotify events.  
 
-Name:	
-Stack:	
+Name:	add-cr
+Stack:	addr len -- addr len+1
 Description:
+    Append an end of line char (0x0a) to a given string.
+Note:
+    No checking is performed to the memory region must have sufficient
+    space allocated.
 
 Name:	
 Stack:	
