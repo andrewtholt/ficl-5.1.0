@@ -132,14 +132,15 @@ create
     dup allocate abort" Allocate failed"
     swap 2dup erase
 ;
-
-
-: addcr ( addr len -- addr len+1 )
-    2dup
-    +       \ addr len ptr
-    0x0a swap c! \ addr len
-    1+
-;
+\
+\ Defined as primitive (13 April 2015)
+\
+\ : addcr ( addr len -- addr len+1 )
+\     2dup
+\     +       \ addr len ptr
+\     0x0a swap c! \ addr len
+\     1+
+\ ;
 
 
 

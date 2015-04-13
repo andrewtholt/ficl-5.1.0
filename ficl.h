@@ -652,7 +652,7 @@ FICL_PLATFORM_EXTERN void *ficlRealloc(void *p, size_t size);
 /* 
 ** the Good Stuff starts here...
 */
-#define FICL_VERSION    "5.2.3"
+#define FICL_VERSION    "5.2.4"
 
 #if !defined (FICL_PROMPT)
 #define FICL_PROMPT		"ok> "
