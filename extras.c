@@ -1283,6 +1283,11 @@ static int pcloseRWE(int pid, int *rwepipe)
     return status;
 }
 
+/*
+ * Need to fix a number of BUGS in this
+ * 1. Deal with popenRWE returning an error.
+ * 2. Close needs to free the ficlFile descriptors.
+ */
 void athPopenRWE(ficlVm *vm) {
     int len;
     int rwepipe[3];
