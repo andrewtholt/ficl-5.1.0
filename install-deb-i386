@@ -27,10 +27,27 @@ LIBS="./debian-i386/usr/local/lib"
 
 if [ ! -d ${DEST} ]; then
     mkdir -p ${DEST}
+else
+    # Exists so empty it
+    #
+    cd ${DEST}
+    cd ..
+    rm -rf bin
+    pwd
+    cd $HERE
+    mkdir -p ${DEST}
 fi
 
 if [ ! -d ${LIBS} ]; then
     mkdir -p ${LIBS}
+else
+    # Exists, so empty
+    #
+    cd $LIBS
+    cd ..
+    rm -rf lib
+    cd $HERE
+    LIBS="./debian-i386/usr/local/lib"
 fi
 
 if [ ! -f libficl.so.4.1.0 ]; then
