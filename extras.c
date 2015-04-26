@@ -114,7 +114,7 @@ union semun {
 
 /*
    struct nlist *install(struct database *,char *, char *);
- */
+   */
 
 char           *strsave(char *);
 extern int      errno;
@@ -1057,7 +1057,7 @@ static void athDlClose(ficlVm * vm) {
 }
 /*
    name len handle -- symbol_ptr
- */
+   */
 static void athDlSym(ficlVm * vm) {
     void *sym, *h;
     char *symbol;
@@ -1302,13 +1302,9 @@ void athPopenRWE(ficlVm *vm) {
     ficlFile *pStdout;
     ficlFile *pStderr;
 
-    pStdin = (ficlFile *)malloc(sizeof(struct ficlFile));
-    pStdout= (ficlFile *)malloc(sizeof(struct ficlFile));
-    pStderr= (ficlFile *)malloc(sizeof(struct ficlFile));
-
     len = ficlStackPopInteger(vm->dataStack);
     cmd = ficlStackPopPointer(vm->dataStack);
-    //    rwepipe = ficlStackPopPointer(vm->dataStack);
+    cmd[len] = '\0';
 
     exe=(char *)strtok(cmd," ");
 
@@ -1321,25 +1317,50 @@ void athPopenRWE(ficlVm *vm) {
     }
     args[i]=(char *)NULL;
 
-    ret=popenRWE(&rwepipe[0],cmd,(const char *)args);
+    ret = access( exe , R_OK | X_OK );
 
-    pStdin->fd = rwepipe[0];
-    pStdin->f = fdopen(rwepipe[0],"w");
-    strcpy( pStdin->filename, "Pipe:stdin");
+    if( 0 == ret ) {
 
-    pStdout->fd=rwepipe[1];
-    pStdout->f = fdopen(rwepipe[1],"r");
-    strcpy( pStdout->filename, "Pipe:stdout");
+        pStdin = (ficlFile *)malloc(sizeof(struct ficlFile));
+        pStdout= (ficlFile *)malloc(sizeof(struct ficlFile));
+        pStderr= (ficlFile *)malloc(sizeof(struct ficlFile));
 
-    pStderr->fd=rwepipe[2];
-    pStderr->f = fdopen(rwepipe[2],"r");
-    strcpy( pStderr->filename, "Pipe:stderr");
+        /*
+           exe=(char *)strtok(cmd," ");
 
-    ficlStackPushPointer(vm->dataStack, pStderr);
-    ficlStackPushPointer(vm->dataStack, pStdout);
-    ficlStackPushPointer(vm->dataStack, pStdin);
-    ficlStackPushInteger(vm->dataStack, ret);
-    //    printf("pid=%d\n",ret);
+           i=0;
+           args[i++]=exe;
+
+           while( (tmp=(char *)strtok(NULL," "))) {
+        //        printf("%s\n",tmp);
+        args[i++] = tmp;
+        }
+        args[i]=(char *)NULL;
+        */
+
+        ret=popenRWE(&rwepipe[0],cmd,(const char *)args);
+
+        pStdin->fd = rwepipe[0];
+        pStdin->f = fdopen(rwepipe[0],"w");
+        strcpy( pStdin->filename, "Pipe:stdin");
+
+        pStdout->fd=rwepipe[1];
+        pStdout->f = fdopen(rwepipe[1],"r");
+        strcpy( pStdout->filename, "Pipe:stdout");
+
+        pStderr->fd=rwepipe[2];
+        pStderr->f = fdopen(rwepipe[2],"r");
+        strcpy( pStderr->filename, "Pipe:stderr");
+
+        ficlStackPushPointer(vm->dataStack, pStderr);
+        ficlStackPushPointer(vm->dataStack, pStdout);
+        ficlStackPushPointer(vm->dataStack, pStdin);
+        ficlStackPushInteger(vm->dataStack, ret); // pid
+        ficlStackPushInteger(vm->dataStack, 0);   // Sucess
+    } else {
+        ficlStackPushInteger(vm->dataStack, errno); 
+        ficlStackPushInteger(vm->dataStack, -1); // fail :(
+    }
 }
 
 void athPcloseRWE(ficlVm *vm) 
@@ -1504,7 +1525,7 @@ static void athRmSem(ficlVm * vm) {
 }
 /*
    Returns 0 on error, true on success.
- */
+   */
 int semcall(int sid, int op) {
     struct sembuf   sb;
 
@@ -1632,7 +1653,7 @@ athShmdt(ficlVm * vm)
 
 }
 /*
- */
+*/
 static void athShmrm(ficlVm *vm)
 {
     int shm_id;
@@ -1924,7 +1945,7 @@ static void athSPJoin(ficlVm * vm) {
     //String is < user >:<host > so for example :
     //andrew:	4803
     // fred:		4803 @ host
-     */
+    */
 
     Mbox = ficlStackPopInteger(vm->dataStack);
 
@@ -1933,7 +1954,7 @@ static void athSPJoin(ficlVm * vm) {
     // When a group is joined capture the list of members.
     // On leave free the memory.
     // On send and recv use any membership messages to update list.
-     */
+    */
     SP_join(Mbox, grp);
     ret = SP_receive(Mbox, &service_type, sender, 100, &num_groups, target_groups, &mess_type, &endian_mismatch, sizeof(mess), mess);
 
@@ -2046,7 +2067,7 @@ static void athSPRecv(ficlVm * vm) {
             } else {
                 (void)strcpy(buffer,memb_info.changed_member);
                 ficlStackPushInteger(vm->dataStack, strlen(memb_info.changed_member));
-                
+
                 exitFlag = 1;
             }
         }
@@ -2069,13 +2090,13 @@ static void athSleep(ficlVm *vm)
 char prompt[32];
 static void athSetPrompt(ficlVm *vm)
 {
-//    extern char prompt[];
+    //    extern char prompt[];
     char *ptr;
     int len;
     int crFlag = 0;
 
     memset(prompt,0x00, 32);
-//    bzero(prompt,32);
+    //    bzero(prompt,32);
 
     crFlag = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
@@ -2094,7 +2115,7 @@ static void athResetPrompt(ficlVm *vm)
     extern char prompt[];
 
     memset(prompt,0x00, 32);
-//    bzero(prompt,32);
+    //    bzero(prompt,32);
 
     strcpy(prompt,FICL_PROMPT);
 }
@@ -2131,7 +2152,7 @@ static void athResetPrompt(ficlVm *vm)
 ficlStackPushInteger(vm->dataStack, status);
 
 }
- */
+*/
 
 /*
    static void
@@ -2149,7 +2170,7 @@ status=pthread_yield();
 #endif
 //    usleep(1);
 }
- */
+*/
     static void
 athDeleteThread(ficlVm * vm)
 {
@@ -2224,7 +2245,7 @@ athSocket(ficlVm * vm)
    sock1 =  socket(AF_UNIX, SOCK_STREAM, 0);
    ficlStackPushInteger(vm->dataStack,sock1);
    }
- */
+   */
 /* Stack: addr len port -- flag */
 
     static void
@@ -2366,7 +2387,7 @@ athClose(ficlVm * vm)
 /*
    arg O_NONBLOCK 0x004
    cmd F_SETFL 4
- */
+   */
 
 static void athFdGet( ficlVm *vm) {
     int fd;
@@ -2411,7 +2432,7 @@ static void athFcntl(ficlVm *vm) {
    cmd = (unsigned long)ficlStackPopInteger(vm->dataStack);
    fd  = (int)ficlStackPopInteger(vm->dataStack);
    }
- */
+   */
 
     static void
 athSeal(ficlVm * vm)
@@ -2435,7 +2456,7 @@ athUnseal(ficlVm * vm)
 static void athUname(ficlVm * vm) {
     struct utsname  buf;
     int             res;
-//    extern char    *loadPath;
+    //    extern char    *loadPath;
 
     res = uname(&buf);
     printf("System name :%s\n", buf.sysname);
@@ -2443,14 +2464,14 @@ static void athUname(ficlVm * vm) {
     printf("Release     :%s\n", buf.release);
     printf("Version     :%s\n", buf.version);
     printf("Machine     :%s\n", buf.machine);
-//    printf("Load        :%s\n", loadPath);
+    //    printf("Load        :%s\n", loadPath);
 }
 #endif
 
 int verbose;
 
 static void athVerboseQ(ficlVm *vm) {
-     ficlStackPushInteger(vm->dataStack, verbose);
+    ficlStackPushInteger(vm->dataStack, verbose);
 }
 /*
 #define OS_UNKNOWN 0
@@ -2460,7 +2481,7 @@ static void athVerboseQ(ficlVm *vm) {
 #define OS_SOLARIS 4
 #define OS_UCLINUX 5
 #define OS_QNX 6
- */
+*/
 
 /*
 #define CPU_UNKNOWN 0
@@ -2473,7 +2494,7 @@ static void athVerboseQ(ficlVm *vm) {
 #define CPU_ARM 7
 #define CPU_MIPS 8
 #define CPU_SH4A 9
- */
+*/
 
 // #ifndef ARM
 static void athCpu(ficlVm * vm) {
@@ -2530,7 +2551,7 @@ static void athOs(ficlVm * vm) {
     }
 
 #else
-  os = OS_UNKNOWN;
+    os = OS_UNKNOWN;
 #endif
     ficlStackPushInteger(vm->dataStack, os);
 }
@@ -2703,7 +2724,7 @@ static void athSH4AQ(ficlVm *vm) {
 
 /*
    Return the hostname at pad, and the length on the stack.
- */
+   */
 // #ifndef ARM
 static void athHostname(ficlVm * vm) {
     int             n;
@@ -2717,7 +2738,7 @@ static void athHostname(ficlVm * vm) {
     /*
        len = ficlStackPopInteger(vm->dataStack);
        dest = ficlStackPopPointer(vm->dataStack);
-     */
+       */
 
     res = uname(&buf);
 
@@ -2731,7 +2752,7 @@ static void athHostname(ficlVm * vm) {
        {
        n = len;
        }
-     */
+       */
 
     n = strlen(buf.nodename);
     //	strncpy((char *) dest, (char *) buf.nodename, (size_t) n);
@@ -2836,7 +2857,7 @@ static void athModBusConnect(ficlVm * vm) {
  on a serial network. The special value 'MODBUS_TCP_SLAVE' (0xFF) can be used in TCP mode to restore
  the default value.
 
- */
+*/
 static void athModBusSetSlave(ficlVm * vm) {
     modbus_t *ctx;
     int rtu;
@@ -3207,7 +3228,7 @@ void athI2cClose(ficlVm *vm) {
 #define MAP_MASK (MAP_SIZE - 1)
 /*
 Stack: <phys address> --- <false>| addr <true>
- */
+*/
 void athMmap(ficlVm *vm) {
     int fd;
     int size;
@@ -3242,7 +3263,7 @@ void athMmap(ficlVm *vm) {
 
 #ifdef LINUX
 void athIoctl(ficlVm *vm) {
-    
+
     int fd=-1;
     void *cmd = (void *)-1;
     int data = -1;
@@ -3288,14 +3309,14 @@ void athOpenSerialPort(ficlVm *vm) {
 #ifdef LINUX
 static void athPrimitiveTick(ficlVm *vm) {
     /*
-    ficlCell *pTick;
-         
-    FICL_STACK_CHECK(vm->dataStack, 0, 1);
-             
-    pTick = (ficlCell *)(&vm->tickCounter);
-    ficlStackPush(vm->dataStack, FICL_LVALUE_TO_CELL(pTick));
-    return;
-    */
+       ficlCell *pTick;
+
+       FICL_STACK_CHECK(vm->dataStack, 0, 1);
+
+       pTick = (ficlCell *)(&vm->tickCounter);
+       ficlStackPush(vm->dataStack, FICL_LVALUE_TO_CELL(pTick));
+       return;
+       */
 
     ficlStackPushInteger(vm->dataStack, systemTick);
 
@@ -3326,7 +3347,7 @@ static void athStartTimer(ficlVm *vm) {
     timer.it_interval.tv_usec = interval * 1000;
 
     setitimer(ITIMER_VIRTUAL, &timer, NULL);
-    
+
 }
 #endif
 
@@ -3563,7 +3584,7 @@ void athWrite(ficlVm *vm) {
  */
 void athInotifyInit(ficlVm *vm) {
     int fd;
-    
+
     fd = inotify_init();
     if(fd) {
         ficlStackPushInteger(vm->dataStack, fd);
@@ -3632,7 +3653,7 @@ void athInotifyRmWatch(ficlVm *vm) {
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
-//    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
+    //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE
@@ -3643,8 +3664,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"write", athWrite, FICL_WORD_DEFAULT);
 #endif
 
-//    ficlDictionarySetPrimitive(dictionary, (char *)"key", athGetkey, FICL_WORD_DEFAULT);
-//    ficlDictionarySetPrimitive(dictionary, (char *)"?key", athQkey, FICL_WORD_DEFAULT);
+    //    ficlDictionarySetPrimitive(dictionary, (char *)"key", athGetkey, FICL_WORD_DEFAULT);
+    //    ficlDictionarySetPrimitive(dictionary, (char *)"?key", athQkey, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"stdout-flush", athStdoutFlush, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"zmove", athZmove, FICL_WORD_DEFAULT);
@@ -3670,7 +3691,7 @@ ficlDictionarySetPrimitive(dictionary, "gdbm-dump", athGdbmDump, FICL_WORD_DEFAU
 ficlDictionarySetPrimitive(dictionary, "gdbm-reorg", athGdbmReorganize, FICL_WORD_DEFAULT);
 ficlDictionarySetPrimitive(dictionary, "gdbm-sync", athGdbmSync, FICL_WORD_DEFAULT);
 #endif
-     */
+*/
 
     /*
 #ifdef SIMPL
@@ -3682,11 +3703,11 @@ ficlDictionarySetPrimitive(dictionary, "simpl-reply", athSimplReply, FICL_WORD_D
 
 ficlDictionarySetPrimitive(dictionary, "simpl-detach", athSimplDetach, FICL_WORD_DEFAULT);
 #endif
-     */
+*/
 
-//    ficlDictionarySetPrimitive(dictionary, (char *)"load", ficlPrimitiveLoad, FICL_WORD_DEFAULT);
-//    ficlDictionarySetPrimitive(dictionary, (char *)"$load", ficlDollarPrimitiveLoad, FICL_WORD_DEFAULT);
-//    ficlDictionarySetPrimitive(dictionary, (char *)"$load-dir", ficlDollarPrimitiveLoadDir, FICL_WORD_DEFAULT);
+    //    ficlDictionarySetPrimitive(dictionary, (char *)"load", ficlPrimitiveLoad, FICL_WORD_DEFAULT);
+    //    ficlDictionarySetPrimitive(dictionary, (char *)"$load", ficlDollarPrimitiveLoad, FICL_WORD_DEFAULT);
+    //    ficlDictionarySetPrimitive(dictionary, (char *)"$load-dir", ficlDollarPrimitiveLoadDir, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"spewhash", ficlPrimitiveSpewHash, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"system", ficlPrimitiveSystem, FICL_WORD_DEFAULT);
@@ -3787,7 +3808,7 @@ ficlDictionarySetPrimitive(dictionary, "list-get", athListGet, FICL_WORD_DEFAULT
 ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD_DEFAULT);
 
 #endif
-     */
+*/
 #ifdef MTHREAD
     //	ficlDictionarySetPrimitive(dictionary, "create-vm", athCreateVM, FICL_WORD_DEFAULT);
     //	ficlDictionarySetPrimitive(dictionary, "create-thread", athCreateThread, FICL_WORD_DEFAULT);
@@ -3804,7 +3825,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
        ficlDictionarySetPrimitive(dictionary, "qempty?", athQempty, FICL_WORD_DEFAULT);
        ficlDictionarySetPrimitive(dictionary, "qfull?", athQfull, FICL_WORD_DEFAULT);
        ficlDictionarySetPrimitive(dictionary, "qsize", athQsize, FICL_WORD_DEFAULT);
-     */   
+       */   
 #endif
 
 #ifdef SOCKET
