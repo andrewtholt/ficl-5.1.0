@@ -2,7 +2,11 @@
 ** Ficl softcore
 ** both uncompressed and Lempel-Ziv compressed versions.
 **
+<<<<<<< Updated upstream
 ** Generated 2015/03/27 08:09:11
+=======
+** Generated 2015/03/17 18:37:49
+>>>>>>> Stashed changes
 **/
 
 #include "ficl.h"
