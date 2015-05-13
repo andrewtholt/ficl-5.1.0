@@ -44,3 +44,6 @@
 -18 constant NET_ERROR_ON_SESSION
 -19 constant SP_BUG
 0x64 constant MAX_CLIENT_SCATTER_ELEMENTS
+
+32 constant MAX_GROUP_NAME      
+
