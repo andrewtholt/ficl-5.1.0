@@ -8,7 +8,7 @@ OS=`uname -s`
 echo "building for $CPU"
 echo "       OS is $OS"
 
-if [ "$OS" == "Linux" ]; then
+if [ "$OS" = "Linux" ]; then
     ARCH=$CPU
 else
     ARCH="${OS}_${CPU}"
