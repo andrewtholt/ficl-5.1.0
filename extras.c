@@ -3529,7 +3529,9 @@ void athRedisDisplayReply(ficlVm *vm) {
 #endif
 
 #if FICL_WANT_FILE
+#if LINUX
 #include <sys/inotify.h>
+#endif
 
 void athRead(ficlVm *vm) {
     ssize_t size;
@@ -3574,6 +3576,7 @@ void athWrite(ficlVm *vm) {
     }
 }
 
+#ifdef LINUX
 /**
  * inotify_init() call
  *
@@ -3650,6 +3653,8 @@ void athInotifyRmWatch(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, res);
 }
 #endif
+#endif
+
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
@@ -3657,9 +3662,11 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE
+#ifdef LINUX
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-init",  athInotifyInit,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-add-watch",  athInotifyAddWatch,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-rm-watch",  athInotifyRmWatch,  FICL_WORD_DEFAULT);
+#endif
     ficlDictionarySetPrimitive(dictionary, (char *)"read",  athRead,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"write", athWrite, FICL_WORD_DEFAULT);
 #endif

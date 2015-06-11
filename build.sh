@@ -2,14 +2,20 @@
 
 # set -x
 
-MAKEFLAGS=""
+CPU=`uname -m`
+OS=`uname -s`
 
-if [ -z "$ARCH" ] ;then
-    ARCH=`uname -m`
-    echo "building for $ARCH"
+echo "building for $CPU"
+echo "       OS is $OS"
+
+if [ "$OS" == "Linux" ]; then
+    ARCH=$CPU
+else
+    ARCH="${OS}_${CPU}"
 fi
 
-while getopts a:hx:o:n flag; do
+echo 
+while getopts a:hx:o: flag; do
     case $flag in
         a)
             ARGS=$OPTARG
@@ -20,10 +26,6 @@ while getopts a:hx:o:n flag; do
             printf "\t-h\t\tHelp.\n"
             printf "\t-o <variant>\tBuild a variant based on an architecture\n"
             printf "\t-x <makefile arch>\n"
-            printf "\t-n Test, say what you would do.\n"
-
-            printf "\nThe follwing environment files effect behavior:\n\n"
-            printf "\tARCH\tBuild for the specified architecture.\n"
 
             exit 0
             ;;
@@ -33,9 +35,6 @@ while getopts a:hx:o:n flag; do
         x)
             ARCH=${OPTARG}
             ;;
-        n)
-            MAKEFLAGS="-n"
-            ;;
     esac
 done
 
@@ -43,7 +42,7 @@ MAKEFILE=Makefile.${ARCH}${OPT}
 
 if [ -f $MAKEFILE ]; then
     echo "Building with $MAKEFILE"
-	make $MAKEFLAGS -j 4 -f $MAKEFILE $ARGS
+	make -j 4 -f $MAKEFILE $ARGS
 else
 	echo "$MAKEFILE does not exist."
 fi

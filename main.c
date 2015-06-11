@@ -99,6 +99,8 @@ int main(int argc, char **argv) {
 
     int i=0;
     int ch;
+    extern char *optarg;
+
     char *fileName=(char *)NULL;
 //    char *loadPath=(char *)NULL;
     char *cmd=(char *)NULL;
