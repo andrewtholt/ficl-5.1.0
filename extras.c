@@ -29,7 +29,7 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 #include "ficl.h"
 
 #ifdef LIBMODBUS
-#include <modbus.h>
+#include <modbus/modbus.h>
 #endif
 
 #ifdef SPREAD
