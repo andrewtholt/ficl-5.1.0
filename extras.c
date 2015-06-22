@@ -2881,7 +2881,7 @@ static void athModBusGetTimeout(ficlVm * vm) {
     modbus_get_response_timeout(ctx, &response_timeout);
 
     time = (response_timeout.tv_sec * 1000) + (response_timeout.tv_usec/1000) ;
-
+    ficlStackPushInteger(vm->dataStack, time );
 }
 /*
  * Modbus function code 0x02 (read input status).

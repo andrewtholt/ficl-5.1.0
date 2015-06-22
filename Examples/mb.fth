@@ -11,6 +11,9 @@
     ctx modbus-connect
     ctx 1 modbus-set-slave
 
+    cr
+    ." Timeout set to " ctx modbus-get-timeout . ." ms" cr
+
 ;
 
 : modbus
