@@ -480,6 +480,16 @@ Bugs:
     1. Failure is not indicated, except by a message
     2. It destroys the context on failure.
 
+Name:   modbus-set-timeout
+Stack:  ctx ms --
+Description:
+    Set the maximum time to wait for a response, in milliseconds.
+
+Name:   modbus-get-timeout
+Stack:  ctx -- ms
+Description:
+    Get the current maximum time to wait for a response, in milliseconds.
+
 Name:	modbus-set-slave
 Stack:	RTU-id ---
 Description:
@@ -501,7 +511,7 @@ Description:
 Name:	modbus-read-input-bits
 Stack:	ctx address count buffer -- true| count false
 Description:
-    Using ModBus function 0x02 (Read input status) read 'coun' bits from
+    Using ModBus function 0x02 (Read input status) read 'count' bits from
     ModBus bit address 'address' into the holding area pointed to by
     'buffer'
 
@@ -540,12 +550,12 @@ Description:
 
 
 Name:	modbus-debug
-Stack:	flag --
+Stack:	ctx flag --
 Description:
     Enable or disable verbose debugging messages.
 
 Name:	modbus-error-recovery
-Stack:	flag
+Stack:	ctx flag
 Description:
     Enable or disable ModBus error recovery.
 
