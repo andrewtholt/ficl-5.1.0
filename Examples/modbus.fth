@@ -28,7 +28,7 @@
     ctx modbus-connect
     ctx 1 modbus-set-slave
 
-    ctx 0 20 ptr modbus-read-registers abort" Read failed"
+    ctx 0 2 ptr modbus-read-registers abort" Read failed"
 
     ptr 20 dump
 
