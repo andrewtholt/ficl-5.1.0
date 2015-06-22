@@ -3064,7 +3064,7 @@ static void athModBusWriteMultipleRegisters( ficlVm *vm) {
 
     ctx = ( modbus_t *) ficlStackPopPointer(vm->dataStack);
 
-    status = modbus_write_registers(ctx,addr,ptr,len);
+    status = modbus_write_registers(ctx,addr,len,ptr);
 
     if (-1 == status) {
         ficlStackPushInteger(vm->dataStack,-1);
