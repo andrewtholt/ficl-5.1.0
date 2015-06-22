@@ -3044,6 +3044,11 @@ static void athModBusWriteRegister( ficlVm *vm) {
 
 }
 
+/*
+ *
+ * IN: context address ptr reg-count
+ * OUT:
+ */
 static void athModBusWriteMultipleRegisters( ficlVm *vm) {
     modbus_t *ctx;
 
@@ -3059,11 +3064,12 @@ static void athModBusWriteMultipleRegisters( ficlVm *vm) {
 
     ctx = ( modbus_t *) ficlStackPopPointer(vm->dataStack);
 
-    status = modbus_write_registers(ctx,addr,len,ptr);
+    status = modbus_write_registers(ctx,addr,ptr,len);
 
     if (-1 == status) {
         ficlStackPushInteger(vm->dataStack,-1);
     } else {
+        ficlStackPushInteger(vm->dataStack,status);
         ficlStackPushInteger(vm->dataStack,0);
     }
 
