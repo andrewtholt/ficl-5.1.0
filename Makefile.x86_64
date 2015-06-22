@@ -4,11 +4,11 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 #
 # TARGET= -DLINUX  -DSYSV_IPC -DSOCKET -DSERIAL # riscos MOTO_CPU32 
-TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 # -DI2C # -DFICL_WANT_FLOAT=0 
+TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSYSV_IPC -DLIBMODBUS # -DI2C # -DFICL_WANT_FLOAT=0 
 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS)
-CPPFLAGS= $(TARGET) -I.
+CPPFLAGS= $(TARGET) -I. -I/usr/local/include
 CC = cc -g
 LIB = ar cr
 RANLIB = ranlib
@@ -19,7 +19,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl
+	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl -L/usr/local/lib -lmodbus
 
 ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
 	$(CC) --static main.o -o ficls -L. -lficl -lm -ldl
