@@ -2868,6 +2868,21 @@ static void athModBusSetSlave(ficlVm * vm) {
     modbus_set_slave(ctx, rtu);
 
 }
+
+/*
+ * Return current timeout im milliseconds.
+ */
+static void athModBusGetTimeout(ficlVm * vm) {
+    modbus_t *ctx;
+    struct timeval response_timeout;
+    int time;
+
+    ctx=ficlStackPopPointer(vm->dataStack);
+    modbus_get_response_timeout(ctx, &response_timeout);
+
+    time = (response_timeout.tv_sec * 1000) + (response_timeout.tv_usec/1000) ;
+
+}
 /*
  * Modbus function code 0x02 (read input status).
  */
@@ -3857,6 +3872,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "modbus-connect", athModBusConnect, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "modbus-set-slave", athModBusSetSlave, FICL_WORD_DEFAULT);
 
+    ficlDictionarySetPrimitive(dictionary, "modbus-get-timeout", athModBusGetTimeout, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, "modbus-read-input-bits", athModBusReadInputBits, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "modbus-read-registers", athModBusReadRegisters, FICL_WORD_DEFAULT);
