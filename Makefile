@@ -4,7 +4,7 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 TARGET= -DLINUX 
 SHFLAGS = -fPIC
-CFLAGS= $(SHFLAGS) -g -m32
+CFLAGS= $(SHFLAGS) -g -march=c3 
 CPPFLAGS= $(TARGET) -I. 
 LDFLAGS=-Wl,--no-as-needed
 CC = cc
