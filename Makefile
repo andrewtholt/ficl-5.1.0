@@ -34,7 +34,7 @@ libficl.a: $(OBJECTS)
 
 # shared library build
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-	$(CC) -m32 -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
+	$(CC) $(CFLAGS) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
 #	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
