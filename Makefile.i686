@@ -7,7 +7,7 @@ SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g -m32
 CPPFLAGS= $(TARGET) -I. -I/usr/local/include
 LDFLAGS=-Wl,--no-as-needed
-CC = cc
+# CC = cc
 LIB = ar cr
 RANLIB = ranlib
 
