@@ -2,7 +2,7 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX -DMUSL -DSYSV_IPC -DSOCKET
+TARGET= -DLINUX -DMUSL -DSYSV_IPC -DSOCKET -DDYNLIB
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g -m32
 CPPFLAGS+= $(TARGET) -I. -I/home/andrewh/Source/openwrt/staging_dir/toolchain-i386_i486_gcc-4.8-linaro_musl-1.1.10/include
