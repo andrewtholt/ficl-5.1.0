@@ -11,19 +11,16 @@ void ficlCallbackTextOut(ficlCallback *callback, char *text)
 {
 	ficlOutputFunction textOut = NULL;
 
-	if (callback != NULL)
-	{
+	if (callback != NULL) {
 		if (callback->textOut != NULL)
 			textOut = callback->textOut;
-		else if ((callback->system != NULL) && (callback != &(callback->system->callback)))
-		{
+		else if ((callback->system != NULL) && (callback != &(callback->system->callback))) {
 			ficlCallbackTextOut(&(callback->system->callback), text);
 			return;
 		}
 	}
 
-	if ((textOut == NULL) && (ficlSystemGlobal != NULL))
-	{
+	if ((textOut == NULL) && (ficlSystemGlobal != NULL)) {
 		callback = &(ficlSystemGlobal->callback);
 		textOut = callback->textOut;
 	}

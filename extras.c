@@ -52,7 +52,7 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 #endif
 
 #ifdef SYSV_IPC
-#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED) || defined(MAC) || defined(SOLARIS)
+#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED) || defined(MAC) || defined(SOLARIS) || defined(MUSL)
 #warning "Including sys/sem.h"
 #include <sys/sem.h>
 /* union semun is defined by including <sys/sem.h> */
@@ -68,24 +68,24 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 static int systemTick=0;
 #endif
 
-#if defined(SOLARIS) 
+#if defined(SOLARIS) || defined(MUSL)
 #warning "Solaris"
 union semun {
     int             val;
     struct semid_ds *buf;
-    ushort_t       *array;
+    unsigned short *array;
 } arg;
 #endif
 
 #define MSGSIZE 255
-#if defined(SOLARIS) || defined(COBALT) || defined(MAC)
+#if defined(SOLARIS) || defined(COBALT) || defined(MAC) || defined(MUSL)
 struct msgbuf {
     long            mtype;
     char            mtext[MSGSIZE];
 };
 #endif
 
-#if (!defined(MAC) && !defined(SOLARIS)) && defined(SYSV_IPC) && !defined(COBALT)
+#if (!defined(MAC) && !defined(SOLARIS)) && defined(SYSV_IPC) && !defined(COBALT) && !defined(MUSL) 
 #warning "Including sys/msg.h"
 #include <sys/msg.h>
 #define MSGSIZE 255
