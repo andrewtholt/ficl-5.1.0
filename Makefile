@@ -2,12 +2,16 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX -DSYSV_IPC -DSOCKET
+TARGET= -DLINUX -DMUSL -DSYSV_IPC -DSOCKET
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g -m32
-CPPFLAGS= $(TARGET) -I. 
+CPPFLAGS+= $(TARGET) -I. -I/home/andrewh/Source/openwrt/staging_dir/toolchain-i386_i486_gcc-4.8-linaro_musl-1.1.10/include
+
 LDFLAGS=-Wl,--no-as-needed
-CC = cc
+
+CC = gcc
+CFLAGS= $(SHFLAGS) -g -m32
+AR = ar cr
 LIB = ar cr
 RANLIB = ranlib
 
@@ -22,8 +26,8 @@ all:	lib ficl # ficls
 # Build statically linked ficls.
 #
 ficl: main.o $(HEADERS) libficl.a
-#	$(CC) $(LDFLAGS) main.o -o ficls -lm -ldl -L. -lficl
-	$(CC) $(CFLAGS) --static main.o -o ficl -L. -lficl -lm
+	$(CC) $(CFLAGS) main.o -o ficl -lm -ldl -L. -lficl -lm
+#	$(CC) $(CFLAGS) --static main.o -o ficl -L. -lficl -lm
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
@@ -39,7 +43,7 @@ libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
 #	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-	$(CC) main.o -o main -L. -lficl -lm
+	$(CC) $(CFLAGS) main.o -o main -L. -lficl -lm
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
 
 unix.o: ficlplatform/unix.c $(HEADERS)
