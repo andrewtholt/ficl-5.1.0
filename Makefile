@@ -70,18 +70,24 @@ clean:
 
 
 install:        ficl libficl.so.$(MAJOR).$(MINOR) libficl.a
+	@echo "=============="
+	@echo "DESTDIR = >"
+	@echo $(DESTDIR)
+	@echo "=============="
 	strip ./ficl
-	cp ./ficl /usr/local/bin
-	cp ficl.h /usr/local/include
-	cp ficllocal.h /usr/local/include
-	cp ficltokens.h /usr/local/include
-	mkdir -p /usr/local/include/ficlplatform
-	cp ficlplatform/unix.h /usr/local/include/ficlplatform
-	cp libficl.so.$(MAJOR).$(MINOR) /usr/local/lib
-	cp libficl.a /usr/local/lib
-	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so.$(MAJOR)
-	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so
-	mkdir -p /usr/local/lib/ficl
-	cp Lib/* /usr/local/lib/ficl
+	mkdir -p $(DESTDIR)/usr/local/bin
+	cp ./ficl $(DESTDIR)/usr/local/bin
+	mkdir -p $(DESTDIR)/usr/local/include
+	cp ficllocal.h $(DESTDIR)/usr/local/include
+	cp ficltokens.h $(DESTDIR)/usr/local/include
+	mkdir -p $(DESTDIR)/usr/local/include/ficlplatform
+	cp ficlplatform/unix.h $(DESTDIR)/usr/local/include/ficlplatform
+	mkdir -p $(DESTDIR)/usr/local/lib
+	cp libficl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/local/lib
+	cp libficl.a $(DESTDIR)/usr/local/lib
+#	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so.$(MAJOR)
+#	ln -sf /usr/local/lib/libficl.so.$(MAJOR).$(MINOR) /usr/local/lib/libficl.so
+	mkdir -p $(DESTDIR)/usr/local/lib/ficl
+	cp Lib/* $(DESTDIR)/usr/local/lib/ficl
 
 
