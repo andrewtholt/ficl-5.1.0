@@ -1,4 +1,4 @@
-include /usr/local/lib/ficl/mydump.fth
+\ include /usr/local/lib/ficl/mydump.fth
 
 -1 value ctx
 -1 value ptr
@@ -12,11 +12,11 @@ include /usr/local/lib/ficl/mydump.fth
 ;
 
 : tst
-    ctx 0 40 ptr modbus-read-registers abort" Read failed"
-    ptr 20 mdump
+    ctx 0 10 ptr modbus-read-registers abort" Read failed"
+    ptr 20 dump
 
-\\    ctx 0 20 ptr modbus-read-input-bits abort" Read failed"
-\\   ptr 20 dump
+\    ctx 0 20 ptr modbus-read-input-bits abort" Read failed"
+\   ptr 20 dump
 ;
 
 variable rtd1
@@ -47,11 +47,11 @@ variable baud-rate
 
 
 \    s" 192.168.0.190" 502 modbus-new-net abort" modbus-new-rtu failed" to ctx
-    s" 192.168.0.244" 502 modbus-new-net abort" modbus-new-rtu failed" to ctx
+    s" 192.168.100.25" 1502 modbus-new-net abort" modbus-new-rtu failed" to ctx
 
     ctx modbus-connect
     ctx -1 modbus-error-recovery
-    ctx 3 modbus-set-slave
+    ctx 1 modbus-set-slave
 
     tst
 
