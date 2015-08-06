@@ -9,7 +9,7 @@ if [ $LEN -ne 32 ]; then
     exit -1
 fi
 
-
+ARCH=i686
 echo "Build debian package"
 echo "First make everything."
 
@@ -21,8 +21,8 @@ echo "First make everything."
 
 HERE=`pwd`
 
-DEST="./debian-i386/usr/local/bin"
-LIBS="./debian-i386/usr/local/lib"
+DEST="./debian-${ARCH}/usr/local/bin"
+LIBS="./debian-${ARCH}/usr/local/lib"
 
 
 if [ ! -d ${DEST} ]; then
@@ -47,7 +47,7 @@ else
     cd ..
     rm -rf lib
     cd $HERE
-    LIBS="./debian-i386/usr/local/lib"
+#    LIBS="./debian-i386/usr/local/lib"
 fi
 
 if [ ! -f libficl.so.4.1.0 ]; then
@@ -75,8 +75,7 @@ if [ -x ./ficls ]; then
     strip ${DEST}/ficls
 fi
 
-# dpkg -b ./debian-x86 ${ROOT}/dists/main/test/binary-x86
-dpkg -b ./debian-i386 .
+dpkg -b ./debian-${ARCH} .
 
 # cd $ROOT
 # dpkg-scanpackages dists/main/test/binary-arm | gzip -c9 > ${ROOT}/dists/main/test/binary-arm/Packages.gz

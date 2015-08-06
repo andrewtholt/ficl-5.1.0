@@ -1,0 +1,10 @@
+Package: ficl-i686
+Section: misc
+Priority: extra
+Maintainer: Andrew Holt
+Architecture: i686
+Version: 5.2.4
+Description: ficl
+ ficl - Forth Inspired Control Language
+ 5.2.1 8 Nov 2014 - Configured for a minimal build, plus a static executable ficls
+ 5.2.4 Make all builds have the same features (possibly no libmodbus)

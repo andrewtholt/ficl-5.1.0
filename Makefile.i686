@@ -2,7 +2,7 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX -DDYNLIB -DLIBMODBUS # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET 
+TARGET= -DLINUX -DDYNLIB -DLIBMODBUS -DSYSV_IPC -DSOCKET # -DFICL_WANT_FLOAT=
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g -m32
 CPPFLAGS= $(TARGET) -I. -I/usr/local/include
