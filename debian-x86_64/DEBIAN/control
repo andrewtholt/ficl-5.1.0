@@ -3,9 +3,10 @@ Section: misc
 Priority: extra
 Maintainer: Andrew Holt
 Architecture: amd64
-Version: 5.2.4
+Version: 5.2.5
 Description: ficl
  ficl - Forth Inspired Control Language
  5.2.1 8 Nov 2014 - Configured for a minimal build, plus a static executable ficls
  5.2.4 Added SYSV_IPC back in
+ 5.2.5 Added ini file functions.
 

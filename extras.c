@@ -77,6 +77,10 @@ union semun {
 } arg;
 #endif
 
+#if defined(INIPARSER)
+#include <iniparser.h>
+#endif
+
 #define MSGSIZE 255
 #if defined(SOLARIS) || defined(COBALT) || defined(MAC) || defined(MUSL)
 struct msgbuf {
@@ -456,6 +460,12 @@ static void athFeatures(ficlVm *vm) {
     printf("    LIBMODBUS\n");
 #else
     printf("NOT LIBMODBUS\n");
+#endif
+
+#ifdef INIPARSER
+    printf("    INIPARSER\n");
+#else
+    printf("NOT INIPARSER\n");
 #endif
 
 #ifdef SYSV_IPC
@@ -3726,13 +3736,101 @@ void athInotifyRmWatch(ficlVm *vm) {
 
     ficlStackPushInteger(vm->dataStack, res);
 }
+
 #endif
+#endif
+
+#ifdef INIPARSER
+
+void athIniFileLoad(ficlVm *vm) {
+    int len;
+    char *name;
+    dictionary *ini;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    name = (char *)ficlStackPopPointer(vm->dataStack) ;
+    name[len]='\0';
+
+    ini = iniparser_load( name );
+    ficlStackPushPointer(vm->dataStack,ini);
+}
+/*
+ * Stack: default name len ini
+ */
+void athIniGetInt(ficlVm *vm) {
+    int len;
+    char *name;
+    int val;
+    int def;
+
+    dictionary *ini;
+
+    def  = ficlStackPopInteger(vm->dataStack);
+
+    len = ficlStackPopInteger(vm->dataStack);
+    name = (char *)ficlStackPopPointer(vm->dataStack) ;
+    name[len]='\0';
+
+    ini = (dictionary *)ficlStackPopPointer(vm->dataStack) ;
+
+    val = iniparser_getint(ini, name,def );
+
+    ficlStackPushInteger(vm->dataStack,val);
+}
+
+void athIniGetBoolean(ficlVm *vm) {
+    int len;
+    char *name;
+    int val;
+    int def;
+
+    dictionary *ini;
+
+    def  = ficlStackPopInteger(vm->dataStack);
+
+    len = ficlStackPopInteger(vm->dataStack);
+    name = (char *)ficlStackPopPointer(vm->dataStack) ;
+    name[len]='\0';
+
+    ini = (dictionary *)ficlStackPopPointer(vm->dataStack) ;
+
+    val = iniparser_getboolean(ini, name,def );
+    if ( val != 0)
+        val = -1;
+
+    ficlStackPushInteger(vm->dataStack,val);
+}
+
+void athIniGetString(ficlVm *vm) {
+    int len;
+    char *name;
+    char *val;
+
+    dictionary *ini;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    name = (char *)ficlStackPopPointer(vm->dataStack) ;
+    name[len]='\0';
+
+    ini = (dictionary *)ficlStackPopPointer(vm->dataStack) ;
+
+    val = iniparser_getstring(ini, name,"" );
+
+    ficlStackPushPointer(vm->dataStack,val);
+    ficlStackPushInteger(vm->dataStack,strlen(val));
+}
 #endif
 
 void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
     //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
+#ifdef INIPARSER
+    ficlDictionarySetPrimitive(dictionary, (char *)"ini-load", athIniFileLoad, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"ini-getint", athIniGetInt, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"ini-getbool", athIniGetBoolean, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"ini-getstring", athIniGetString, FICL_WORD_DEFAULT);
+#endif
     ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE

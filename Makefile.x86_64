@@ -4,7 +4,7 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 #
 # TARGET= -DLINUX  -DSYSV_IPC -DSOCKET -DSERIAL # riscos MOTO_CPU32 
-TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSYSV_IPC -DLIBMODBUS -DSOCKET # -DI2C # -DFICL_WANT_FLOAT=0 
+TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSYSV_IPC -DLIBMODBUS -DSOCKET -DINIPARSER # -DI2C # -DFICL_WANT_FLOAT=0 
 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS)
@@ -19,7 +19,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl -L/usr/local/lib -lmodbus
+	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl -L/usr/local/lib -lmodbus -liniparser
 
 ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
 	$(CC) --static main.o -o ficls -L. -lficl -lm -ldl
