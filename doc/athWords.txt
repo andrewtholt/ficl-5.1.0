@@ -650,6 +650,50 @@ Note:
     No checking is performed to the memory region must have sufficient
     space allocated.
 
+Name:	ini-load
+Stack:	fname len : ini
+Description:
+    Load an ini file.  Returns a pointer to the created dictionary.
+
+Name:	ini-getint
+Stack:	ini name len default : n
+Description:
+    Read the integer given by the name.  If not set return the default.
+    e.g.
+        ini s" section:item" 0 ini-getint
+
+Name:	initget-bool
+Stack:	ini name len default : f
+Description:
+    Read the boolean value given by the name.  Return 0, for false,
+    and -1 for true.
+
+Name:	ini-getstring
+Stack:	ini name len : ptr len
+Description:
+    Return the string value given by the name.  Returns an empty string
+    if not set.
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
 Name:	
 Stack:	
 Description:
