@@ -47,7 +47,7 @@ else
     cd ..
     rm -rf lib
     cd $HERE
-#    LIBS="./debian-i386/usr/local/lib"
+    mkdir -p ${LIBS}
 fi
 
 if [ ! -f libficl.so.4.1.0 ]; then
