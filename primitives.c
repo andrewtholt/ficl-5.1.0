@@ -3402,6 +3402,12 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetConstant(environment, "modbus",              FICL_FALSE);
 #endif
 
+#ifdef INIPARSER
+    ficlDictionarySetConstant(environment, "iniparser",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "iniparser",              FICL_FALSE);
+#endif
+
 #ifdef SPREAD
     ficlDictionarySetConstant(environment, "spread",              FICL_TRUE);
 #else

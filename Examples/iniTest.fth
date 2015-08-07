@@ -1,4 +1,6 @@
 
+s" iniparser" environment? 0= abort" No ini file parser."
+
 -1 value ini
 
 : init
