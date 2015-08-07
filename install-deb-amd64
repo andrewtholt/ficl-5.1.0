@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# set -x
+
+LEN=`getconf LONG_BIT`
+
+if [ $LEN -ne 64 ]; then
+    echo "Attempting to build on wrong platform."
+    exit -1
+fi
+
+ARCH="amd64"
+echo "Build debian package"
+echo "First make everything."
+
+./build.sh
+
+HERE=`pwd`
+
+DEST="./debian-${ARCH}/usr/local/bin"
+LIBS="./debian-${ARCH}/usr/local/lib"
+
+
+if [ ! -d ${DEST} ]; then
+    mkdir -p ${DEST}
+fi
+
+if [ ! -d ${LIBS} ]; then
+    mkdir -p ${LIBS}
+fi
+
+if [ ! -f libficl.so.4.1.0 ]; then
+    echo "No shared object."
+else
+    cp libficl.so.4.1.0 $LIBS
+    cd $LIBS
+    mkdir -p ficl
+    cp $HERE/Lib/* ficl
+
+    if [ ! -L libficl.so ]; then
+        ln -s libficl.so.4.1.0 libficl.so
+    fi
+
+    if [ ! -L libficl.so.4 ]; then
+        ln -s libficl.so.4.1.0 libficl.so.4
+    fi
+fi
+cd $HERE
+
+cp ./ficl ${DEST}
+strip ${DEST}/ficl
+
+if [ -x ./ficls ]; then
+    echo "And a static executable too."
+    cp ./ficls ${DEST}
+    strip ${DEST}/ficls
+fi
+
+dpkg -b ./debian-${ARCH} .
+
+# cd $ROOT
+# dpkg-scanpackages dists/main/test/binary-arm | gzip -c9 > ${ROOT}/dists/main/test/binary-arm/Packages.gz
+# cd /net/imickey/Volumes/Share/debs
+# dpkg-scanpackages i386 | gzip -c9 > i386/Packages.gz 
+
