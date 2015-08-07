@@ -2,7 +2,7 @@ OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o s
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX -DDYNLIB -DLIBMODBUS -DSYSV_IPC -DSOCKET # -DFICL_WANT_FLOAT=
+TARGET= -DLINUX -DDYNLIB -DLIBMODBUS -DSYSV_IPC -DSOCKET -DINIPARSER # -DFICL_WANT_FLOAT=0
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g -m32
 CPPFLAGS= $(TARGET) -I. -I/usr/local/include
@@ -17,7 +17,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -ldl -L/usr/local/lib -lmodbus
+	$(CC) main.o -o ficl -L. -lficl -lm -ldl -L/usr/local/lib -lmodbus -liniparser
 #
 # Build statically linked ficls.
 #
