@@ -2,7 +2,7 @@ Package: ficl
 Section: misc
 Priority: extra
 Maintainer: Andrew Holt
-Architecture: amd64
+Architecture: x86_64
 Version: 5.2.5
 Description: ficl
  ficl - Forth Inspired Control Language
