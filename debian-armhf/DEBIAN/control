@@ -1,4 +1,4 @@
-Package: ficl-armv7l
+Package: ficl
 Section: misc
 Priority: extra
 Maintainer: Andrew Holt

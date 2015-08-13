@@ -14,10 +14,6 @@ echo "Build debian package"
 echo "First make everything."
 
 ./build.sh
-# ./build.sh shared
-
-# make -f Makefile_min.linux
-# make -f Makefile_min.linux shared
 
 HERE=`pwd`
 
