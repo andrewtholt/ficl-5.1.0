@@ -5,7 +5,7 @@ s" iniparser" environment? 0= abort" No ini file parser."
 
 : init
     ini 0 < if
-        s" /tmp/newServer.ini" ini-load
+        s" ./newServer.ini" ini-load
         to ini
     then
 ;
@@ -14,15 +14,16 @@ s" iniparser" environment? 0= abort" No ini file parser."
     init
     ini s" modbus:LOCAL_RTU" 1 ini-getint
     cr
-    ." Get int    :" . cr
+    ." Get int (LOCAL_RTU):" . cr
 
     ini s" modbus:debug" 0 ini-getbool
-    ." Get Boolean:" . cr
+    ." Get Boolean (DEBUG):" . cr
 
     ini s" modbus:tty" ini-getstring
-    ." Get String :" type cr
+    ." Get String    (TTY):" type cr
 ;
 
-
+cr 
+.( Type test to start ) cr
 
 
