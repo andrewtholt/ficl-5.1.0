@@ -1810,6 +1810,21 @@ static void athShmOpen(ficlVm *vm) {
         ficlStackPushInteger(vm->dataStack, 0);
     }
 }
+
+static void athShmUnlink(ficlVm *vm) {
+    char *fname;
+    int len;
+    int rc;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    fname = (char *)ficlStackPopPointer(vm->dataStack);
+    fname[len]='\0';
+
+    rc = shm_unlink(fname);
+
+    ficlStackPushInteger(vm->dataStack, rc);
+}
+
 #endif
 
 /*
@@ -3873,6 +3888,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetConstant(dictionary,  (char *)"O_TRUNC", O_TRUNC);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-open", athShmOpen, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"shm-unlink", athShmUnlink, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef INIPARSER

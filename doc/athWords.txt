@@ -696,9 +696,13 @@ Description:
 Note:
     POSIX_IPC must have been defined at build time.
 
-Name:	
-Stack:	
+Name:	shm-unlink
+Stack:	fname len -- 0 | -1
 Description:
+    Unlink the the shared memory optect given by fname.  The segment is not destroyed
+    until the last client closes the associated file descriptor.
+Note:
+    POSIX_IPC must have been defined at build time.
 
 Name:	
 Stack:	
