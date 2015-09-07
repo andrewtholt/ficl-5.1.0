@@ -3390,6 +3390,12 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetConstant(environment, "sysv_ipc",              FICL_FALSE);
 #endif
 
+#ifdef POSIX_IPC
+    ficlDictionarySetConstant(environment, "posix_ipc",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "posix_ipc",              FICL_FALSE);
+#endif
+
 #ifdef SOCKET
     ficlDictionarySetConstant(environment, "socket",              FICL_TRUE);
 #else

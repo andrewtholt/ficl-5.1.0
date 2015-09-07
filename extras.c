@@ -2306,7 +2306,7 @@ static void athConnect(ficlVm * vm) {
 
     memset(&hint, 0 , sizeof(hint));
 
-//    hint.ai_family = AF_UNSPEC;
+    //    hint.ai_family = AF_UNSPEC;
     hint.ai_family = AF_INET;
     hint.ai_socktype = SOCK_STREAM;
 
@@ -2316,9 +2316,9 @@ static void athConnect(ficlVm * vm) {
     len = ficlStackPopInteger(vm->dataStack);
 
     hostName = (char *)ficlStackPopPointer(vm->dataStack);
-//    hostName[len] = '\0';
-    
-//    rc = getaddrinfo(hostName, NULL /*service*/, &hint, &result);
+    //    hostName[len] = '\0';
+
+    //    rc = getaddrinfo(hostName, NULL /*service*/, &hint, &result);
     rc = getaddrinfo(hostName, portNumber, &hint, &result);
 
     if( 0 == rc ) {
@@ -2333,22 +2333,22 @@ static void athConnect(ficlVm * vm) {
     }
 
     /*
-    hp = (struct hostent *) gethostbyname(hostName);
-    memset((char *) &serv_addr, '\0', sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(port);
+       hp = (struct hostent *) gethostbyname(hostName);
+       memset((char *) &serv_addr, '\0', sizeof(serv_addr));
+       serv_addr.sin_family = AF_INET;
+       serv_addr.sin_port = htons(port);
 
-    memcpy((char *) &serv_addr.sin_addr, (void *) hp->h_addr, hp->h_length);
+       memcpy((char *) &serv_addr.sin_addr, (void *) hp->h_addr, hp->h_length);
 
-    sock1 = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock1 < 0) 	{
-        exitStatus = -1;
-    } else 	{
-        tmp = connect(sock1, (struct sockaddr *) & serv_addr, sizeof(serv_addr));
-        if (tmp < 0)
-            exitStatus = -1;
-    }
-    */
+       sock1 = socket(AF_INET, SOCK_STREAM, 0);
+       if (sock1 < 0) 	{
+       exitStatus = -1;
+       } else 	{
+       tmp = connect(sock1, (struct sockaddr *) & serv_addr, sizeof(serv_addr));
+       if (tmp < 0)
+       exitStatus = -1;
+       }
+       */
 
     if (exitStatus == 0) {
         ficlStackPushInteger(vm->dataStack, sock1);
@@ -3351,26 +3351,20 @@ void athMmap(ficlVm *vm) {
     int ret=0;
     void *map_base;
 
-    fd = open("/dev/mem", O_RDWR | O_SYNC);
+    size = ficlStackPopInteger(vm->dataStack) ;
+    target = ficlStackPopInteger(vm->dataStack) ;
+    fd = ficlStackPopInteger(vm->dataStack) ;
 
-    if( fd == -1) {
+    map_base = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target);
+
+    if(map_base == (void *) -1) {
         ret=-1;
     } else {
-        size = ficlStackPopInteger(vm->dataStack) ;
-        target = ficlStackPopInteger(vm->dataStack) ;
-
-        //        map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target & ~MAP_MASK);
-        map_base = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, target & ~MAP_MASK);
-
-        if(map_base == (void *) -1) {
-            ret=-1;
-        } else {
-            ret=0;
-            ficlStackPushPointer(vm->dataStack, map_base);
-        }
-
-        ficlStackPushInteger(vm->dataStack,ret);
+        ret=0;
+        ficlStackPushPointer(vm->dataStack, map_base);
     }
+
+    ficlStackPushInteger(vm->dataStack,ret);
 
 }
 

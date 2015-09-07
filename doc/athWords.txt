@@ -674,13 +674,20 @@ Description:
     Return the string value given by the name.  Returns an empty string
     if not set.
 
-Name:	
-Stack:	
+Name:	mmap
+Stack:	fd offset size -- ptr 0 | -1
 Description:
+    Return a pointer to memory containing the data from fd, at 'offset' into the file and
+    with a maximum size of 'size' bytes.
 
-Name:	
-Stack:	
+Name:	shm-open
+Stack:	fname len flags mode -- fd 0 | -1
 Description:
+    Open the POSIX shared memory segment with name 'fname' using the flags (made up of
+    O_CREAT, O_RDWR etc) and with fil access mode (like file permission, so octal 777
+    is anybody can read, write or execute) and return a file descriptor.
+Note:
+    POSIX_IPC must have been defined at build time.
 
 Name:	
 Stack:	
