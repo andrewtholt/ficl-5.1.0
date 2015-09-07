@@ -23,6 +23,10 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 #include <sys/shm.h>
 #endif
 
+#ifdef POSIX_IPC
+#include <sys/mman.h>
+#endif
+
 #include <signal.h>
 #include <errno.h>
 #include <unistd.h>
@@ -472,6 +476,12 @@ static void athFeatures(ficlVm *vm) {
     printf ("    SYSV_IPC\n");
 #else    
     printf ("NOT SYSV_IPC\n");    
+#endif
+
+#ifdef POSIX_IPC
+    printf ("    POSIX_IPC\n");
+#else    
+    printf ("NOT POSIX_IPC\n");    
 #endif
 
 #ifdef DYNLIB
@@ -1482,9 +1492,7 @@ athGetenv(ficlVm * vm)
 
 }
 
-    static void
-athGetErrno(ficlVm * vm)
-{
+static void athGetErrno(ficlVm * vm) {
     extern int      errno;
     ficlStackPushInteger(vm->dataStack, errno);
     errno = 0;
@@ -1779,13 +1787,36 @@ athMsgRecv(ficlVm * vm)
 }
 #endif				/* // #define(MAC) */
 
+#ifdef POSIX_IPC
+static void athShmOpen(ficlVm *vm) {
+    char *fname;
+    int flag;
+    int len;
+    int fd;
+    int mode;
+
+    mode = ficlStackPopInteger(vm->dataStack);
+    flag = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    fname = (char *)ficlStackPopPointer(vm->dataStack);
+
+    fname[len] = '\0';
+
+    fd=shm_open(fname,flag,mode);
+    if( fd < 0) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, fd);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+}
+#endif
+
 /*
  * Stack: sep ptr cnt --- addrn lenn ...... addr0 len0 n
  */
 
-    static void
-athStrTok(ficlVm * vm)
-{
+static void athStrTok(ficlVm * vm) {
     char           *ptr;
     char            s;
     char            sep[2];
@@ -3825,6 +3856,16 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
     //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
+#ifdef POSIX_IPC
+    ficlDictionarySetConstant(dictionary,  (char *)"O_RDONLY", O_RDONLY);
+    ficlDictionarySetConstant(dictionary,  (char *)"O_RDWR", O_RDWR);
+    ficlDictionarySetConstant(dictionary,  (char *)"O_CREAT", O_CREAT);
+    ficlDictionarySetConstant(dictionary,  (char *)"O_EXCL", O_EXCL);
+    ficlDictionarySetConstant(dictionary,  (char *)"O_TRUNC", O_TRUNC);
+
+    ficlDictionarySetPrimitive(dictionary, (char *)"shm-open", athShmOpen, FICL_WORD_DEFAULT);
+#endif
+
 #ifdef INIPARSER
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-load", athIniFileLoad, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-getint", athIniGetInt, FICL_WORD_DEFAULT);
