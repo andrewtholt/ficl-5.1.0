@@ -25,6 +25,7 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
 #ifdef POSIX_IPC
 #include <sys/mman.h>
+#include <semaphore.h>
 #endif
 
 #include <signal.h>
@@ -1825,6 +1826,97 @@ static void athShmUnlink(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, rc);
 }
 
+static void athSemOpen(ficlVm *vm) {
+    int oflag;
+    int len;
+    char *name;
+    sem_t *sem_id;
+
+    oflag = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    name = (char *)ficlStackPopPointer(vm->dataStack);
+    name[len]='\0';
+
+    sem_id = sem_open(name,oflag);
+    
+    if( SEM_FAILED == sem_id) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushPointer(vm->dataStack, sem_id);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+
+}
+
+static void athSemCreat(ficlVm *vm) {
+    int oflag;
+    int len;
+    int value;
+    mode_t mode;
+
+    char *name;
+    sem_t *sem_id;
+
+    value = ficlStackPopInteger(vm->dataStack);
+    mode = (mode_t)ficlStackPopInteger(vm->dataStack);
+    oflag = ficlStackPopInteger(vm->dataStack);
+
+    oflag |= O_CREAT;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    name = (char *)ficlStackPopPointer(vm->dataStack);
+    name[len]='0';
+
+    sem_id = sem_open(name,oflag,mode,value);
+    
+    if( SEM_FAILED == sem_id) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushPointer(vm->dataStack, sem_id);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+
+}
+
+static void athSemWait(ficlVm *vm) {
+    sem_t *sem_id;
+    int rc;
+
+    sem_id = (sem_t *)ficlStackPopPointer(vm->dataStack);
+
+    rc=sem_wait(sem_id);
+
+   ficlStackPushInteger(vm->dataStack, rc);
+
+}
+
+static void athSemPost(ficlVm *vm) {
+    sem_t *sem_id;
+    int rc;
+
+    sem_id = (sem_t *)ficlStackPopPointer(vm->dataStack);
+
+    rc=sem_post(sem_id);
+
+    ficlStackPushInteger(vm->dataStack, rc);
+
+}
+
+static void athSemGetValue(ficlVm *vm) {
+    sem_t *sem_id;
+    int val;
+    int rc;
+
+    sem_id = (sem_t *)ficlStackPopPointer(vm->dataStack);
+
+    rc=sem_getvalue(sem_id,&val);
+
+    if(rc == 0) {
+        ficlStackPushInteger(vm->dataStack, val);
+    }
+
+    ficlStackPushInteger(vm->dataStack, rc);
+}
 #endif
 
 /*
@@ -3889,6 +3981,12 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-open", athShmOpen, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-unlink", athShmUnlink, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-open", athSemOpen, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-create", athSemCreat, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-wait", athSemWait, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-post", athSemPost, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-getvalue", athSemGetValue, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef INIPARSER

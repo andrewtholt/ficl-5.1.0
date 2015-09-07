@@ -704,6 +704,55 @@ Description:
 Note:
     POSIX_IPC must have been defined at build time.
 
+Name:	sem-open
+Stack:	name len oflag -- sem-id 0 | -1
+Description:
+    Open an existing semaphore, identified by name, with the acces defined by 
+    oflag (e.g. O_RDWR)
+Note:
+    POSIX_IPC must have been defined at build time.  See sem_open(3) for 
+    more information.
+
+Name:	sem-create
+Stack:	name len oflag mode value -- sem-id 0 | -1
+Description:
+    Create a semaphore, identified by the name, using oflags (e.g.O_RDWR) and 
+    file access permissions mode, with an initial value.
+Note:
+    POSIX_IPC must have been defined at build time.  See sem_open(3) for 
+    more information.
+
+Name:	sem-wait
+Stack:	sem-id -- 0|-1
+Description:
+    sem-wait decrements (locks) the semaphore pointed to by sem-id.  If the
+    semaphore has a value greater than zero then the decrement proceeds, and 
+    the word returns.  If the semaphore currently has the value 0, then 
+    the word blocks until the value is greater than 0.
+Note:
+    POSIX_IPC must have been defined at build time.  See sem_wait(3) for 
+    more information.
+
+Name:	sem-post
+Stack:	sem-id -- 0| -1
+Description:
+    sem-post increments (unlocks) the semaphore pointed to by sem-id.
+Note:
+    POSIX_IPC must have been defined at build time.  See sem_post(3) for 
+    more information.
+
+Name:	sem-getvalue
+Stack:	sem-id -- n 0 | -1
+Description:
+    sem-getvalue returns the current value of the semaphore pointed to by sem-id.
+Note:
+    POSIX_IPC must have been defined at build time.  See sem_getvalue(3) for 
+    more information.
+
+Name:	
+Stack:	
+Description:
+
 Name:	
 Stack:	
 Description:
