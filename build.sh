@@ -25,6 +25,7 @@ while getopts a:hx:o:p: flag; do
             printf "\t-a <makefile args>\n"
             printf "\t-h\t\tHelp.\n"
             printf "\t-o <variant>\tBuild a variant based on an architecture\n"
+            printf "\t-p <profile>\tUse the profile to set defines, and libraries.\n"
             printf "\t-x <makefile arch>\n"
 
             exit 0
@@ -40,6 +41,10 @@ while getopts a:hx:o:p: flag; do
             ;;
     esac
 done
+
+if [ ! -f profile.mk ]; then
+    ln -s ./basic.mk ./profile.mk
+fi
 
 if [ ! -z "$PROFILE" ]; then
     echo "Profile set"

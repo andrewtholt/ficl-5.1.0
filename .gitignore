@@ -34,3 +34,4 @@ softcore/makesoftcore
 .c9
 html
 latex
+profile.mk
