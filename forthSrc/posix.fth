@@ -16,7 +16,7 @@
     then
 ;
 
-: test
+: main
     init
     semid sem-getvalue abort" sem-getvalue failed."
 

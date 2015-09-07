@@ -1865,7 +1865,7 @@ static void athSemCreat(ficlVm *vm) {
 
     len = ficlStackPopInteger(vm->dataStack);
     name = (char *)ficlStackPopPointer(vm->dataStack);
-    name[len]='0';
+    name[len]='\0';
 
     sem_id = sem_open(name,oflag,mode,value);
     
