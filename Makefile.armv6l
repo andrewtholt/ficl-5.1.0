@@ -22,7 +22,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -ldl -lrt -lpthread $(LIBS)
+	$(CC) main.o -o ficl -L. -lficl -lm -lrt -lpthread $(LIBS)
 #
 # Build statically linked ficls.
 #
