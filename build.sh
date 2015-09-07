@@ -63,6 +63,7 @@ if [ -f $MAKEFILE ]; then
     PROFILE=$(readlink ./profile.mk)
     echo "Profile $PROFILE"
     echo "=========================="
+    sleep 1
 	make -j 4 -f $MAKEFILE $ARGS
 else
 	echo "$MAKEFILE does not exist."
