@@ -1,11 +1,13 @@
 # 
 # Make file for Raspberry Pi, Armv6l
 #
+include profile.mk
+
 OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o softcore.o stack.o tools.o vm.o primitives.o bit.o lzuncompress.o unix.o utility.o hash.o callback.o word.o extras.o libser.o
 HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
-TARGET= -DLINUX -DDYNLIB -DSOCKET -DSYSV_IPC -DMODBUS -DINIPARSER # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET 
+# TARGET= -DLINUX -DDYNLIB -DSOCKET -DSYSV_IPC -DMODBUS -DINIPARSER # -DFICL_WANT_FLOAT=0 # -DSYSV_IPC -DSOCKET 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS) -g
 CPPFLAGS= $(TARGET) -I.
@@ -20,7 +22,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -ldl -L/usr/local/lib -lmodbus -liniparser
+	$(CC) main.o -o ficl -L. -lficl -lm -ldl -lrt -lpthread $(LIBS)
 #
 # Build statically linked ficls.
 #
