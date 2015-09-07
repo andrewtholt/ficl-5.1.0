@@ -680,6 +680,13 @@ Description:
     Return a pointer to memory containing the data from fd, at 'offset' into the file and
     with a maximum size of 'size' bytes.
 
+Name:	munmap
+Stack:	ptr len -- rc
+Description:
+    Takes a pointer and length of a mapped in memory area, and unmaps from the
+    process address state.
+
+
 Name:	shm-open
 Stack:	fname len flags mode -- fd 0 | -1
 Description:

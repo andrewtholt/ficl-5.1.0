@@ -3368,6 +3368,21 @@ void athMmap(ficlVm *vm) {
 
 }
 
+void athMunmap(ficlVm *vm) {
+    void *ptr;
+    int len;
+    int rc;
+
+    len = ficlStackPopInteger(vm->dataStack) ;
+    ptr = ficlStackPopPointer(vm->dataStack) ;
+
+    rc = munmap(ptr,len);
+
+    ficlStackPushInteger(vm->dataStack,rc);
+}
+
+
+
 #endif
 
 #ifdef LINUX
@@ -4125,6 +4140,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 #ifdef LINUX
     ficlDictionarySetPrimitive(dictionary, (char *)"ioctl", athIoctl, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mmap", athMmap, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"munmap", athMunmap, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "ticks",      athPrimitiveTick, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"start-clock", athStartTimer , FICL_WORD_DEFAULT);
