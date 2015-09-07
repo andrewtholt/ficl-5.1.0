@@ -15,7 +15,7 @@ else
 fi
 
 echo 
-while getopts a:hx:o: flag; do
+while getopts a:hx:o:p: flag; do
     case $flag in
         a)
             ARGS=$OPTARG
@@ -32,16 +32,32 @@ while getopts a:hx:o: flag; do
         o)
             OPT=_${OPTARG}
             ;;
+        p)
+            PROFILE=${OPTARG}.mk
+            ;;
         x)
             ARCH=${OPTARG}
             ;;
     esac
 done
 
+if [ ! -z "$PROFILE" ]; then
+    echo "Profile set"
+
+    if [ -f "profile.mk" ]; then
+        echo "Profile exists"
+        rm ./profile.mk
+    fi
+    ln -s ./$PROFILE ./profile.mk
+fi
+
 MAKEFILE=Makefile.${ARCH}${OPT}
 
 if [ -f $MAKEFILE ]; then
     echo "Building with $MAKEFILE"
+    PROFILE=$(readlink ./profile.mk)
+    echo "Profile $PROFILE"
+    echo "=========================="
 	make -j 4 -f $MAKEFILE $ARGS
 else
 	echo "$MAKEFILE does not exist."

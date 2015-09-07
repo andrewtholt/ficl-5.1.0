@@ -3,8 +3,10 @@ HEADERS= ficl.h ficlplatform/unix.h
 #
 # Flags for shared library
 #
-# TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSYSV_IPC -DLIBMODBUS -DSOCKET -DINIPARSER # -DI2C # -DFICL_WANT_FLOAT=0 
-TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSOCKET -DPOSIX_IPC # -DSYSV_IPC # -DLIBMODBUS -DINIPARSER 
+#TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DPOSIX_IPC -DSYSV_IPC -DLIBMODBUS -DSOCKET -DINIPARSER # -DI2C # -DFICL_WANT_FLOAT=0 
+
+include profile.mk
+# TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSOCKET -DPOSIX_IPC # -DSYSV_IPC # -DLIBMODBUS -DINIPARSER 
 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS)
@@ -13,13 +15,15 @@ CC = cc -g
 LIB = ar cr
 RANLIB = ranlib
 
+# LIBS=-L/usr/local/lib -lmodbus -liniparser
+
 MAJOR = 4
 MINOR = 1.0
 
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl -lpthread # -L/usr/local/lib -lmodbus -liniparser
+	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl -lpthread $(LIBS) # -L/usr/local/lib -lmodbus -liniparser
 
 ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
 	$(CC) --static main.o -o ficls -L. -lficl -lm -ldl
