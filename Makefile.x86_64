@@ -23,7 +23,7 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -lrt -ldl -lpthread $(LIBS) # -L/usr/local/lib -lmodbus -liniparser
+	$(CC) main.o -o ficl -L. -lficl -lm -lrt -lpthread $(LIBS) # -L/usr/local/lib -lmodbus -liniparser
 
 ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
 	$(CC) --static main.o -o ficls -L. -lficl -lm -ldl

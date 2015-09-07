@@ -1,4 +1,4 @@
 
 TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DPOSIX_IPC -DSYSV_IPC -DLIBMODBUS -DSOCKET -DINIPARSER 
 
-LIBS=-L/usr/local/lib -lmodbus -liniparser
+LIBS=-ldl -L/usr/local/lib -lmodbus -liniparser
