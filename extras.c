@@ -3124,7 +3124,8 @@ static void athModBusNewNet(ficlVm *vm) {
 
     address = ficlStackPopPointer( vm->dataStack );
 
-    address[len]= (char *)NULL;
+//    address[len]= (char *)NULL;
+    address[len]= '\0';
 
     ctx = modbus_new_tcp(address, port);
 
