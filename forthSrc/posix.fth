@@ -1,3 +1,11 @@
+load lib.fth
+load struct.fth
+
+struct 
+    uint8_t field state
+    uint32_t field STM4Sent
+    uint32_t field STM9Sent
+endstruct /STM
 
 -1 value fd
 0 value initRun

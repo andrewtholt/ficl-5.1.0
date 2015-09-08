@@ -535,6 +535,27 @@ static void athFeatures(ficlVm *vm) {
 #endif
 }
 
+static void athStore32(ficlVm *vm) {
+    uint32_t *ptr;
+    int data;
+
+    ptr=(uint32_t *)ficlStackPopPointer(vm->dataStack);
+    data=ficlStackPopInteger(vm->dataStack);
+
+    *ptr=(uint32_t)data;
+}
+
+static void athRead32(ficlVm *vm) {
+    uint32_t *ptr;
+    int data;
+
+    ptr=(uint32_t *)ficlStackPopPointer(vm->dataStack);
+
+    data=(uint32_t)*ptr;
+    
+    ficlStackPushInteger(vm->dataStack,data);
+}
+
 struct timeval now;
 
 static void athNow(ficlVm *vm) {
@@ -4104,6 +4125,9 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
     //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"32!", athStore32, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"32@", athRead32, FICL_WORD_DEFAULT);
+
 #ifdef POSIX_IPC
     ficlDictionarySetConstant(dictionary,  (char *)"O_RDONLY", O_RDONLY);
     ficlDictionarySetConstant(dictionary,  (char *)"O_RDWR", O_RDWR);
