@@ -1,3 +1,13 @@
+Name:	32@
+Stack:	ptr -- uint32
+Description:
+    Returns a 32 bit word from the address pointed to by ptr.
+
+Name:	32!
+Stack:	int32 ptr --
+Description:
+    Stores a 32 bit word in the 4 bytes starting at ptr.
+
 Name: .features
 Stack: --
 Description:
