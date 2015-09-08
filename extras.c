@@ -64,7 +64,7 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
 #ifdef SYSV_IPC
 #if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED) || defined(MAC) || defined(SOLARIS) || defined(MUSL)
-#warning "Including sys/sem.h"
+// #warning "Including sys/sem.h"
 #include <sys/sem.h>
 /* union semun is defined by including <sys/sem.h> */
 #endif
@@ -1134,7 +1134,9 @@ static void athZmove(ficlVm *vm) {
     from = ficlStackPopPointer(vm->dataStack);
 
     ret = strncpy(to,from,len);
-    *(to + len) = (char)NULL;
+
+//    *(to + len) = (char)NULL;
+    to[len] = '\0';
 
 }
 // 
@@ -1150,7 +1152,8 @@ static void athAddCr(ficlVm *vm) {
     len = ficlStackPopInteger(vm->dataStack);
     from = ficlStackPopPointer(vm->dataStack);
 
-    *(from + len) = (char)0x0a;
+    from[len] = (char)0x0a;
+//    *(from + len) = (char)0x0a;
 
     len++;
 
@@ -1949,7 +1952,7 @@ static void athMqOpen(ficlVm *vm) {
     if( mqd < 0) {
         ficlStackPushInteger(vm->dataStack, -1);
     } else {
-        ficlStackPushPointer(vm->dataStack, mqd);
+        ficlStackPushInteger(vm->dataStack, mqd);
         ficlStackPushInteger(vm->dataStack, 0);
     }
 }
@@ -1957,14 +1960,14 @@ static void athMqOpen(ficlVm *vm) {
 static void athMqClose(ficlVm *vm) {
     mqd_t mqd;
 
-    mqd = (mqd_t)ficlStackPopPointer(vm->dataStack);
+    mqd = (mqd_t)ficlStackPopInteger(vm->dataStack);
 
     ficlStackPushInteger(vm->dataStack, mq_close(mqd));
 }
 
 static void athMqRecv(ficlVm *vm) {
     mqd_t mqd;
-    char *msgptr;
+    uint8_t *msgptr;
     struct mq_attr obuf;
     unsigned int msg_prio;
     int rc;
@@ -1972,8 +1975,8 @@ static void athMqRecv(ficlVm *vm) {
 
     msg_prio = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
-    msgptr = (mqd_t)ficlStackPopPointer(vm->dataStack);
-    mqd = (mqd_t)ficlStackPopPointer(vm->dataStack);
+    msgptr = (uint8_t *)ficlStackPopPointer(vm->dataStack);
+    mqd = (mqd_t)ficlStackPopInteger(vm->dataStack);
 
     rc = mq_receive(mqd,msgptr,len,&msg_prio);
 
@@ -1988,15 +1991,15 @@ static void athMqRecv(ficlVm *vm) {
 
 static void athMqSend(ficlVm *vm) {
     mqd_t mqd;
-    char *msgptr;
+    uint8_t *msgptr;
     unsigned int msg_prio;
     int len;
     int rc;
 
     msg_prio = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
-    msgptr = (mqd_t)ficlStackPopPointer(vm->dataStack);
-    mqd = (mqd_t)ficlStackPopPointer(vm->dataStack);
+    msgptr = (uint8_t *)ficlStackPopPointer(vm->dataStack);
+    mqd = (mqd_t)ficlStackPopInteger(vm->dataStack);
 
     rc = mq_send(mqd,msgptr,len,msg_prio);
 
@@ -2016,7 +2019,7 @@ static void athMqGetAttr(ficlVm *vm) {
     int status;
 
     sel = ficlStackPopInteger(vm->dataStack);
-    mqd = ficlStackPopPointer(vm->dataStack);
+    mqd = ficlStackPopInteger(vm->dataStack);
 
     rc = mq_getattr(mqd,&obuf);
 
@@ -2100,13 +2103,12 @@ static void athStrTok(ficlVm * vm) {
     ficlStackPushInteger(vm->dataStack, count);
 }
 
-static void athFiclFileDump(ficlVm *vm)
-{
+static void athFiclFileDump(ficlVm *vm) {
     ficlFile *a;
 
     a = (ficlFile *)ficlStackPopPointer(vm->dataStack);
 
-    printf("FILE *: %x\n",(unsigned int)a->f);
+//    printf("FILE *: %x\n",(unsigned int)a->f);
     printf("Name  : %s\n",a->filename);
     printf("fd    : %d\n",a->fd);
 }
