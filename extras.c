@@ -24,8 +24,14 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 #endif
 
 #ifdef POSIX_IPC
+#include <mqueue.h> 
 #include <sys/mman.h>
 #include <semaphore.h>
+
+#define MQ_FLAGS 1
+#define MQ_MAXMSG 2
+#define MQ_MSGSIZE 3
+#define MQ_CURMSGS 4
 #endif
 
 #include <signal.h>
@@ -1789,6 +1795,9 @@ athMsgRecv(ficlVm * vm)
 #endif				/* // #define(MAC) */
 
 #ifdef POSIX_IPC
+/* 
+ * POSIX Shared memory
+ */
 static void athShmOpen(ficlVm *vm) {
     char *fname;
     int flag;
@@ -1826,6 +1835,9 @@ static void athShmUnlink(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, rc);
 }
 
+/* 
+ * POSIX Semaphores
+ */
 static void athSemOpen(ficlVm *vm) {
     int oflag;
     int len;
@@ -1917,6 +1929,124 @@ static void athSemGetValue(ficlVm *vm) {
 
     ficlStackPushInteger(vm->dataStack, rc);
 }
+/* 
+ * POSIX Message Queues
+ */
+static void athMqOpen(ficlVm *vm) {
+    char *path;
+    int oflags;
+    int perms;
+    int len;
+    struct mq_attr *buf;
+    mqd_t mqd;
+
+    oflags = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    path = ficlStackPopPointer(vm->dataStack);
+    path[len]='\0';
+
+    mqd = mq_open(path,oflags);
+    if( mqd < 0) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushPointer(vm->dataStack, mqd);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+}
+
+static void athMqClose(ficlVm *vm) {
+    mqd_t mqd;
+
+    mqd = (mqd_t)ficlStackPopPointer(vm->dataStack);
+
+    ficlStackPushInteger(vm->dataStack, mq_close(mqd));
+}
+
+static void athMqRecv(ficlVm *vm) {
+    mqd_t mqd;
+    char *msgptr;
+    struct mq_attr obuf;
+    unsigned int msg_prio;
+    int rc;
+    int len;
+
+    msg_prio = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    msgptr = (mqd_t)ficlStackPopPointer(vm->dataStack);
+    mqd = (mqd_t)ficlStackPopPointer(vm->dataStack);
+
+    rc = mq_receive(mqd,msgptr,len,&msg_prio);
+
+    if( rc < 0) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, rc);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+
+}
+
+static void athMqSend(ficlVm *vm) {
+    mqd_t mqd;
+    char *msgptr;
+    unsigned int msg_prio;
+    int len;
+    int rc;
+
+    msg_prio = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    msgptr = (mqd_t)ficlStackPopPointer(vm->dataStack);
+    mqd = (mqd_t)ficlStackPopPointer(vm->dataStack);
+
+    rc = mq_send(mqd,msgptr,len,msg_prio);
+
+    ficlStackPushInteger(vm->dataStack, rc);
+
+}
+
+/* 
+ * Stack: mqd selector -- value 0 | -1
+ */
+static void athMqGetAttr(ficlVm *vm) {
+    mqd_t mqd;
+    struct mq_attr obuf;
+    int rc;
+    int sel;
+
+    int status;
+
+    sel = ficlStackPopInteger(vm->dataStack);
+    mqd = ficlStackPopPointer(vm->dataStack);
+
+    rc = mq_getattr(mqd,&obuf);
+
+    if ( rc < 0) {
+        ficlStackPushInteger(vm->dataStack,-1);
+    } else {
+        status = 0;
+        switch(sel) {
+            case MQ_FLAGS:
+                ficlStackPushInteger(vm->dataStack,obuf.mq_flags);
+                break;
+            case MQ_MAXMSG:
+                ficlStackPushInteger(vm->dataStack,obuf.mq_maxmsg);
+                break;
+            case MQ_MSGSIZE:
+                ficlStackPushInteger(vm->dataStack,obuf.mq_msgsize );
+                break;
+            case MQ_CURMSGS:
+                ficlStackPushInteger(vm->dataStack,obuf.mq_curmsgs);
+                break;
+            default:
+                status=-1;
+                break;
+        }
+        ficlStackPushInteger(vm->dataStack,status);
+    }
+
+}
+
+
 #endif
 
 /*
@@ -3979,6 +4109,11 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetConstant(dictionary,  (char *)"O_EXCL", O_EXCL);
     ficlDictionarySetConstant(dictionary,  (char *)"O_TRUNC", O_TRUNC);
 
+    ficlDictionarySetConstant(dictionary,  (char *)"MQ_FLAGS", MQ_FLAGS);
+    ficlDictionarySetConstant(dictionary,  (char *)"MQ_MAXMSG", MQ_MAXMSG);
+    ficlDictionarySetConstant(dictionary,  (char *)"MQ_MSGSIZE", MQ_MSGSIZE);
+    ficlDictionarySetConstant(dictionary,  (char *)"MQ_CURMSGS", MQ_CURMSGS);
+
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-open", athShmOpen, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-unlink", athShmUnlink, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-open", athSemOpen, FICL_WORD_DEFAULT);
@@ -3987,6 +4122,12 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-wait", athSemWait, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-post", athSemPost, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-getvalue", athSemGetValue, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-open", athMqOpen, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-close", athMqClose, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-getattr", athMqGetAttr, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-recv", athMqRecv, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-send", athMqSend, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef INIPARSER

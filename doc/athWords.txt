@@ -749,6 +749,84 @@ Note:
     POSIX_IPC must have been defined at build time.  See sem_getvalue(3) for 
     more information.
 
+Name:	mq-open
+Stack:	name len oflags -- mqd 0 | -1
+Description:
+    Open an already existing message queu with the permissions, oflags.
+Note:
+    POSIX_IPC must have been defined at build time.  See mq_open(3) for 
+    more information.
+
+Name:	mq-close
+Stack:	mqd -- 0| -1
+Description:    
+    Close the message queue mqd.
+Note:
+    POSIX_IPC must have been defined at build time.  See mq_close(3) for 
+    more information.
+
+Name:	mq-recv
+Stack:	mqd ptr len prio -- len 0 | -1
+Description:
+    Retrieve a message from the queue, mqd and place it in the buffer pointed to by 
+    ptr, of length len.  prio selects a message based on its prority, 0 means
+    get the next available.
+Note:
+    POSIX_IPC must have been defined at build time.  See mq_receive(3) for 
+    more information.
+
+Name:	mq-send
+Stack:	mqd ptr len prio -- len 0 | -1
+Description:
+    Send a message to the queue, mqd and held in the buffer pointed to by 
+    ptr, of length len.  prio assigns a message prority, 0 being the
+    lowest, and the default.
+Note:
+    POSIX_IPC must have been defined at build time.  See mq_send(3) for 
+    more information.
+
+
+Name:	mq-getattr
+Stack:	mqd sel -- val 0 | -1
+Description:
+    Return the selected attribute of the message queue mqd.
+    Legal values for sel, are:
+    MQ_FLAGS    0 or O_NONBLOCK
+    MQ_MAXMSG   Max number of queued messages.
+    MQ_MSGSIZE  Max size of a message, in bytes.
+    MQ_CURMSGS  Count of messages currently in queue.
+
+    Any other value will return an error.
+
+Notes:
+    POSIX_IPC must have been defined at build time.  See mq_getattr(3) for 
+    more information.
+    The values above are available as pre-defined constants.
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
 Name:	
 Stack:	
 Description:
