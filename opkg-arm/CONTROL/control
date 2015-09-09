@@ -1,5 +1,5 @@
 Package: ficl
-Version: 5.2.3
+Version: 5.3.1
 Depends: 
 Provides: 
 Source: package/base-files
@@ -15,3 +15,4 @@ Description:  Forth, forked from ficl-4.0.3
   5.1.5 Added key.
   5.1.6 File optional word set included.
   5.1.7 Fixed bug in softcore dump definition
+  5.3.1 More POSIX stuff
