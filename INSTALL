@@ -1,0 +1,86 @@
+
+
+Once you have retrieved the source code simply:
+
+./build.sh
+
+Will build you ficl for the machine you are on.
+
+Once complete enter:
+
+./ficl -c .features
+
+And you will see something like :
+
+
+.features
+Ficl version 5.3.1
+Sep  9 2015 
+NOT MAC
+NOT COBALT
+    LINUX
+NOT UCLINUX
+NOT SOLARIS
+NOT MTHREAD
+NOT QNX
+
+NOT FICL_ANSI
+    FICL_WANT_MINIMAL
+NOT SERIAL
+NOT REDIS
+NOT MODBUS
+NOT LIBMODBUS
+NOT INIPARSER
+    SYSV_IPC
+    POSIX_IPC
+    DYNLIB
+    SOCKET
+NOT I2C
+    WANT_FILE
+    WANT_FLOAT
+    WANT_DEBUGGER
+NOT SPREAD
+
+
+
+This is, basically, a list of what features are available and wether they have been built.
+
+To build a minimalist ficl:
+
+Enter
+
+./build.sh -a clean
+
+./build.sh -p tiny
+
+./ficl -c .features
+
+Will give:
+
+.features
+Ficl version 5.3.1
+Sep  9 2015 
+NOT MAC
+NOT COBALT
+    LINUX
+NOT UCLINUX
+NOT SOLARIS
+NOT MTHREAD
+NOT QNX
+
+NOT FICL_ANSI
+    FICL_WANT_MINIMAL
+NOT SERIAL
+NOT REDIS
+NOT MODBUS
+NOT LIBMODBUS
+NOT INIPARSER
+NOT SYSV_IPC
+NOT POSIX_IPC
+NOT DYNLIB
+NOT SOCKET
+NOT I2C
+    WANT_FILE
+    WANT_FLOAT
+    WANT_DEBUGGER
+NOT SPREAD
