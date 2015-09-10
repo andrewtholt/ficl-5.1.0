@@ -2010,6 +2010,48 @@ static void athMqRecv(ficlVm *vm) {
 
 }
 
+static void athMqTimedRecv(ficlVm *vm) {
+    mqd_t mqd;
+    uint8_t *msgptr;
+    int delayMs;
+    struct mq_attr obuf;
+    unsigned int msg_prio;
+    int rc;
+    int len;
+    struct timespec time;
+
+    rc = clock_gettime(CLOCK_REALTIME, &time);
+
+    delayMs = ficlStackPopInteger(vm->dataStack);
+    msg_prio = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    msgptr = (uint8_t *)ficlStackPopPointer(vm->dataStack);
+    mqd = (mqd_t)ficlStackPopInteger(vm->dataStack);
+
+    /*
+    fprintf(stderr,"Before Seconds=%d\n",time.tv_sec);
+    fprintf(stderr,"       Nano Seconds=%lu\n",time.tv_nsec);
+    */
+
+    time.tv_sec  += (delayMs / 1000);
+//    time.tv_nsec += (delayMs % 1000) * 1000000;
+
+    /*
+    fprintf(stderr,"Seconds=%d\n",time.tv_sec);
+    fprintf(stderr,"Nano Seconds=%lu\n",time.tv_nsec);
+    */
+
+    rc = mq_timedreceive(mqd,msgptr,len,&msg_prio,&time);
+
+    if( rc < 0) {
+
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, rc);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+}
+
 static void athMqSend(ficlVm *vm) {
     mqd_t mqd;
     uint8_t *msgptr;
@@ -2145,10 +2187,11 @@ static void athMs(ficlVm * vm) {
     ms = ficlStackPopInteger(vm->dataStack);
     for (i=0;i < ms; i++) {
 #ifdef LINUX
-        usleep(1000);
+//        usleep(1000);
 
         tim.tv_sec=0;
-        tim.tv_nsec=( 1000 * 1000 * ms );
+//        tim.tv_nsec=( 1000 * 1000 * ms );
+        tim.tv_nsec=( 1000 * 1000  );
         (void) nanosleep(&tim,&tim2);
 #else
         if ( usleep(1000) < 0)
@@ -4154,6 +4197,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-close", athMqClose, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-getattr", athMqGetAttr, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-recv", athMqRecv, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-timedrecv", athMqTimedRecv, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-send", athMqSend, FICL_WORD_DEFAULT);
 #endif
 
