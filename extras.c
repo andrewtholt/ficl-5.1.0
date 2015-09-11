@@ -1953,6 +1953,17 @@ static void athSemGetValue(ficlVm *vm) {
 
     ficlStackPushInteger(vm->dataStack, rc);
 }
+
+static void athSemClose(ficlVm *vm) {
+    sem_t *sem_id;
+    int rc;
+    sem_id = (sem_t *)ficlStackPopPointer(vm->dataStack);
+
+    rc=sem_close(sem_id);
+
+    ficlStackPushInteger(vm->dataStack, rc);
+}
+
 /* 
  * POSIX Message Queues
  */
@@ -4187,6 +4198,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-open", athShmOpen, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"shm-unlink", athShmUnlink, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-open", athSemOpen, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-close", athSemClose, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-create", athSemCreat, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-wait", athSemWait, FICL_WORD_DEFAULT);
