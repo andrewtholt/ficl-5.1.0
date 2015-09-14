@@ -9,5 +9,6 @@ Description: ficl
  5.2.1 8 Nov 2014 - Configured for a minimal build, plus a static executable ficls
  5.2.4 Make all builds have the same features (possibly no libmodbus)
  5.2.5 Added ini file functions.
+ 5.3.0 Added POSIX IPCs
  5.3.1 More POSIX stuff
 
