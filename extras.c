@@ -535,6 +535,19 @@ static void athFeatures(ficlVm *vm) {
 #endif
 }
 
+static void athSeed(ficlVm *vm) {
+    int seed;
+    seed=ficlStackPopInteger(vm->dataStack);
+
+    srand(seed);
+}
+
+static void athRand(ficlVm *vm) {
+    
+    ficlStackPushInteger(vm->dataStack,rand());
+
+}
+
 static void athStore32(ficlVm *vm) {
     uint32_t *ptr;
     int data;
@@ -2055,6 +2068,7 @@ static void athMqTimedRecv(ficlVm *vm) {
     fprintf(stderr,"       Nano Seconds=%lu\n",time.tv_nsec);
     */
 
+    rc = mq_getattr(mqd,&obuf);
     time.tv_sec  += (delayMs / 1000);
 //    time.tv_nsec += (delayMs % 1000) * 1000000;
 
@@ -4191,6 +4205,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionary *dictionary = ficlSystemGetDictionary(system);
 
     //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"seed", athSeed, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"random", athRand, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"32!", athStore32, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"32@", athRead32, FICL_WORD_DEFAULT);
 
