@@ -1846,8 +1846,9 @@ Description:
 Notes:	
 
 Name:	random
-Stack:	
+Stack:	-- n
 Description:	
+    Return a random number.
 Notes:	
 
 Name:	range
@@ -2008,8 +2009,9 @@ Description:
 Notes:	
 
 Name:	seed-random
-Stack:	
+Stack:	n --
 Description:	
+    Re-seed the random number generator.
 Notes:	
 
 Name:	see-xt
