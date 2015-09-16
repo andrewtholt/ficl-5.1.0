@@ -2176,8 +2176,8 @@ static void athCursesMove(ficlVm * vm) {
     int row;
     int col;
 
-    row = ficlStackPopInteger(vm->dataStack);
     col = ficlStackPopInteger(vm->dataStack);
+    row = ficlStackPopInteger(vm->dataStack);
 
     move(row,col);
 }

@@ -813,25 +813,31 @@ Notes:
     more information.
     The values above are available as pre-defined constants.
 
-Name:	
-Stack:	
+Name:	curses-init
+Stack:	-- win
 Description:
+    Initialises curses and returns a pointer to the main window.
 
-Name:	
-Stack:	
+Name:	curses-end
+Stack:	win --
 Description:
+    Given the main window pointer clears up.
 
-Name:	
-Stack:	
+Name:	curses-move
+Stack:	row col --
 Description:
+    Move to position.  Top lefts is origin.
 
-Name:	
-Stack:	
+Name:	curses-addstr
+Stack:	c-addr len --
 Description:
+    Write the string at the current main window location.
 
-Name:	
-Stack:	
+Name:	curses-refresh
+Stack:	--
 Description:
+    Curses draws into an in memory version of the screen.  This renders the changes
+    to the display.
 
 Name:	
 Stack:	
