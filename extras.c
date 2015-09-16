@@ -62,6 +62,11 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 #include <termios.h>
 #endif
 
+#ifdef CURSES
+#include <curses.h>
+#include <term.h>
+#endif
+
 #ifdef SYSV_IPC
 #if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED) || defined(MAC) || defined(SOLARIS) || defined(MUSL)
 // #warning "Including sys/sem.h"
@@ -532,6 +537,12 @@ static void athFeatures(ficlVm *vm) {
     printf("    SPREAD\n");
 #else
     printf("NOT SPREAD\n");
+#endif
+
+#if CURSES
+    printf("    CURSES\n");
+#else
+    printf("NOT CURSES\n");
 #endif
 }
 
@@ -2137,6 +2148,70 @@ static void athMqGetAttr(ficlVm *vm) {
 
 
 #endif
+
+#ifdef CURSES
+static void athCursesInit(ficlVm * vm) {
+    WINDOW * mainwin;
+
+    mainwin = initscr();
+
+    if( mainwin == NULL) {
+        ficlStackPushInteger(vm->dataStack,-1);
+    } else {
+        ficlStackPushPointer(vm->dataStack,mainwin);
+        ficlStackPushInteger(vm->dataStack,0);
+    }
+}
+
+static void athCursesEnd(ficlVm * vm) {
+    WINDOW * mainwin;
+
+    mainwin = (WINDOW *)ficlStackPopPointer(vm->dataStack);
+    delwin( mainwin );
+    endwin();
+    refresh();
+}
+
+static void athCursesMove(ficlVm * vm) {
+    int row;
+    int col;
+
+    row = ficlStackPopInteger(vm->dataStack);
+    col = ficlStackPopInteger(vm->dataStack);
+
+    move(row,col);
+}
+
+static void athCursesAddstr(ficlVm * vm) {
+    char *txt;
+    int len;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    txt = (char *)ficlStackPopPointer(vm->dataStack);
+    txt[len]='\0';
+
+    addstr( txt );
+
+}
+
+static void athCursesRefresh(ficlVm * vm) {
+    refresh();
+}
+
+static void athCursesClear(ficlVm * vm) {
+    clear();
+}
+
+
+static void athCursesGetch(ficlVm * vm) {
+    int c;
+
+    c=getch();
+    ficlStackPushInteger(vm->dataStack,c);
+
+}
+#endif
+
 
 /*
  * Stack: sep ptr cnt --- addrn lenn ...... addr0 len0 n
@@ -4194,6 +4269,16 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"32!", athStore32, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"32@", athRead32, FICL_WORD_DEFAULT);
+
+#ifdef CURSES
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-init", athCursesInit, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-end", athCursesEnd, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-move", athCursesMove, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-addstr", athCursesAddstr, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-refresh", athCursesRefresh, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-clear", athCursesClear, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-getch", athCursesGetch, FICL_WORD_DEFAULT);
+#endif
 
 #ifdef POSIX_IPC
     ficlDictionarySetConstant(dictionary,  (char *)"O_RDONLY", O_RDONLY);
