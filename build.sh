@@ -14,8 +14,9 @@ else
     ARCH="${OS}_${CPU}"
 fi
 
+LIST="NO"
 echo 
-while getopts a:hx:o:p: flag; do
+while getopts la:hx:o:p: flag; do
     case $flag in
         a)
             ARGS=$OPTARG
@@ -27,6 +28,7 @@ while getopts a:hx:o:p: flag; do
             printf "\t-o <variant>\tBuild a variant based on an architecture\n"
             printf "\t-p <profile>\tUse the profile to set defines, and libraries.\n"
             printf "\t-x <makefile arch>\n"
+            printf "\t-l\t\tList available profiles\n"
 
             exit 0
             ;;
@@ -36,11 +38,26 @@ while getopts a:hx:o:p: flag; do
         p)
             PROFILE=${OPTARG}.mk
             ;;
+        l)
+            LIST="YES"
+            ;;
         x)
             ARCH=${OPTARG}
             ;;
     esac
 done
+
+if [ $LIST = "YES" ]; then
+    echo "List of Profiles"
+    echo
+    P=$(ls *.mk | egrep -v "ficl|profile" | cut -f1 -d'.' )
+
+    for A in $P; do
+        echo $A
+    done
+    exit
+fi
+
 
 if [ ! -f profile.mk ]; then
     ln -s ./basic.mk ./profile.mk
