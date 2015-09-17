@@ -114,7 +114,6 @@ int main(int argc, char **argv) {
     loadPath = getenv("FICL_PATH");
     memset(&athFsi,0,sizeof(struct ficlSystemInformation));
 
-    printf("FICL_DEFAULT_DICTIONARY_SIZE %d\n",FICL_DEFAULT_DICTIONARY_SIZE);
     athFsi.dictionarySize = FICL_DEFAULT_DICTIONARY_SIZE;
 
     while ((ch = getopt(argc,argv, "c:qh?d:f:sV")) != -1) {
