@@ -533,6 +533,18 @@ static void athFeatures(ficlVm *vm) {
     printf("NOT WANT_DEBUGGER\n");
 #endif
 
+#if FICL_WANT_OOP
+    printf("    WANT_OOP\n");
+#else
+    printf("NOT WANT_OOP\n");
+#endif
+
+#if FICL_WANT_SOFTWORDS 
+    printf("    WANT_SOFTWORDS\n");
+#else
+    printf("NOT WANT_SOFTWORDS\n");
+#endif
+
 #if SPREAD
     printf("    SPREAD\n");
 #else

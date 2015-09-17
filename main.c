@@ -62,6 +62,7 @@ char *loadPath;
 void usage() {
     printf("\nUsage: ficl <options> where options are: \n\n");
     printf("\t-c <cmd>\tExecute the command and exit.\n");
+    printf("\t-d <size>\tSet the size of the dictionary.  Must be >= the default.\n");
     printf("\t-f <file>\tLoad this file at startup\n");
     printf("\t-h|?\t\tThis help.\n");
     printf("\t-q\t\tSupress startup messages.");
@@ -69,9 +70,6 @@ void usage() {
     printf("\n");
 
     printf("NOTES:\n");
-    printf("\t-d is used with -f in the case where the program will be run as a\n");
-    printf("\tbackground task, or started by a system script.\n\n");
-
     printf("\tThe environment variable FICL_PATH controls the locations searched for\n");
     printf("\tfiles.  It is a : seperated list of directories, e.g\n\n");
 
@@ -99,7 +97,10 @@ int main(int argc, char **argv) {
 
     int i=0;
     int ch;
+    int tmp=0;
+
     extern char *optarg;
+    ficlSystemInformation athFsi;
 
     char *fileName=(char *)NULL;
 //    char *loadPath=(char *)NULL;
@@ -111,12 +112,24 @@ int main(int argc, char **argv) {
     i = tcgetattr( 0, &orig_termios); 
 
     loadPath = getenv("FICL_PATH");
+    memset(&athFsi,0,sizeof(struct ficlSystemInformation));
 
-    while ((ch = getopt(argc,argv, "c:qh?df:sV")) != -1) {
+    printf("FICL_DEFAULT_DICTIONARY_SIZE %d\n",FICL_DEFAULT_DICTIONARY_SIZE);
+    athFsi.dictionarySize = FICL_DEFAULT_DICTIONARY_SIZE;
+
+    while ((ch = getopt(argc,argv, "c:qh?d:f:sV")) != -1) {
         switch(ch) {
             case 'c':
                 cmd=strsave(optarg);
                 printf("%s\n",cmd);
+                break;
+            case 'd':
+                tmp=atoi( optarg );
+                if ( tmp >= FICL_DEFAULT_DICTIONARY_SIZE ) {
+                    athFsi.dictionarySize = tmp;
+                } else {
+                    fprintf(stderr,"Warning: new dictionary size ignored, must be larger than default\n");
+                }
                 break;
             case 'f':
                 fileName=strsave(optarg);
@@ -132,7 +145,8 @@ int main(int argc, char **argv) {
         }
     }
 
-    system = ficlSystemCreate(NULL);
+//    system = ficlSystemCreate(NULL);
+    system = ficlSystemCreate(&athFsi);
     ficlSystemCompileExtras(system);
     ficlSystemCompileMain(system);
     vm = ficlSystemCreateVm(system);
@@ -146,11 +160,6 @@ int main(int argc, char **argv) {
      ** load files specified on command-line
      */
 
-    if( cmd != (char *)NULL ) {
-        returnValue = ficlVmEvaluate(vm, cmd);
-        exit(returnValue);
-    }
-
     if( fileName != (char *)NULL ) {
         if( verbose == 0) {
             sprintf(buffer, "load %s\n cr", fileName );
@@ -159,6 +168,12 @@ int main(int argc, char **argv) {
         }
         returnValue = ficlVmEvaluate(vm, buffer);
     }
+
+    if( cmd != (char *)NULL ) {
+        returnValue = ficlVmEvaluate(vm, cmd);
+        exit(returnValue);
+    }
+
 
     while (returnValue != FICL_VM_STATUS_USER_EXIT) {
         //        fputs(FICL_PROMPT, stdout);
