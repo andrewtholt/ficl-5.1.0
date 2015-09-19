@@ -63,8 +63,8 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 #endif
 
 #ifdef CURSES
-#include <curses.h>
 #include <term.h>
+#include <curses.h>
 #endif
 
 #ifdef SYSV_IPC
@@ -1945,8 +1945,33 @@ static void athSemWait(ficlVm *vm) {
 
     rc=sem_wait(sem_id);
 
-   ficlStackPushInteger(vm->dataStack, rc);
+    ficlStackPushInteger(vm->dataStack, rc);
+}
 
+static void athSemTimedWait(ficlVm *vm) {
+    struct timespec time;
+    sem_t *sem_id;
+    int rc;
+    int wait;
+    int sec;
+    int ms;
+    struct timespec t;
+
+    rc = clock_gettime(CLOCK_REALTIME, &time);
+
+    // wait, delay in ms
+    wait = ficlStackPopInteger(vm->dataStack);
+    sem_id = (sem_t *)ficlStackPopPointer(vm->dataStack);
+    
+    sec = wait / 1000 ; // Seconds and ...
+    ms  = wait % 1000 ; // .. ms
+
+    t.tv_sec += sec;
+    t.tv_nsec += ms * 1000000;
+
+    rc=sem_timedwait(sem_id,&t);
+
+    ficlStackPushInteger(vm->dataStack, rc);
 }
 
 static void athSemPost(ficlVm *vm) {
@@ -2162,6 +2187,95 @@ static void athMqGetAttr(ficlVm *vm) {
 #endif
 
 #ifdef CURSES
+
+
+static void athCursesNewWin(ficlVm * vm) {
+    WINDOW *win;
+
+    int l;
+    int c;
+
+    int y1;
+    int x1;
+
+    l=ficlStackPopInteger(vm->dataStack);
+    c=ficlStackPopInteger(vm->dataStack);
+    y1=ficlStackPopInteger(vm->dataStack);
+    x1=ficlStackPopInteger(vm->dataStack);
+
+    win = newwin(l,c,y1,x1);
+    ficlStackPushPointer(vm->dataStack,win);
+}
+
+static void athCursesDelWin(ficlVm * vm) {
+    WINDOW *win;
+
+    win=ficlStackPopPointer(vm->dataStack);
+
+    delwin(win);
+}
+
+static void athCursesBox(ficlVm * vm) {
+    WINDOW *win;
+
+    win=ficlStackPopPointer(vm->dataStack);
+
+    box(win,'|','-');
+
+}
+
+static void athCursesTouchWin(ficlVm * vm) {
+    WINDOW *win;
+
+    win=ficlStackPopPointer(vm->dataStack);
+
+    touchwin(win);
+
+}
+
+static void athCursesWclear(ficlVm * vm) {
+    WINDOW *win;
+
+    win=ficlStackPopPointer(vm->dataStack);
+
+    wclear(win);
+
+}
+
+static void athCursesWrefresh(ficlVm * vm) {
+    WINDOW *win;
+
+    win=ficlStackPopPointer(vm->dataStack);
+
+    wrefresh(win);
+
+}
+
+static void athCursesWaddstr(ficlVm * vm) {
+    char *txt;
+    int len;
+    WINDOW *mywin;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    txt = (char *)ficlStackPopPointer(vm->dataStack);
+    txt[len]='\0';
+    mywin = ficlStackPopPointer(vm->dataStack);
+
+    waddstr( mywin, txt );
+}
+
+static void athCursesWmove(ficlVm * vm) {
+    int row;
+    int col;
+    WINDOW *mywin;
+
+    col = ficlStackPopInteger(vm->dataStack);
+    row = ficlStackPopInteger(vm->dataStack);
+    mywin = ficlStackPopPointer(vm->dataStack);
+
+    wmove(mywin,row,col);
+}
+
 static void athCursesInit(ficlVm * vm) {
     WINDOW * mainwin;
 
@@ -2203,7 +2317,6 @@ static void athCursesAddstr(ficlVm * vm) {
     txt[len]='\0';
 
     addstr( txt );
-
 }
 
 static void athCursesRefresh(ficlVm * vm) {
@@ -4283,6 +4396,16 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"32@", athRead32, FICL_WORD_DEFAULT);
 
 #ifdef CURSES
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-newwin", athCursesNewWin, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-delwin", athCursesDelWin, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-box", athCursesBox, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-wclear", athCursesWclear, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-touchwin", athCursesTouchWin, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-wrefresh", athCursesWrefresh, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-waddstr", athCursesWaddstr, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"curses-wmove", athCursesWmove, FICL_WORD_DEFAULT);
+
     ficlDictionarySetPrimitive(dictionary, (char *)"curses-init", athCursesInit, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"curses-end", athCursesEnd, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"curses-move", athCursesMove, FICL_WORD_DEFAULT);
@@ -4311,6 +4434,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-create", athSemCreat, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-wait", athSemWait, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"sem-timedwait", athSemTimedWait, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-post", athSemPost, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-getvalue", athSemGetValue, FICL_WORD_DEFAULT);
 

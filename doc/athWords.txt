@@ -839,6 +839,69 @@ Description:
     Curses draws into an in memory version of the screen.  This renders the changes
     to the display.
 
+Name:	curses-newwin
+Stack:	lines cols y x -- win
+Description:
+    Creates a window at line, cols of size y x, returns a window id.
+
+Name:	curses-box
+Stack:	win --
+Description:
+    Draws a box at the edge of the window.
+NOTES:
+    The drawn box is inside the window.  So if you write at 0,0 you overwrite
+    the box.
+
+Name:	curses-touchwin
+Stack:	win --
+Description:
+    Mark the window to be redrawn at the next refresh.
+
+Name:	curses-wmove
+Stack:	win y x --
+Description:
+    Move the co-ordinates in the given window.
+
+Name:	curses-waddste
+Stack:	win addr count --
+Description:
+    Type the string at the current cursor position in the window.
+
+Name:	curses-wrefresh
+Stack:	win --
+Description:
+    Write the window to the screen, if it needs to.
+
+Name:	curses-delwin
+Stack:	win --
+Description:
+    Release the resources consumed by the window. Has no affect on the screen.
+
+Name:	curses-wclear
+Stack:	win ---
+Description:
+    Clear the given window.
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
 Name:	
 Stack:	
 Description:
@@ -866,3 +929,156 @@ Description:
 Name:	
 Stack:	
 Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+
+Name:	
+Stack:	
+Description:
+    
