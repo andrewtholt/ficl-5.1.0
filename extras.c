@@ -2056,6 +2056,19 @@ static void athMqClose(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, mq_close(mqd));
 }
 
+static void athMqUnlink(ficlVm *vm) {
+    int len;
+    char *path;
+    int rc;
+
+    len = ficlStackPopInteger(vm->dataStack);
+    path = ficlStackPopPointer(vm->dataStack);
+    path[len]='\0';
+
+    rc=mq_unlink(path);
+    ficlStackPushInteger(vm->dataStack, rc);
+}
+
 static void athMqRecv(ficlVm *vm) {
     mqd_t mqd;
     uint8_t *msgptr;
@@ -4443,6 +4456,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-open", athMqOpen, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-close", athMqClose, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-unlink", athMqUnlink, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-getattr", athMqGetAttr, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-recv", athMqRecv, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-timedrecv", athMqTimedRecv, FICL_WORD_DEFAULT);
