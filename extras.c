@@ -4430,6 +4430,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 
 #ifdef POSIX_IPC
     ficlDictionarySetConstant(dictionary,  (char *)"O_RDONLY", O_RDONLY);
+    ficlDictionarySetConstant(dictionary,  (char *)"O_WRONLY", O_WRONLY);
     ficlDictionarySetConstant(dictionary,  (char *)"O_RDWR", O_RDWR);
     ficlDictionarySetConstant(dictionary,  (char *)"O_CREAT", O_CREAT);
     ficlDictionarySetConstant(dictionary,  (char *)"O_EXCL", O_EXCL);

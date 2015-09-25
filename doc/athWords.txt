@@ -344,7 +344,7 @@ Description:
     Return Unix time, i.e. seconds since 1 Jan 1970
 
 Name:	date
-Stack:	n --- hh mm ss dd mon yyyy
+Stack:	n --- yyyy mon dd ss mm hh 
 Description:
     Take the number given by time and convert it into a date and time.
 
