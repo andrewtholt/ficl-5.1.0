@@ -2077,7 +2077,7 @@ static void athMqRecv(ficlVm *vm) {
     int rc;
     int len;
 
-    msg_prio = ficlStackPopInteger(vm->dataStack);
+//    msg_prio = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
     msgptr = (uint8_t *)ficlStackPopPointer(vm->dataStack);
     mqd = (mqd_t)ficlStackPopInteger(vm->dataStack);
@@ -2087,6 +2087,7 @@ static void athMqRecv(ficlVm *vm) {
     if( rc < 0) {
         ficlStackPushInteger(vm->dataStack, -1);
     } else {
+        ficlStackPushInteger(vm->dataStack, msg_prio);
         ficlStackPushInteger(vm->dataStack, rc);
         ficlStackPushInteger(vm->dataStack, 0);
     }
