@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/time.h>
+#include <poll.h>
 
 #ifndef EMBEDDED
 #include <termios.h>
@@ -2998,6 +2999,35 @@ athClose(ficlVm * vm)
    cmd F_SETFL 4
    */
 
+static void athPoll ( ficlVm *vm) {
+    int i;
+    uint8_t count;
+    int rc;
+
+    struct pollfd fds[16]; // limited to 16
+    uint8_t *ptr;  // Points to a chunk of memory structured like:
+                // uint8_t count
+                // uint8_t fd0
+                // ....
+                // uint8_t fdn
+
+    memset(fds, 0, sizeof(fds));
+    ptr = ficlStackPopPointer(vm->dataStack); 
+
+    count=(uint8_t)ptr[0];
+    for(i=0;i< count ;i++) {
+        fds[i].fd = (uint8_t)ptr[i+1];
+        fds[i].events = POLLIN;
+    }
+    usleep(1);
+    poll( fds, count,-1);
+
+    for(i=0;i<count;i++) {
+        ptr[i+1]=fds[i].revents;
+    }
+
+}
+
 static void athFdGet( ficlVm *vm) {
     int fd;
     ficlFile *ff;
@@ -4656,6 +4686,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 
     ficlDictionarySetPrimitive(dictionary, (char *)"socket-close", athClose, FICL_WORD_DEFAULT);
 #endif
+    ficlDictionarySetPrimitive(dictionary, (char *)"poll", athPoll, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"fd@", athFdGet, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"fcntl", athFcntl, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"seal", athSeal, FICL_WORD_DEFAULT);
