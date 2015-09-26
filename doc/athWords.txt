@@ -344,7 +344,7 @@ Description:
     Return Unix time, i.e. seconds since 1 Jan 1970
 
 Name:	date
-Stack:	n --- hh mm ss dd mon yyyy
+Stack:	n --- yyyy mon dd ss mm hh 
 Description:
     Take the number given by time and convert it into a date and time.
 
@@ -776,14 +776,18 @@ Note:
     more information.
 
 Name:	mq-recv
-Stack:	mqd ptr len prio -- len 0 | -1
+Stack:	mqd ptr len -- prio len 0 | -1
 Description:
     Retrieve a message from the queue, mqd and place it in the buffer pointed to by 
-    ptr, of length len.  prio selects a message based on its prority, 0 means
-    get the next available.
+    ptr, of length len.  
+
 Note:
     POSIX_IPC must have been defined at build time.  See mq_receive(3) for 
     more information.
+
+    The message returned will be the highest priority available.  Where
+    there is more than a single message of a given priority the message
+    returned will be the oldest.
 
 Name:	mq-send
 Stack:	mqd ptr len prio -- len 0 | -1
