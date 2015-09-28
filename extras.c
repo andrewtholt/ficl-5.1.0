@@ -2027,6 +2027,30 @@ static void athSemUnlink(ficlVm *vm) {
 /* 
  * POSIX Message Queues
  */
+static void athMqCreate(ficlVm *vm) {
+    char *path;
+    int oflags;
+    int perms;
+    int len;
+    struct mq_attr *buf;
+    mode_t mode = 0666; // Let umask sort it out.
+    mqd_t mqd;
+
+    oflags = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    path = ficlStackPopPointer(vm->dataStack);
+    path[len]='\0';
+
+    mqd = mq_open(path,(oflags | O_CREAT), mode, NULL);
+
+    if( mqd < 0) {
+        ficlStackPushInteger(vm->dataStack, -1);
+    } else {
+        ficlStackPushInteger(vm->dataStack, mqd);
+        ficlStackPushInteger(vm->dataStack, 0);
+    }
+}
+
 static void athMqOpen(ficlVm *vm) {
     char *path;
     int oflags;
@@ -2078,7 +2102,7 @@ static void athMqRecv(ficlVm *vm) {
     int rc;
     int len;
 
-//    msg_prio = ficlStackPopInteger(vm->dataStack);
+    msg_prio = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
     msgptr = (uint8_t *)ficlStackPopPointer(vm->dataStack);
     mqd = (mqd_t)ficlStackPopInteger(vm->dataStack);
@@ -3931,6 +3955,7 @@ void athMmap(ficlVm *vm) {
     if(map_base == (void *) -1) {
         ret=-1;
     } else {
+        ftruncate(fd,size);
         ret=0;
         ficlStackPushPointer(vm->dataStack, map_base);
     }
@@ -4486,6 +4511,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-close", athSemClose, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sem-unlink", athSemUnlink, FICL_WORD_DEFAULT);
 
+    ficlDictionarySetPrimitive(dictionary, (char *)"mq-create", athMqCreate, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-open", athMqOpen, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-close", athMqClose, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mq-unlink", athMqUnlink, FICL_WORD_DEFAULT);
