@@ -88,6 +88,7 @@ deb:	ficl
 
 local_install:	ficl libficl.so.$(MAJOR).$(MINOR)
 	strip ./ficl
+	mkdir -p $(HOME)/bin
 	mkdir -p $(HOME)/lib/ficl
 	mkdir -p $(HOME)/include/ficlplatform
 	mkdir -p $(HOME)/lib/ficl
