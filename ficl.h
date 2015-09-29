@@ -201,7 +201,7 @@ extern "C" {
 #define FICL_WANT_OOP              (0)
 #define FICL_WANT_PLATFORM         (0)
 #define FICL_WANT_MULTITHREADED    (0)
-#define FICL_WANT_EXTENDED_PREFIX  (0)
+#define FICL_WANT_EXTENDED_PREFIX  (1)
 
 #define FICL_ROBUST                (0)
 
@@ -309,7 +309,7 @@ extern "C" {
 ** and prefix.fr (if included as part of softcore.c)
 */
 #if !defined FICL_WANT_EXTENDED_PREFIX
-#define FICL_WANT_EXTENDED_PREFIX (0)
+#define FICL_WANT_EXTENDED_PREFIX (1)
 #endif /* FICL_WANT_EXTENDED_PREFIX */
 
 /*
