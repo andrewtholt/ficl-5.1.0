@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+# set -x
 
 STATUS=$(which rlwrap > /dev/null)
 
