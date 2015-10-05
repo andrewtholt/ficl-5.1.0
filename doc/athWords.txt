@@ -886,6 +886,22 @@ Stack:	win ---
 Description:
     Clear the given window.
 
+Name:	poll
+Stack:	addr --
+Description:
+    Takes the address of an area of memory and uses the data to set up poll.
+    The area is structured like this:
+
+    uint8_t count 
+    uint8_t fd0
+    ...
+    uint8_t fdn
+
+    There is a limit of 16 file descriptors.  When one of the fd will allow
+    a read without blocking poll overwrites the fd with the revent structure member
+    see poll(2) for more details.
+
+
 Name:	geteuid
 Stack:	-- n
 Description:
