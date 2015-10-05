@@ -886,17 +886,20 @@ Stack:	win ---
 Description:
     Clear the given window.
 
-Name:	
-Stack:	
+Name:	geteuid
+Stack:	-- n
 Description:
+    Return the current users effictive uid.  See passwd(5) for more details.
 
-Name:	
-Stack:	
+Name:	seteuid
+Stack:	-- flag
 Description:
+    Set the current users effective uid.  Returns true on failure.
 
-Name:	
-Stack:	
+Name:	name-to-uid
+Stack:	name len --- uid 0 | -1
 Description:
+    Given a user name look up the uid.
 
 Name:	
 Stack:	

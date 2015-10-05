@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/time.h>
 #include <poll.h>
+#include <pwd.h>
 
 #ifndef EMBEDDED
 #include <termios.h>
@@ -629,6 +630,43 @@ static void athDate(ficlVm * vm) {
     ficlStackPushInteger(vm->dataStack, d->tm_hour );
 }
 
+static void athGeteuid(ficlVm *vm) {
+    ficlStackPushInteger(vm->dataStack, geteuid() );
+}
+
+
+static void athSeteuid(ficlVm *vm) {
+
+    uid_t uid;
+    int rc;
+
+    uid = ficlStackPopInteger(vm->dataStack);
+
+    rc = seteuid( uid );
+
+    ficlStackPushInteger(vm->dataStack, rc );
+
+}
+
+static void athNameToUid( ficlVm *vm) {
+    struct passwd *pwd;
+    char *name;
+    uint8_t len;
+
+    len= ficlStackPopInteger(vm->dataStack);
+    name = ficlStackPopPointer(vm->dataStack);
+    name[len]='\0';
+
+    pwd=getpwnam(name);
+
+    if(!pwd) {
+        ficlStackPushInteger(vm->dataStack, -1 );
+    } else {
+        ficlStackPushInteger(vm->dataStack, pwd->pw_uid );
+        ficlStackPushInteger(vm->dataStack, 0 );
+    }
+}
+
 static void athPrimitiveDollarSystem(ficlVm * vm) {
     char           *cmd;
     int             len;
@@ -644,6 +682,7 @@ static void athPrimitiveDollarSystem(ficlVm * vm) {
 
     ficlStackPushInteger(vm->dataStack, status);
 }
+
 
 #ifdef FRED
 /*
@@ -4463,6 +4502,9 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     //    ficlDictionarySetPrimitive(dictionary, (char *)"break", ficlPrimitiveBreak, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"32!", athStore32, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"32@", athRead32, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"geteuid", athGeteuid, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"seteuid", athSeteuid, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"name-to-uid", athNameToUid, FICL_WORD_DEFAULT);
 
 #ifdef CURSES
     ficlDictionarySetPrimitive(dictionary, (char *)"curses-newwin", athCursesNewWin, FICL_WORD_DEFAULT);
