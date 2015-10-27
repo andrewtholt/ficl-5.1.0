@@ -5,7 +5,7 @@
 CPU=`uname -m`
 OS=`uname -s`
 
-echo "building for $CPU"
+printf "\nbuilding for $CPU\n"
 echo "       OS is $OS"
 
 if [ "$OS" = "Linux" ]; then
@@ -55,6 +55,12 @@ if [ $LIST = "YES" ]; then
     for A in $P; do
         echo $A
     done
+
+    if [ -f profile.mk ]; then
+        printf "\nCurrent profile is: "
+        basename $(readlink profile.mk) | cut -f1 -d"."
+        printf "\n"
+    fi
     exit
 fi
 
