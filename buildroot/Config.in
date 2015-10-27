@@ -1,5 +1,0 @@
-config BR2_PACKAGE_FICL
-	bool "ficl"
-    default n
-	help
-	  A Forth Inspired Control Language.
