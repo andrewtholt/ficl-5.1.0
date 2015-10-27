@@ -1,0 +1,30 @@
+
+To build ficl with buildroot
+
+Download ficl (assumption $HOME/Source/ficl-5.1.0)
+
+set BR2_EXTERNAL:
+    export BR2_EXTERNAL=$HOME/Source/ExternalBuildroot
+
+Create a directory:
+    mkdir -p $BR2_EXTERNAL/package/ficl
+
+cd to $BR2_EXTERNAL
+
+create a file Config.in containing
+   source "$BR2_EXTERNAL/package/ficl/Config.in"
+
+create a file external.mk containing:
+    include $(sort $(BR2_EXTERNAL)/package/ficl/*.mk)
+
+In your buildroot folder run:
+    make menuconfig
+
+You will notice a new category "User-provided options" select it, and you should see ficl listed.  tick the box and exit saving your new configuration.
+
+Now:
+    make V=1
+
+
+
+
