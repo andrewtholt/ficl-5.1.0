@@ -2187,19 +2187,17 @@ static void athMqTimedRecv(ficlVm *vm) {
 
     rc = mq_getattr(mqd,&obuf);
 
-//    t.tv_sec += sec;
-    time.tv_nsec += delayMs * 1000000;
-    if(time.tv_nsec >= 1000000000) {
+    time.tv_sec  += (delayMs / 1000);
+    time.tv_nsec += (delayMs % 1000) * 1000000;
+
+    if(time.tv_nsec >= 1000000000 ) {
         time.tv_nsec -= 1000000000;
         time.tv_sec++;
     }
-//    time.tv_sec  += (delayMs / 1000);
-//    time.tv_nsec += (delayMs % 1000) * 1000000;
 
     rc = mq_timedreceive(mqd,msgptr,len,&msg_prio,&time);
 
     if( rc < 0) {
-
         ficlStackPushInteger(vm->dataStack, -1);
     } else {
         ficlStackPushInteger(vm->dataStack, rc);
