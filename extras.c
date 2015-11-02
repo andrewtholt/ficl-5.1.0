@@ -2008,6 +2008,10 @@ static void athSemTimedWait(ficlVm *vm) {
 
     t.tv_sec += sec;
     t.tv_nsec += ms * 1000000;
+    if(t.tv_nsec >= 1000000000) {
+        t.tv_nsec -= 1000000000;
+        t.tv_sec++;
+    }
 
     rc=sem_timedwait(sem_id,&t);
 
@@ -2182,13 +2186,15 @@ static void athMqTimedRecv(ficlVm *vm) {
     */
 
     rc = mq_getattr(mqd,&obuf);
-    time.tv_sec  += (delayMs / 1000);
-//    time.tv_nsec += (delayMs % 1000) * 1000000;
 
-    /*
-    fprintf(stderr,"Seconds=%d\n",time.tv_sec);
-    fprintf(stderr,"Nano Seconds=%lu\n",time.tv_nsec);
-    */
+//    t.tv_sec += sec;
+    time.tv_nsec += delayMs * 1000000;
+    if(time.tv_nsec >= 1000000000) {
+        time.tv_nsec -= 1000000000;
+        time.tv_sec++;
+    }
+//    time.tv_sec  += (delayMs / 1000);
+//    time.tv_nsec += (delayMs % 1000) * 1000000;
 
     rc = mq_timedreceive(mqd,msgptr,len,&msg_prio,&time);
 
