@@ -2442,8 +2442,15 @@ static void athStrTok(ficlVm * vm) {
     sep[0] = s;
     sep[1] = '\0';
 
-    *(ptr + len) = '\0';
+    if( (char *)NULL != ptr) {
+        *(ptr + len) = '\0';
+    }
 
+    tok = (char *) strtok(ptr, sep);
+    ficlStackPushPointer(vm->dataStack, tok);
+    ficlStackPushInteger(vm->dataStack, strlen(tok));
+
+    /*
     count = 0;
     do
     {
@@ -2460,15 +2467,16 @@ static void athStrTok(ficlVm * vm) {
 
     for (i = count - 1; i >= 0; i--)
     {
-        /*
-         * printf("i = %d\n",i); printf("t[%d] = %s \n",i,t[i]);
-         */
+        //
+        // printf("i = %d\n",i); printf("t[%d] = %s \n",i,t[i]);
+        //
 
         len = strlen(t[i]);
         ficlStackPushPointer(vm->dataStack, t[i]);
         ficlStackPushInteger(vm->dataStack, len);
     }
     ficlStackPushInteger(vm->dataStack, count);
+    */
 }
 
 static void athFiclFileDump(ficlVm *vm) {
