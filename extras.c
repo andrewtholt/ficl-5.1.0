@@ -2448,7 +2448,11 @@ static void athStrTok(ficlVm * vm) {
 
     tok = (char *) strtok(ptr, sep);
     ficlStackPushPointer(vm->dataStack, tok);
-    ficlStackPushInteger(vm->dataStack, strlen(tok));
+    if( (char *) NULL == tok ) {
+        ficlStackPushInteger(vm->dataStack,0 );
+    } else {
+        ficlStackPushInteger(vm->dataStack, strlen(tok));
+    }   
 
     /*
     count = 0;
