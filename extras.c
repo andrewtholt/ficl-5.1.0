@@ -2008,6 +2008,10 @@ static void athSemTimedWait(ficlVm *vm) {
 
     t.tv_sec += sec;
     t.tv_nsec += ms * 1000000;
+    if(t.tv_nsec >= 1000000000) {
+        t.tv_nsec -= 1000000000;
+        t.tv_sec++;
+    }
 
     rc=sem_timedwait(sem_id,&t);
 
@@ -2182,18 +2186,18 @@ static void athMqTimedRecv(ficlVm *vm) {
     */
 
     rc = mq_getattr(mqd,&obuf);
-    time.tv_sec  += (delayMs / 1000);
-//    time.tv_nsec += (delayMs % 1000) * 1000000;
 
-    /*
-    fprintf(stderr,"Seconds=%d\n",time.tv_sec);
-    fprintf(stderr,"Nano Seconds=%lu\n",time.tv_nsec);
-    */
+    time.tv_sec  += (delayMs / 1000);
+    time.tv_nsec += (delayMs % 1000) * 1000000;
+
+    if(time.tv_nsec >= 1000000000 ) {
+        time.tv_nsec -= 1000000000;
+        time.tv_sec++;
+    }
 
     rc = mq_timedreceive(mqd,msgptr,len,&msg_prio,&time);
 
     if( rc < 0) {
-
         ficlStackPushInteger(vm->dataStack, -1);
     } else {
         ficlStackPushInteger(vm->dataStack, rc);
@@ -2438,8 +2442,19 @@ static void athStrTok(ficlVm * vm) {
     sep[0] = s;
     sep[1] = '\0';
 
-    *(ptr + len) = '\0';
+    if( (char *)NULL != ptr) {
+        *(ptr + len) = '\0';
+    }
 
+    tok = (char *) strtok(ptr, sep);
+    ficlStackPushPointer(vm->dataStack, tok);
+    if( (char *) NULL == tok ) {
+        ficlStackPushInteger(vm->dataStack,0 );
+    } else {
+        ficlStackPushInteger(vm->dataStack, strlen(tok));
+    }   
+
+    /*
     count = 0;
     do
     {
@@ -2456,15 +2471,16 @@ static void athStrTok(ficlVm * vm) {
 
     for (i = count - 1; i >= 0; i--)
     {
-        /*
-         * printf("i = %d\n",i); printf("t[%d] = %s \n",i,t[i]);
-         */
+        //
+        // printf("i = %d\n",i); printf("t[%d] = %s \n",i,t[i]);
+        //
 
         len = strlen(t[i]);
         ficlStackPushPointer(vm->dataStack, t[i]);
         ficlStackPushInteger(vm->dataStack, len);
     }
     ficlStackPushInteger(vm->dataStack, count);
+    */
 }
 
 static void athFiclFileDump(ficlVm *vm) {
