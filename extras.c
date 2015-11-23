@@ -2873,9 +2873,7 @@ athTryLockMutex(ficlVm * vm)
 /* Stack -- socket */
 #ifdef SOCKET
 
-    static void
-athSocket(ficlVm * vm)
-{
+static void athSocket(ficlVm * vm) {
     int             sock1;
     sock1 = socket(AF_INET, SOCK_STREAM, 0);
     ficlStackPushInteger(vm->dataStack, sock1);
@@ -3044,6 +3042,19 @@ athSend(ficlVm * vm)
     ficlStackPushInteger(vm->dataStack, status);
     flag = ( status < 0 );
     ficlStackPushInteger(vm->dataStack, flag);
+
+}
+
+static void athShutdown(ficlVm *vm) {
+    int sock;
+    int how;
+    int rc;
+
+    how = ficlStackPopInteger(vm->dataStack);
+    sock = ficlStackPopInteger(vm->dataStack);
+
+    rc = shutdown(sock,how);
+    ficlStackPushInteger(vm->dataStack, rc);
 
 }
 
@@ -4754,6 +4765,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, (char *)"socket-send", athSend, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"socket-connect", athConnect, FICL_WORD_DEFAULT);
 
+    ficlDictionarySetPrimitive(dictionary, (char *)"socket-shutdown", athShutdown, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"socket-close", athClose, FICL_WORD_DEFAULT);
 #endif
     ficlDictionarySetPrimitive(dictionary, (char *)"poll", athPoll, FICL_WORD_DEFAULT);

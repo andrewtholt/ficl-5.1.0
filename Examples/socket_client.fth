@@ -15,7 +15,7 @@
 255 constant /buffer
 
 : main
-    s" localhost" 1234 socket-connect abort" connect" to sid
+    s" localhost" 9090 socket-connect abort" connect" to sid
 
     /buffer allocate abort" allocate" to in-buffer
     /buffer allocate abort" allocate" to out-buffer
