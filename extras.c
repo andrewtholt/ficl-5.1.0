@@ -1843,7 +1843,8 @@ athMsgSend(ficlVm * vm)
     msg = (char *)ficlStackPopPointer(vm->dataStack);
 
     buf.mtype = 1;
-    strncpy(buf.mtext, msg, nbytes);
+//    strncpy(buf.mtext, msg, nbytes);
+    memcpy(buf.mtext, msg, nbytes);
 
     //status = msgsnd(qid, &buf, nbytes - sizeof(buf.mtype), 0);
     status = msgsnd(qid, &buf, nbytes, 0);
