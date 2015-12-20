@@ -1829,9 +1829,7 @@ static void athRmQueue( ficlVm *vm)
 //
 //Stack:ptr cnt qid-- flag
 //
-    static void
-athMsgSend(ficlVm * vm)
-{
+static void athMsgSend(ficlVm * vm) {
     struct msgbuf   buf;
     int             nbytes;
     int             qid;
@@ -1853,9 +1851,7 @@ athMsgSend(ficlVm * vm)
 //
 //Stack ptr qid-- ptr cnt flag
 //
-    static void
-athMsgRecv(ficlVm * vm)
-{
+static void athMsgRecv(ficlVm * vm) {
     struct msgbuf   buf;
     int             nbytes;
     int             qid;
@@ -1868,7 +1864,8 @@ athMsgRecv(ficlVm * vm)
     msg = (char *)ficlStackPopPointer(vm->dataStack);
 
     status = msgrcv(qid, &buf, MSGSIZE, 0, flag);
-    strncpy(msg, buf.mtext, MSGSIZE);
+    memcpy(msg, buf.mtext, MSGSIZE);
+//    strncpy(msg, buf.mtext, MSGSIZE);
 
     if (status > 0)
     {
