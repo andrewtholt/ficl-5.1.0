@@ -1867,7 +1867,7 @@ athMsgRecv(ficlVm * vm)
     qid = ficlStackPopInteger(vm->dataStack);
     msg = (char *)ficlStackPopPointer(vm->dataStack);
 
-    status = msgrcv(qid, &buf, MSGSIZE, 1, flag);
+    status = msgrcv(qid, &buf, MSGSIZE, 0, flag);
     strncpy(msg, buf.mtext, MSGSIZE);
 
     if (status > 0)
