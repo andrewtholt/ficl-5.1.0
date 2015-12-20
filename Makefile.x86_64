@@ -69,8 +69,8 @@ clean:
 
 
 install:	ficl libficl.so.$(MAJOR).$(MINOR)
-	strip ./ficl
 	cp ./ficl /usr/local/bin
+	strip /usr/local/bin/ficl
 	cp ficl.h /usr/local/include
 	cp ficllocal.h /usr/local/include
 	cp ficltokens.h /usr/local/include
