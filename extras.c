@@ -4482,6 +4482,28 @@ void athIniFileLoad(ficlVm *vm) {
     ini = iniparser_load( name );
     ficlStackPushPointer(vm->dataStack,ini);
 }
+
+void athIniGetSectionCount(ficlVm *vm) {
+    dictionary *ini ;
+
+    ini = (dictionary *)ficlStackPopPointer(vm->dataStack) ;
+
+    ficlStackPushInteger(vm->dataStack,iniparser_getnsec( ini ));
+}
+
+void athIniGetSectionName(ficlVm *vm) {
+    dictionary *ini ;
+    char *p;
+    int n;
+
+    n = ficlStackPopInteger(vm->dataStack) ;
+    ini = (dictionary *)ficlStackPopPointer(vm->dataStack) ;
+
+    p = iniparser_getsecname( ini, n );
+
+    ficlStackPushPointer(vm->dataStack,p);
+    ficlStackPushInteger(vm->dataStack,strlen(p));
+}
 /*
  * Stack: default name len ini
  */
@@ -4618,6 +4640,8 @@ void ficlSystemCompileExtras(ficlSystem * system) {
 
 #ifdef INIPARSER
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-load", athIniFileLoad, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"#sections", athIniGetSectionCount, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"ini-get-section-name", athIniGetSectionName, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-getint", athIniGetInt, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-getbool", athIniGetBoolean, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-getstring", athIniGetString, FICL_WORD_DEFAULT);
