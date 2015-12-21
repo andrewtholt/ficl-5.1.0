@@ -456,6 +456,12 @@ static void athFeatures(ficlVm *vm) {
     printf("NOT FICL_WANT_MINIMAL\n");
 #endif
 
+#ifdef FICL_WANT_STRING
+    printf("    FICL_WANT_STRING\n");
+#else
+    printf("NOT FICL_WANT_STRING\n");
+#endif
+
 #ifdef SERIAL
     printf ("    SERIAL\n");
 #else
