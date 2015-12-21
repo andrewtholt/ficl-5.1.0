@@ -986,6 +986,13 @@ static void athStringJoin(ficlVm *vm)
     ficlStackPushPointer(vm->stringStack,new);
 }
 
+static void athStringType(ficlVm *vm) {
+    char *s;
+
+    s = ficlStackPopPointer(vm->stringStack);
+    printf("%s",s);
+    free(s);
+}
 #endif
 
     static void
@@ -4844,6 +4851,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "spush", athStringPush, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "spop", athStringPop, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "s+", athStringJoin, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "stype", athStringType, FICL_WORD_DEFAULT);
 
 #endif
 #ifdef I2C
