@@ -928,21 +928,29 @@ Stack:	name len --- uid 0 | -1
 Description:
     Given a user name look up the uid.
 
-Name:	
-Stack:	
+Name:	spush
+Stack:	a l --
+String: -- s     
 Description:
+    Push a string to the string stack
 
-Name:	
-Stack:	
+Name:	spop
+Stack:	a l -- s sl
+String: s --
 Description:
+    Pop a string of the string stack and copy it into memory.
 
-Name:	
-Stack:	
+Name:	s+
+Stack:	--
+String: s1 s2 --- s3
 Description:
+    Join s2 to the end of s1.
 
-Name:	
-Stack:	
+Name:	sdrop
+Stack:	---
+String: s ---
 Description:
+    Remove a string from the string stack and release the storage.
 
 Name:	
 Stack:	
