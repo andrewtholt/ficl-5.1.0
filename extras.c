@@ -968,13 +968,28 @@ static void athStringPop(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack,strlen(d));
 
 }
+static void athStringDrop(ficlVm *vm) {
+    char *s;
 
-static void athStringJoin(ficlVm *vm)
-{
+    FICL_STACK_CHECK(vm->stringStack, 1, 0);
+    s=ficlStackPopPointer(vm->stringStack);
+
+    free(s);
+}
+
+static void athStringDepth(ficlVm *vm) {
+    int i;
+
+    i = ficlStackDepth(vm->stringStack);
+    ficlStackPushInteger(vm->dataStack, i );
+}
+
+static void athStringJoin(ficlVm *vm) {
     char *a,*b;
     char *new;
     int la,lb,ln;
 
+    FICL_STACK_CHECK(vm->stringStack, 2, 0);
     b=ficlStackPopPointer(vm->stringStack);
     a=ficlStackPopPointer(vm->stringStack);
 
@@ -4856,6 +4871,8 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 #warning "Defining string primitives"
     ficlDictionarySetPrimitive(dictionary, "spush", athStringPush, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "spop", athStringPop, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "sdrop", athStringDrop, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "sdepth", athStringDepth, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "s+", athStringJoin, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "stype", athStringType, FICL_WORD_DEFAULT);
 
