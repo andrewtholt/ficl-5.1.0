@@ -958,6 +958,7 @@ static void athStringPush(ficlVm *vm) {
 static void athStringPop(ficlVm *vm) {
     char *d,*n;
     int l;
+    int len;
 
     FICL_STACK_CHECK(vm->stringStack, 1, 0);
     FICL_STACK_CHECK(vm->dataStack, 2, 1);
@@ -966,9 +967,16 @@ static void athStringPop(ficlVm *vm) {
     d=ficlStackPopPointer(vm->dataStack);
     n=ficlStackPopPointer(vm->stringStack);
 
-    strncpy(d,n,l);
+    len=strlen(n);
+
+    if ( l >= len ) {
+        strncpy(d,n,len);
+        ficlStackPushInteger(vm->dataStack,len );
+    } else {
+        ficlStackPushInteger(vm->dataStack,-1 );
+    }
+
     free(n);
-    ficlStackPushInteger(vm->dataStack,strlen(d));
 
 }
 
