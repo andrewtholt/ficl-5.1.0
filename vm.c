@@ -103,7 +103,8 @@ ficlVm *ficlVmCreate(ficlVm *vm, unsigned nPStack, unsigned nRStack)
 #if FICL_WANT_STRING
     if (vm->stringStack)
         ficlStackDestroy(vm->stringStack);
-    vm->stringStack = ficlStackCreate(vm, "string", nPStack);
+//    vm->stringStack = ficlStackCreate(vm, "string", nPStack);
+    vm->stringStack = ficlStackCreate(vm, "string", 10);
 #endif
     ficlVmReset(vm);
     return vm;
