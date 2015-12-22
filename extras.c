@@ -959,6 +959,9 @@ static void athStringPop(ficlVm *vm) {
     char *d,*n;
     int l;
 
+    FICL_STACK_CHECK(vm->stringStack, 1, 0);
+    FICL_STACK_CHECK(vm->dataStack, 2, 1);
+
     l= ficlStackPopInteger(vm->dataStack);
     d=ficlStackPopPointer(vm->dataStack);
     n=ficlStackPopPointer(vm->stringStack);
@@ -968,6 +971,7 @@ static void athStringPop(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack,strlen(d));
 
 }
+
 static void athStringDrop(ficlVm *vm) {
     char *s;
 
@@ -975,6 +979,13 @@ static void athStringDrop(ficlVm *vm) {
     s=ficlStackPopPointer(vm->stringStack);
 
     free(s);
+}
+
+static void athStringDup(ficlVm *vm) {
+    char *s;
+    s=ficlStackPopPointer(vm->stringStack);
+    ficlStackPushPointer(vm->stringStack,s);
+    ficlStackPushPointer(vm->stringStack,(char *)strsave(s));
 }
 
 static void athStringDepth(ficlVm *vm) {
@@ -1010,6 +1021,7 @@ static void athStringJoin(ficlVm *vm) {
 static void athStringType(ficlVm *vm) {
     char *s;
 
+    FICL_STACK_CHECK(vm->stringStack, 1, 0);
     s = ficlStackPopPointer(vm->stringStack);
     printf("%s",s);
     free(s);
@@ -4896,6 +4908,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "spush", athStringPush, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "spop", athStringPop, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "sdrop", athStringDrop, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "sdup", athStringDup, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "sdepth", athStringDepth, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "s+", athStringJoin, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "stype", athStringType, FICL_WORD_DEFAULT);
