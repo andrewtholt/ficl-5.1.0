@@ -138,7 +138,7 @@ union semun {
    struct nlist *install(struct database *,char *, char *);
    */
 
-char           *strsave(char *);
+// char           *strsave(char *);
 extern int      errno;
 #ifndef FICL_ANSI
 
@@ -934,11 +934,30 @@ ficlPrimitiveSpewHash(ficlVm * vm)
     return;
 }
 
-char           *strsave(char *s) {
+struct cstring {
+    uint8_t len;
+    char str[255];
+};
+
+struct cstring *strsave(char *s) {
+    /*
     char           *p;
 
     if ((p = (char *) malloc(strlen(s) + 1)) != NULL)
         strcpy(p, s);
+    return (p);
+    */
+
+    struct cstring *p;
+    int l;
+
+    if ((p = (struct cstring *) malloc(sizeof(struct cstring))) != NULL) {
+        l=strlen(s);
+        l = (l > 254 ) ? 254 : l ;
+        p->len = l;
+        strncpy(p->str,s,l);
+        p->str[l+1]='\0';
+    }
     return (p);
 }
 
@@ -947,11 +966,13 @@ char           *strsave(char *s) {
 static void athStringPush(ficlVm *vm) {
     char *p,*n;
     int l;
+    struct cstring *r;
 
     l= ficlStackPopInteger(vm->dataStack);
     p = ficlStackPopPointer(vm->dataStack);
 
-    ficlStackPushPointer(vm->stringStack,(char *)strsave(p));
+    r = strsave(p);
+    ficlStackPushPointer(vm->stringStack,r);
 
 }
 
@@ -990,10 +1011,13 @@ static void athStringDrop(ficlVm *vm) {
 }
 
 static void athStringDup(ficlVm *vm) {
-    char *s;
+    struct cstring *s;
+
+    FICL_STACK_CHECK(vm->stringStack, 1, 0);
     s=ficlStackPopPointer(vm->stringStack);
     ficlStackPushPointer(vm->stringStack,s);
-    ficlStackPushPointer(vm->stringStack,(char *)strsave(s));
+
+    ficlStackPushPointer(vm->stringStack,(struct cstring *)strsave(s->str));
 }
 
 static void athStringDepth(ficlVm *vm) {
@@ -1003,6 +1027,9 @@ static void athStringDepth(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, i );
 }
 
+/* 
+ * FIX ME to use the cstring structure.
+ */
 static void athStringJoin(ficlVm *vm) {
     char *a,*b;
     char *new;
@@ -1027,18 +1054,16 @@ static void athStringJoin(ficlVm *vm) {
 }
 
 static void athStringType(ficlVm *vm) {
-    char *s;
+    struct cstring *s;
 
     FICL_STACK_CHECK(vm->stringStack, 1, 0);
     s = ficlStackPopPointer(vm->stringStack);
-    printf("%s",s);
+    printf("%s",s->str);
     free(s);
 }
 #endif
 
-    static void
-athSlashString(ficlVm * vm)
-{
+static void athSlashString(ficlVm * vm) {
     char           *str;
     int             len, cut;
 
@@ -1054,9 +1079,7 @@ athSlashString(ficlVm * vm)
 
 }
 
-    static void
-athMinusTrailing(ficlVm * vm)
-{
+static void athMinusTrailing(ficlVm * vm) {
     char           *str;
     int             len;
     int             i;
@@ -1064,8 +1087,7 @@ athMinusTrailing(ficlVm * vm)
     len = ficlStackPopInteger(vm->dataStack);
     str = ficlStackPopPointer(vm->dataStack);
 
-    for (i = (len - 1); i >= 0; i--)
-    {
+    for (i = (len - 1); i >= 0; i--) {
         if (str[i] > ' ')
             break;
         else
@@ -1075,20 +1097,16 @@ athMinusTrailing(ficlVm * vm)
     ficlStackPushInteger(vm->dataStack, len);
 }
 
-    static void
-athTwoRot(ficlVm * vm)
-{
+static void athTwoRot(ficlVm * vm) {
     void           *stuff[6];
     void           *tmp0, *tmp1;
     int             i = 0;
 
-    for (i = 0; i < 6; i++)
-    {
+    for (i = 0; i < 6; i++) {
         stuff[i] = (void *) ficlStackPopInteger(vm->dataStack);
     }
 
-    for (i = 3; i >= 0; i--)
-    {
+    for (i = 3; i >= 0; i--) {
         ficlStackPushPointer(vm->dataStack, stuff[i]);
     }
     ficlStackPushPointer(vm->dataStack, stuff[5]);
