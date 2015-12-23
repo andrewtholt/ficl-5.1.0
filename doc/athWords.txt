@@ -692,7 +692,7 @@ Description:
 Name:	ini-get-section-name
 Stack:	n --- a l
 Description:
-    Rtuen the name of the nth section (First section is 0);
+    Return the name of the nth section (First section is 0);
 
 Name:	mmap
 Stack:	fd offset size -- ptr 0 | -1
