@@ -15,7 +15,7 @@
 #endif
 
 #ifdef REDIS
-#include "hiredis.h"
+#include <hiredis.h>
 #endif 
 
 static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */

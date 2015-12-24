@@ -10,7 +10,8 @@ include profile.mk
 
 SHFLAGS = -fPIC
 CFLAGS= $(SHFLAGS)
-CPPFLAGS= $(TARGET) -I. -I/usr/local/include
+INCLUDES += -I. -I/usr/local/include
+CPPFLAGS= $(TARGET) $(INCLUDES) # -I. -I/usr/local/include
 CC = cc -g
 LIB = ar cr
 RANLIB = ranlib
