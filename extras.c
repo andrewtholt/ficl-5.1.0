@@ -889,31 +889,29 @@ static void ficlDollarPrimitiveLoadDir(ficlVm * vm) {
  ** Dump a tab delimited file that summarizes the contents of the
  ** dictionary hash table by hashcode...
  */
-    static void
-ficlPrimitiveSpewHash(ficlVm * vm)
-{
+static void ficlPrimitiveSpewHash(ficlVm * vm) {
     ficlHash       *hash = ficlVmGetDictionary(vm)->forthWordlist;
     ficlWord       *word;
     FILE           *f;
     unsigned        i;
     unsigned        hashSize = hash->size;
 
-    if (!ficlVmGetWordToPad(vm))
+    if (!ficlVmGetWordToPad(vm)) {
         ficlVmThrow(vm, FICL_VM_STATUS_OUT_OF_TEXT);
+    }
 
     f = fopen(vm->pad, "w");
-    if (!f)
-    {
+    if (!f) {
         ficlVmTextOut(vm, "unable to open file\n");
         return;
     }
-    for (i = 0; i < hashSize; i++)
-    {
+
+    for (i = 0; i < hashSize; i++) {
         int             n = 0;
 
         word = hash->table[i];
-        while (word)
-        {
+
+        while (word) {
             n++;
             word = word->link;
         }
@@ -921,8 +919,7 @@ ficlPrimitiveSpewHash(ficlVm * vm)
         fprintf(f, "%d\t%d", i, n);
 
         word = hash->table[i];
-        while (word)
-        {
+        while (word) {
             fprintf(f, "\t%s", word->name);
             word = word->link;
         }
@@ -934,6 +931,8 @@ ficlPrimitiveSpewHash(ficlVm * vm)
     return;
 }
 
+#if FICL_WANT_STRING
+#warning "String stack words...."
 struct cstring {
     uint8_t len;
     char str[255];
@@ -961,8 +960,6 @@ struct cstring *strsave(char *s) {
     return (p);
 }
 
-#if FICL_WANT_STRING
-#warning "String stack words...."
 static void athStringPush(ficlVm *vm) {
     char *p,*n;
     int l;
@@ -977,7 +974,9 @@ static void athStringPush(ficlVm *vm) {
 }
 
 static void athStringPop(ficlVm *vm) {
-    char *d,*n;
+    char *d;
+    struct cstring *n;
+
     int l;
     int len;
 
@@ -988,21 +987,20 @@ static void athStringPop(ficlVm *vm) {
     d=ficlStackPopPointer(vm->dataStack);
     n=ficlStackPopPointer(vm->stringStack);
 
-    len=strlen(n);
+    len=(n->len)+1;
 
     if ( l >= len ) {
-        strncpy(d,n,len);
-        ficlStackPushInteger(vm->dataStack,len );
+        memcpy(d,n,len);
+        ficlStackPushInteger(vm->dataStack,0 );
     } else {
         ficlStackPushInteger(vm->dataStack,-1 );
     }
 
     free(n);
-
 }
 
 static void athStringDrop(ficlVm *vm) {
-    char *s;
+    struct cstring *s;
 
     FICL_STACK_CHECK(vm->stringStack, 1, 0);
     s=ficlStackPopPointer(vm->stringStack);
@@ -1031,22 +1029,26 @@ static void athStringDepth(ficlVm *vm) {
  * FIX ME to use the cstring structure.
  */
 static void athStringJoin(ficlVm *vm) {
-    char *a,*b;
-    char *new;
+    struct cstring *a,*b;
+    struct cstring *new;
     int la,lb,ln;
 
     FICL_STACK_CHECK(vm->stringStack, 2, 0);
     b=ficlStackPopPointer(vm->stringStack);
     a=ficlStackPopPointer(vm->stringStack);
 
-    la=strlen(a);
-    lb=strlen(b);
+    la=a->len;
+    lb=b->len;
     ln=la+lb;
 
-    new=(char *)malloc( ln+1); // space for null terminator
+    ln = (ln > 254 ) ? 254 : ln;
 
-    strcpy(new,a);
-    strcat(new,b);
+    new = strsave(" ");
+
+    memcpy( new->str, a->str, la );
+    memcpy( (new->str) + la, b->str,lb);
+    new->len = ln;
+
     free(a);
     free(b);
 
@@ -1518,7 +1520,7 @@ void athPopenRWE(ficlVm *vm) {
         args[i]=(char *)NULL;
         */
 
-        ret=popenRWE(&rwepipe[0],cmd,(const char *)args);
+        ret=popenRWE(&rwepipe[0],cmd,(const char * const*)args);
 
         pStdin->fd = rwepipe[0];
         pStdin->f = fdopen(rwepipe[0],"w");
