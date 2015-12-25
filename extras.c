@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <poll.h>
 #include <pwd.h>
+#include "cstring.h"
 
 #ifndef EMBEDDED
 #include <termios.h>
@@ -138,13 +139,23 @@ union semun {
    struct nlist *install(struct database *,char *, char *);
    */
 
-// char           *strsave(char *);
+char           *strsave(char *);
 extern int      errno;
 #ifndef FICL_ANSI
 
 void fatal(char *message) {
     fprintf(stderr, "fatal error: %s\n", message);
     exit(1);
+}
+
+char *strsave( char *s ) {
+    char *p = (char *)NULL;
+
+    if( (p=(char *)malloc( strlen(s) )) != 0) {
+        strcpy(p,s);
+    }
+
+    return(p);
 }
 
 
@@ -933,12 +944,14 @@ static void ficlPrimitiveSpewHash(ficlVm * vm) {
 
 #if FICL_WANT_STRING
 #warning "String stack words...."
+/*
 struct cstring {
     uint8_t len;
     char str[255];
 };
+*/
 
-struct cstring *strsave(char *s) {
+struct cstring *cstrsave(char *s) {
     /*
     char           *p;
 
@@ -954,6 +967,8 @@ struct cstring *strsave(char *s) {
         l=strlen(s);
         l = (l > 254 ) ? 254 : l ;
         p->len = l;
+        // change to memcpy
+        //
         strncpy(p->str,s,l);
         p->str[l+1]='\0';
     }
@@ -968,7 +983,7 @@ static void athStringPush(ficlVm *vm) {
     l= ficlStackPopInteger(vm->dataStack);
     p = ficlStackPopPointer(vm->dataStack);
 
-    r = strsave(p);
+    r = cstrsave(p);
     ficlStackPushPointer(vm->stringStack,r);
 
 }
@@ -1015,7 +1030,7 @@ static void athStringDup(ficlVm *vm) {
     s=ficlStackPopPointer(vm->stringStack);
     ficlStackPushPointer(vm->stringStack,s);
 
-    ficlStackPushPointer(vm->stringStack,(struct cstring *)strsave(s->str));
+    ficlStackPushPointer(vm->stringStack,(struct cstring *)cstrsave(s->str));
 }
 
 static void athStringDepth(ficlVm *vm) {
@@ -1025,9 +1040,6 @@ static void athStringDepth(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, i );
 }
 
-/* 
- * FIX ME to use the cstring structure.
- */
 static void athStringJoin(ficlVm *vm) {
     struct cstring *a,*b;
     struct cstring *new;
@@ -1043,7 +1055,7 @@ static void athStringJoin(ficlVm *vm) {
 
     ln = (ln > 254 ) ? 254 : ln;
 
-    new = strsave(" ");
+    new = cstrsave(" ");
 
     memcpy( new->str, a->str, la );
     memcpy( (new->str) + la, b->str,lb);

@@ -42,11 +42,12 @@
 #include <fcntl.h>
 
 #include "ficl.h"
+#include "cstring.h"
 
 #include <termios.h>
 static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
-char *strsave(char *);
+struct cstring *cstrsave(char *);
 static void ficlDollarPrimitiveLoad(ficlVm *);
 static void ficlPrimitiveLoad(ficlVm *);
 void ficlSystemCompileMain(ficlSystem *);
@@ -89,7 +90,7 @@ extern int verbose;
 
 int main(int argc, char **argv) {
     int returnValue = 0;
-    char buffer[256];
+    char buffer[255];
     ficlVm *vm;
     ficlSystem *system;
 
@@ -104,7 +105,7 @@ int main(int argc, char **argv) {
 
     char *fileName=(char *)NULL;
 //    char *loadPath=(char *)NULL;
-    char *cmd=(char *)NULL;
+    struct cstring *cmd=NULL;
 
     strcpy(prompt, FICL_PROMPT);
     verbose=-1; // Default is to be talkative.
@@ -159,11 +160,13 @@ int main(int argc, char **argv) {
      ** load files specified on command-line
      */
 
-    if( fileName != (char *)NULL ) {
+    if( fileName != NULL ) {
+        memset(buffer,0,255);
         if( verbose == 0) {
             sprintf(buffer, "load %s\n cr", fileName );
         } else {
-            sprintf(buffer, ".( loading %s ) cr load %s\n cr", fileName, fileName );
+            sprintf(buffer, ".( loading %s ) cr load %s\n cr", fileName,
+                    fileName );
         }
         returnValue = ficlVmEvaluate(vm, buffer);
     }
