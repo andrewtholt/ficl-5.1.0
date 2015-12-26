@@ -952,13 +952,6 @@ struct cstring {
 */
 
 struct cstring *cstrsave(char *s) {
-    /*
-    char           *p;
-
-    if ((p = (char *) malloc(strlen(s) + 1)) != NULL)
-        strcpy(p, s);
-    return (p);
-    */
 
     struct cstring *p;
     int l;
@@ -969,7 +962,7 @@ struct cstring *cstrsave(char *s) {
         p->len = l;
         // change to memcpy
         //
-        strncpy(p->str,s,l);
+        memcpy(p->str,s,l);
         p->str[l+1]='\0';
     }
     return (p);
