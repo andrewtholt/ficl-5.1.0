@@ -951,19 +951,19 @@ struct cstring {
 };
 */
 
-struct cstring *cstrsave(char *s) {
+struct cstring *cstrsave(char *s,uint8_t l) {
 
     struct cstring *p;
-    int l;
+//    int l;
 
     if ((p = (struct cstring *) malloc(sizeof(struct cstring))) != NULL) {
-        l=strlen(s);
+//        l=strlen(s);
         l = (l > 254 ) ? 254 : l ;
         p->len = l;
         // change to memcpy
         //
         memcpy(p->str,s,l);
-        p->str[l+1]='\0';
+        p->str[l]='\0';
     }
     return (p);
 }
@@ -976,7 +976,7 @@ static void athStringPush(ficlVm *vm) {
     l= ficlStackPopInteger(vm->dataStack);
     p = ficlStackPopPointer(vm->dataStack);
 
-    r = cstrsave(p);
+    r = cstrsave(p,l);
     ficlStackPushPointer(vm->stringStack,r);
 
 }
@@ -1023,7 +1023,7 @@ static void athStringDup(ficlVm *vm) {
     s=ficlStackPopPointer(vm->stringStack);
     ficlStackPushPointer(vm->stringStack,s);
 
-    ficlStackPushPointer(vm->stringStack,(struct cstring *)cstrsave(s->str));
+    ficlStackPushPointer(vm->stringStack,(struct cstring *)cstrsave(s->str,s->len));
 }
 
 static void athStringDepth(ficlVm *vm) {
@@ -1048,7 +1048,7 @@ static void athStringJoin(ficlVm *vm) {
 
     ln = (ln > 254 ) ? 254 : ln;
 
-    new = cstrsave(" ");
+    new = cstrsave(" ",1);
 
     memcpy( new->str, a->str, la );
     memcpy( (new->str) + la, b->str,lb);
