@@ -1068,6 +1068,17 @@ static void athStringType(ficlVm *vm) {
     printf("%s",s->str);
     free(s);
 }
+
+static void athStringSwap(ficlVm *vm) {
+    struct cstring *a;
+    struct cstring *b;
+
+    a=ficlStackPopPointer(vm->stringStack);
+    b=ficlStackPopPointer(vm->stringStack);
+
+    ficlStackPushPointer(vm->stringStack,a);
+    ficlStackPushPointer(vm->stringStack,b);
+}
 #endif
 
 static void athSlashString(ficlVm * vm) {
@@ -4945,6 +4956,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "sdepth", athStringDepth, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "s+", athStringJoin, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "stype", athStringType, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "sswap", athStringSwap, FICL_WORD_DEFAULT);
 
 #endif
 #ifdef I2C
