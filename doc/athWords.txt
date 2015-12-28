@@ -962,17 +962,23 @@ String: s ---
 Description:
     Remove a string from the string stack and release the storage.
 
-Name:	
-Stack:	
+Name:	sdup
+Stack:	--
+String: s --- s s
 Description:
+    Dupliate the string on top of the stack.
 
-Name:	
-Stack:	
+Name:	sswap
+Stack:	---
+String: a b --- b a
 Description:
+    Stwap the two strings on top of the string stack.
 
-Name:	
-Stack:	
+Name:	.ss
+Stack:	---
+String: --- 
 Description:
+    Display the contents of the string stack.
 
 Name:	
 Stack:	
