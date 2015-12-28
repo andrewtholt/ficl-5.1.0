@@ -1079,6 +1079,37 @@ static void athStringSwap(ficlVm *vm) {
     ficlStackPushPointer(vm->stringStack,a);
     ficlStackPushPointer(vm->stringStack,b);
 }
+
+static void athSSDisplay(ficlVm *vm) {
+    int depth;
+    int i=0;
+    ficlCell cell;
+    void *t;
+
+    ficlStack *stack;
+    struct cstring *ptr;
+
+    stack = vm->stringStack;
+    depth = ficlStackDepth(stack);
+
+    if( depth == 0 ) {
+        printf("String Stack empty\n");
+    } else {
+
+        printf("Top =====>\n");
+        for(i=0;i<depth;i++) {
+            cell=stack->top[-i];
+            printf("\t%d:%s\n",i,cell.s);
+        }   
+    }
+
+    /*
+    for(i=0;i<depth;i++) {
+        ptr=(struct cstring *) stack->top[-i];
+    }
+    */
+
+}
 #endif
 
 static void athSlashString(ficlVm * vm) {
@@ -4957,6 +4988,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "s+", athStringJoin, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "stype", athStringType, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "sswap", athStringSwap, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, ".ss", athSSDisplay, FICL_WORD_DEFAULT);
 
 #endif
 #ifdef I2C

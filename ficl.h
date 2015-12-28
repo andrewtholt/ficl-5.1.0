@@ -828,6 +828,9 @@
 #if (FICL_WANT_FLOAT)
             ficlFloat f;
 #endif
+#if (FICL_WANT_STRING)
+            struct cstring *s;
+#endif
             void *p;
             void (*fn)(void);
         } ficlCell;
