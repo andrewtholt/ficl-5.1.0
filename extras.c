@@ -1099,7 +1099,7 @@ static void athSSDisplay(ficlVm *vm) {
         printf("Top =====>\n");
         for(i=0;i<depth;i++) {
             cell=stack->top[-i];
-            printf("\t%d:%s\n",i,cell.s->str);
+            printf("\t%d:%d >%s<\n",i,cell.s->len,cell.s->str);
         }   
     }
 }
