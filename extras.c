@@ -1099,15 +1099,21 @@ static void athSSDisplay(ficlVm *vm) {
         printf("Top =====>\n");
         for(i=0;i<depth;i++) {
             cell=stack->top[-i];
-            printf("\t%d:%s\n",i,cell.s);
+            printf("\t%d:%s\n",i,cell.s->str);
         }   
     }
+}
 
-    /*
-    for(i=0;i<depth;i++) {
-        ptr=(struct cstring *) stack->top[-i];
-    }
-    */
+static void athStringLength(ficlVm *vm) {
+    ficlStack *stack;
+    ficlCell cell;
+    struct cstring *ptr;
+
+    FICL_STACK_CHECK(vm->stringStack, 1, 0);
+    stack = vm->stringStack;
+
+    cell=stack->top[0];
+    ficlStackPushInteger(vm->dataStack,cell.s->len);
 
 }
 #endif
@@ -4989,6 +4995,7 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "stype", athStringType, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "sswap", athStringSwap, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, ".ss", athSSDisplay, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "string-length", athStringLength, FICL_WORD_DEFAULT);
 
 #endif
 #ifdef I2C
