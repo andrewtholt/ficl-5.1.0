@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
 
     char *fileName=(char *)NULL;
 //    char *loadPath=(char *)NULL;
-    struct cstring *cmd=NULL;
+    struct string *cmd=NULL;
 
     strcpy(prompt, FICL_PROMPT);
     verbose=-1; // Default is to be talkative.
@@ -176,6 +176,12 @@ int main(int argc, char **argv) {
         exit(returnValue);
     }
 
+#ifdef MQTT
+    sprintf(buffer,"defer mqtt-connect-callback\n");
+    returnValue = ficlVmEvaluate(vm, buffer);
+    sprintf(buffer,"defer mqtt-message-callback\n");
+    returnValue = ficlVmEvaluate(vm, buffer);
+#endif
 
     while (returnValue != FICL_VM_STATUS_USER_EXIT) {
         //        fputs(FICL_PROMPT, stdout);

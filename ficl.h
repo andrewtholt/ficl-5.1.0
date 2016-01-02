@@ -1912,3 +1912,7 @@
 #define CPU_MIPS 8
 #define CPU_SH4A 9
 
+/*
+ * Stuff added by me (ATH)
+ */
+char *strsave(char *);

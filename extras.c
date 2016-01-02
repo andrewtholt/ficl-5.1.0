@@ -485,6 +485,12 @@ static void athFeatures(ficlVm *vm) {
     printf ("NOT REDIS\n");
 #endif
 
+#ifdef MQTT
+    printf ("    MQTT\n");
+#else
+    printf ("NOT MQTT\n");
+#endif
+
 #ifdef MODBUS
     printf ("    MODBUS\n");
 #else    
@@ -1114,6 +1120,26 @@ static void athStringLength(ficlVm *vm) {
 
     cell=stack->top[0];
     ficlStackPushInteger(vm->dataStack,cell.s->len);
+
+}
+#endif
+
+#ifdef MQTT
+static void athMqttLibInit(ficlVm *vm) {
+    int rc;
+
+    rc = mosquitto_lib_init();
+    ficlStackPushInteger(vm->dataStack,rc);
+}
+
+static void athMqttLibVersion(ficlVm *vm) {
+    int major,minor,revision;
+
+    mosquitto_lib_version(&major,&minor,&revision);
+
+    ficlStackPushInteger(vm->dataStack,revision);
+    ficlStackPushInteger(vm->dataStack,minor);
+    ficlStackPushInteger(vm->dataStack,major);
 
 }
 #endif
@@ -4998,6 +5024,11 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "string-length", athStringLength, FICL_WORD_DEFAULT);
 
 #endif
+#if MQTT
+    ficlDictionarySetPrimitive(dictionary, "mqtt-lib-init", athMqttLibInit, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-lib-version", athMqttLibVersion, FICL_WORD_DEFAULT);
+#endif
+
 #ifdef I2C
     ficlDictionarySetPrimitive(dictionary, "i2c-open", athI2cOpen, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "i2c-close", athI2cClose, FICL_WORD_DEFAULT);
