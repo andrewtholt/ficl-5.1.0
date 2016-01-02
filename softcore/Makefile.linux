@@ -1,4 +1,4 @@
-SOURCES = softcore.fr ifbrack.fr prefix.fr ficl.fr jhlocal.fr marker.fr oo.fr classes.fr string.fr ficllocal.fr fileaccess.fr
+SOURCES = softcore.fr ifbrack.fr prefix.fr ficl.fr jhlocal.fr marker.fr oo.fr classes.fr string.fr ficllocal.fr fileaccess.fr defer.fr
 
 ../softcore.c: makesoftcore $(SOURCES)
 	./makesoftcore $(SOURCES)

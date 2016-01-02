@@ -652,7 +652,7 @@
         /* 
          ** the Good Stuff starts here...
          */
-#define FICL_VERSION    "5.3.3"
+#define FICL_VERSION    "5.4.0"
 
 #if !defined (FICL_PROMPT)
 #define FICL_PROMPT		"ok> "

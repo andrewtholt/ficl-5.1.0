@@ -2,13 +2,13 @@
 ** Ficl softcore
 ** both uncompressed and Lempel-Ziv compressed versions.
 **
-** Generated 2015/09/29 09:24:21
+** Generated 2016/01/02 15:47:48
 **/
 
 #include "ficl.h"
 
 
-static size_t ficlSoftcoreUncompressedSize = 21365; /* not including trailing null */
+static size_t ficlSoftcoreUncompressedSize = 21666; /* not including trailing null */
 
 #if !FICL_WANT_LZ_SOFTCORE
 
@@ -935,12 +935,32 @@ static char ficlSoftcoreUncompressed[] =
 	";\n"
 	": include parse-word included ;\n"
 	"[endif]\n"
+	": defer ( \"name\" -- )\n"
+	"create ['] abort ,\n"
+	"does> ( ... -- ... )\n"
+	"@ execute ;\n"
+	": defer@ ( xt1 -- xt2 )\n"
+	">body @ ;\n"
+	": defer! ( xt2 xt1 -- )\n"
+	">body ! ;\n"
+	": is\n"
+	"state @ if\n"
+	"POSTPONE ['] POSTPONE defer!\n"
+	"else\n"
+	"' defer!\n"
+	"then ; immediate\n"
+	": action-of\n"
+	"state @ if\n"
+	"POSTPONE ['] POSTPONE defer@\n"
+	"else\n"
+	"' defer@\n"
+	"then ; immediate\n"
 ;
 
 #else /* !FICL_WANT_LZ_SOFTCORE */
 
-static unsigned char ficlSoftcoreCompressed[9958] = {
-	0xfe, 0x40, 0xe3, 0xa7, 0x0b, 0xfd, 0xa7, 0x0b, 
+static unsigned char ficlSoftcoreCompressed[9956] = {
+	0xfe, 0x10, 0xf4, 0x96, 0xd5, 0xfd, 0x96, 0xd5, 
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -2184,7 +2204,7 @@ static unsigned char ficlSoftcoreCompressed[9958] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+	0x00, 0x00, 0x00, 0x00, 
 	};
 
 #endif /* !FICL_WANT_LZ_SOFTCORE */
