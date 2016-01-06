@@ -15,6 +15,10 @@
 #include <sys/select.h>
 #endif
 
+#ifdef MQTT
+#include <mosquitto.h>
+#endif
+
 #ifdef REDIS
 #include <hiredis.h>
 #endif 
@@ -1125,6 +1129,38 @@ static void athStringLength(ficlVm *vm) {
 #endif
 
 #ifdef MQTT
+
+void my_connect_callback(struct mosquitto *mosq, void *userdata, int result) {
+
+    fprintf(stderr,"Connect Callback\n");
+}
+
+static void athMqttConnectCallback(ficlVm *vm) {
+    struct mosquitto *mosq = NULL;
+
+    mosq = ficlStackPopPointer(vm->dataStack);
+    mosquitto_connect_callback_set(mosq, my_connect_callback);
+}
+
+static void athMqttConnect(ficlVm *vm) {
+    int rc;
+    struct mosquitto *mosq = NULL;
+    char *host;
+    int len;
+    int port;
+    int keepalive;
+    
+    keepalive = ficlStackPopInteger(vm->dataStack);
+    port = ficlStackPopInteger(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    host = ficlStackPopPointer(vm->dataStack);
+    mosq = ficlStackPopPointer(vm->dataStack);
+
+    rc=mosquitto_connect(mosq, host, port, keepalive);
+
+    ficlStackPushInteger(vm->dataStack,rc);
+}
+
 static void athMqttLibInit(ficlVm *vm) {
     int rc;
 
@@ -1140,7 +1176,15 @@ static void athMqttLibVersion(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack,revision);
     ficlStackPushInteger(vm->dataStack,minor);
     ficlStackPushInteger(vm->dataStack,major);
+}
 
+static void athMqttNew(ficlVm *vm) {
+    int rc;
+    struct mosquitto *mosq = NULL;
+
+    mosq = mosquitto_new(NULL, true, NULL);
+
+    ficlStackPushPointer(vm->dataStack, mosq);
 }
 #endif
 
@@ -5027,6 +5071,9 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 #if MQTT
     ficlDictionarySetPrimitive(dictionary, "mqtt-lib-init", athMqttLibInit, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "mqtt-lib-version", athMqttLibVersion, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-new", athMqttNew, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-connect", athMqttConnect, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-connect-callback", athMqttConnectCallback, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef I2C

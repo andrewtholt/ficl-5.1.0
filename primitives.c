@@ -3384,6 +3384,12 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetConstant(environment, "redis",              FICL_FALSE);
 #endif
 
+#ifdef MQTT
+    ficlDictionarySetConstant(environment, "mqtt",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "mqtt",              FICL_FALSE);
+#endif
+
 #ifdef SYSV_IPC
     ficlDictionarySetConstant(environment, "sysv_ipc",              FICL_TRUE);
 #else
