@@ -29,6 +29,9 @@ while getopts la:hx:o:p: flag; do
             printf "\t-p <profile>\tUse the profile to set defines, and libraries.\n"
             printf "\t-x <makefile arch>\n"
             printf "\t-l\t\tList available profiles\n"
+            PROFILE=$(readlink ./profile.mk)
+            echo
+            echo "Profile is $PROFILE"
 
             exit 0
             ;;
