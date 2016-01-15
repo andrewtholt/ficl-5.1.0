@@ -15,6 +15,8 @@ else
 fi
 
 LIST="NO"
+PROFILE_CHANGED="NO"
+
 echo 
 while getopts la:hx:o:p: flag; do
     case $flag in
@@ -39,6 +41,7 @@ while getopts la:hx:o:p: flag; do
             OPT=_${OPTARG}
             ;;
         p)
+            PROFILE_CHANGED="YES"
             PROFILE=${OPTARG}.mk
             ;;
         l)
@@ -83,6 +86,10 @@ if [ ! -z "$PROFILE" ]; then
 fi
 
 MAKEFILE=Makefile.${ARCH}${OPT}
+
+if [ $PROFILE_CHANGED = "YES" ]; then
+    make -f $MAKEFILE clean
+fi
 
 if [ -f $MAKEFILE ]; then
     echo "Building with $MAKEFILE"
