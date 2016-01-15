@@ -972,7 +972,7 @@ Name:	sswap
 Stack:	---
 String: a b --- b a
 Description:
-    Stwap the two strings on top of the string stack.
+    Swap the two strings on top of the string stack.
 
 Name:	.ss
 Stack:	---
@@ -980,23 +980,34 @@ String: ---
 Description:
     Display the contents of the string stack.
 
-Name:	
-Stack:	
+Name:	mqtt
+Stack:	name len -- flag
 Description:
+    s" mqtt" environment? returns false if the facility is not available.
 
-Name:	
-Stack:	
+Name:	mqtt-lib-init
+Stack:	-- 
 Description:
+    Setup MQTT library.  MUST be called first.
 
-Name:	
-Stack:	
+Name:	mqtt-lib-version
+Stack:	-- major minor revision
 Description:
+    Return the version number.
 
-Name:	
-Stack:	
+Name:	mqtt-new
+Stack:	-- mosq
 Description:
+    Create a new MQTT connection.
 
-Name:	
+Name:	mqtt-connect
+Stack:	mosq hostname len port keepalive
+Description:
+    Connect the created client instance (identified by mosq) to an MQTT broker
+    at the host indicated by hostname and len, on 'port' and issue a keepalive
+    message every 'keepalive' seconds.
+
+Name:	mqtt-connect-callback
 Stack:	
 Description:
 
