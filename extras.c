@@ -64,7 +64,9 @@ static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
 // #ifndef ARM
 #ifndef EMBEDDED
+#ifndef UCLINUX
 #include <dlfcn.h>
+#endif
 #include <sys/utsname.h>
 #include <termios.h>
 #endif
@@ -1468,6 +1470,7 @@ static void athGetPid(ficlVm *vm)
 #define WRITE 1
 
 #ifndef  EMBEDDED
+#ifndef UCLINUX
 pid_t popen2(const char *command, int *infp, int *outfp)
 {
     int p_stdin[2], p_stdout[2];
@@ -1692,6 +1695,7 @@ void athPcloseRWE(ficlVm *vm)
     free( pStdout );
     free( pStderr );
 }
+#endif
 #endif
 
 static int lastSignal;
@@ -4832,8 +4836,10 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"reset-prompt", athResetPrompt, FICL_WORD_DEFAULT);
 
 #ifndef EMBEDDED
+#ifndef UCLINUX
     ficlDictionarySetPrimitive(dictionary, "popen", athPopenRWE, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "pclose", athPcloseRWE, FICL_WORD_DEFAULT);
+#endif
 #endif
     /*
 #ifdef GDBM

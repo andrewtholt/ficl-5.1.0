@@ -35,3 +35,4 @@ softcore/makesoftcore
 html
 latex
 profile.mk
+*.gdb
