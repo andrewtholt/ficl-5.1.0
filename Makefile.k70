@@ -5,6 +5,7 @@
 OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o softcore.o stack.o tools.o vm.o primitives.o bit.o lzuncompress.o unix.o utility.o hash.o callback.o word.o extras.o
 
 HEADERS=ficl.h ficlplatform/unix.h 
+include profile.mk
 
 INC_DIR="-I/home/andrewh/Source/Linux/linux-cortexm-1.12.0/A2F/root/usr/include"
 #
@@ -15,12 +16,12 @@ LDFLAGS=-Wl,--no-as-needed
 
 CFLAGS= -c $(SHFLAGS) $(TARGET) # -DSYSV_IPC -DSOCKET -DMTHREAD # -DSYSV_IPC -DMODBUS # -DSPREAD -I/usr/local/spread-4.0.0/include # -DVERBOSE # -DDB # -I/usr/local/include
 
-PREFIX=arm-uclinuxeabi-
-CC=$(PREFIX)gcc
-LIB=$(TOOLS)/bin/ar cr
-LIB=$(PREFIX)ar cr
-RANLIB=$(PREFIX)ranlib
-STRIP=$(PREFIX)strip
+# PREFIX=arm-uclinuxeabi-
+# CC=$(PREFIX)gcc
+# LIB=$(TOOLS)/bin/ar cr
+# LIB=$(PREFIX)ar cr
+# RANLIB=$(PREFIX)ranlib
+# STRIP=$(PREFIX)strip
 
 MAJOR = 5
 MINOR = 0.0

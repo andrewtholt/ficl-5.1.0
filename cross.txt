@@ -1,0 +1,17 @@
+
+Notes on how to cross compile.
+
+You need the appropriate compilers installed.
+
+A Makefile for the target (see Makefile.k70) and a profile, 
+e.g. uclinux.mk (which can be empty)
+
+Then, the first build:
+
+./build.sh -p uclinux -x k70
+
+and subsequently
+
+./build.sh -x k70
+
+
