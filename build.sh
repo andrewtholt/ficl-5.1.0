@@ -32,6 +32,7 @@ while getopts dla:hx:o:p: flag; do
         h)
             echo "Help."
             printf "\t-a <makefile args>\n"
+            printf "\t-d\t\tDry run.\n"
             printf "\t-h\t\tHelp.\n"
             printf "\t-o <variant>\tBuild a variant based on an architecture\n"
             printf "\t-p <profile>\tUse the profile to set defines, and libraries.\n"
