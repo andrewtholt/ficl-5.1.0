@@ -16,12 +16,18 @@ fi
 
 LIST="NO"
 PROFILE_CHANGED="NO"
+DRY_RUN="NO"
+MAKE_FLAGS="-f "
 
 echo 
-while getopts la:hx:o:p: flag; do
+while getopts dla:hx:o:p: flag; do
     case $flag in
         a)
             ARGS=$OPTARG
+            ;;
+        d)
+            DRY_RUN="YES"
+            MAKE_FLAGS="-n $MAKE_FLAGS"
             ;;
         h)
             echo "Help."
@@ -88,7 +94,7 @@ fi
 MAKEFILE=Makefile.${ARCH}${OPT}
 
 if [ $PROFILE_CHANGED = "YES" ]; then
-    make -f $MAKEFILE clean
+    make $MAKE_FLAGS $MAKEFILE clean
 fi
 
 if [ -f $MAKEFILE ]; then
@@ -97,7 +103,7 @@ if [ -f $MAKEFILE ]; then
     echo "Profile $PROFILE"
     echo "=========================="
     sleep 1
-	make -j 4 -f $MAKEFILE $ARGS
+    make -j 4 $MAKE_FLAGS $MAKEFILE $ARGS
 else
 	echo "$MAKEFILE does not exist."
 fi
