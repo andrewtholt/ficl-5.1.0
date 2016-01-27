@@ -3438,6 +3438,12 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetConstant(environment, "serial",              FICL_FALSE);
 #endif
 
+#ifdef TIMERS
+    ficlDictionarySetConstant(environment, "serial",              FICL_TRUE);
+#else
+    ficlDictionarySetConstant(environment, "serial",              FICL_FALSE);
+#endif
+
 #ifdef FICL_WANT_STRING
     ficlDictionarySetConstant(environment, "string",              FICL_TRUE);
 #else

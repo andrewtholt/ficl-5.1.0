@@ -533,6 +533,11 @@ static void athFeatures(ficlVm *vm) {
     printf("NOT DYNLIB\n");
 #endif
 
+#ifdef TIMERS
+    printf("    TIMERS\n");
+#else
+    printf("NOT TIMERS\n");
+#endif
 
 #ifdef SOCKET
     printf("    SOCKET\n");
