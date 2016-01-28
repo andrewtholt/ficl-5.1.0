@@ -23,6 +23,10 @@
 #include <hiredis.h>
 #endif 
 
+#if defined(MTHREAD) &&  defined(TIMERS)
+#include "myTimers.h"
+#endif
+
 static int      ttyfd = 0;   /* STDIN_FILENO is 0 by default */
 
 #ifdef SYSV_IPC
@@ -2979,7 +2983,38 @@ static void athResetPrompt(ficlVm *vm)
     strcpy(prompt,FICL_PROMPT);
 }
 
+#if defined(MTHREAD) &&  defined(TIMERS)
+struct {
+    struct timer *head;
+    pthread_mutex_t *timerMutexp;
+} timerData;
 
+static void athSetupTimers(ficlVm * vm) {
+
+    timerData.head = (struct timer *)NULL ;
+    timerData.timerMutexp = ficlStackPopPointer(vm->dataStack);
+
+//    ficlStackPushPointer(vm->dataStack, (timerData.head));
+}
+
+static void athDisplayTimers(ficlVm * vm) {
+
+    displayTimers( &timerData.head );
+}
+
+static void athAddTimer(ficlVm * vm) {
+    int period=0;
+    void *xt;
+
+    period = ficlStackPopInteger(vm->dataStack);
+    xt = ficlStackPopPointer(vm->dataStack);
+
+    addTimer( &timerData.head, period, xt);
+
+}
+
+
+#endif
 #ifdef MTHREAD
 /*
    static void athCreateThread(ficlVm * vm)
@@ -3038,9 +3073,7 @@ athDeleteThread(ficlVm * vm)
     t = (pthread_t) ficlStackPopPointer(vm->dataStack);
 }
 
-    static void
-athCreateMutex(ficlVm * vm)
-{
+static void athCreateMutex(ficlVm * vm) {
     pthread_mutex_t *mutexp;
 
     mutexp = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
@@ -3049,9 +3082,7 @@ athCreateMutex(ficlVm * vm)
     ficlStackPushPointer(vm->dataStack, mutexp);
 }
 
-    static void
-athLockMutex(ficlVm * vm)
-{
+static void athLockMutex(ficlVm * vm) {
     pthread_mutex_t *mutexp;
     int             status;
 
@@ -3060,9 +3091,7 @@ athLockMutex(ficlVm * vm)
     ficlStackPushInteger(vm->dataStack, status);
 }
 
-    static void
-athUnlockMutex(ficlVm * vm)
-{
+static void athUnlockMutex(ficlVm * vm) {
     pthread_mutex_t *mutexp;
     int             status;
 
@@ -3071,10 +3100,7 @@ athUnlockMutex(ficlVm * vm)
     ficlStackPushInteger(vm->dataStack, status);
 }
 
-
-    static void
-athTryLockMutex(ficlVm * vm)
-{
+static void athTryLockMutex(ficlVm * vm) {
     pthread_mutex_t *mutexp;
     int             status;
 
@@ -4977,6 +5003,12 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 
 #endif
 */
+#if defined(MTHREAD) &&  defined(TIMERS)
+    ficlDictionarySetPrimitive(dictionary, "timer-init", athSetupTimers , FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "timer-display", athDisplayTimers , FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "timer-add", athAddTimer , FICL_WORD_DEFAULT);
+#endif
+
 #ifdef MTHREAD
     //	ficlDictionarySetPrimitive(dictionary, "create-vm", athCreateVM, FICL_WORD_DEFAULT);
     //	ficlDictionarySetPrimitive(dictionary, "create-thread", athCreateThread, FICL_WORD_DEFAULT);
