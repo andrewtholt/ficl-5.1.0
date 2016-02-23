@@ -6,7 +6,7 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 # TARGET= -DLINUX -DDYNLIB -DLIBMODBUS -DSYSV_IPC -DSOCKET -DINIPARSER # -DFICL_WANT_FLOAT=0
 SHFLAGS = -fPIC
-CFLAGS= $(SHFLAGS) -g -m32
+CFLAGS= $(SHFLAGS) -g -m32 -Wno-format
 CPPFLAGS= $(TARGET) -I. -I/usr/local/include
 LDFLAGS=-Wl,--no-as-needed
 # CC = cc
