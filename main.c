@@ -120,8 +120,8 @@ int main(int argc, char **argv) {
     while ((ch = getopt(argc,argv, "c:qh?d:f:sV")) != -1) {
         switch(ch) {
             case 'c':
-                cmd=strsave(optarg);
-                printf("%s\n",cmd);
+                cmd=(struct string *)strsave(optarg);
+                printf("%s\n",(char *)cmd);
                 break;
             case 'd':
                 tmp=atoi( optarg );
@@ -171,8 +171,8 @@ int main(int argc, char **argv) {
         returnValue = ficlVmEvaluate(vm, buffer);
     }
 
-    if( cmd != (char *)NULL ) {
-        returnValue = ficlVmEvaluate(vm, cmd);
+    if( cmd != (struct string *)NULL ) {
+        returnValue = ficlVmEvaluate(vm, (char *)cmd);
         exit(returnValue);
     }
 
