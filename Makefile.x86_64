@@ -9,7 +9,7 @@ include profile.mk
 # TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSOCKET -DPOSIX_IPC # -DSYSV_IPC # -DLIBMODBUS -DINIPARSER 
 
 SHFLAGS = -fPIC
-CFLAGS= $(SHFLAGS)
+CFLAGS= $(SHFLAGS) -Wno-format
 INCLUDES += -I. -I/usr/local/include
 CPPFLAGS= $(TARGET) $(INCLUDES) # -I. -I/usr/local/include
 CC = cc -g
