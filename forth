@@ -14,3 +14,7 @@ if [ "$#" -eq 0 ]; then
 else
     rlwrap -n ficl  $*
 fi
+
+
+
+
