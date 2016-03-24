@@ -1,0 +1,7 @@
+# 
+# No modbus, no ini file parser
+# 
+TARGET= -DFICL_WANT_STRING -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DPOSIX_IPC -DSYSV_IPC -DSOCKET -DSERIAL # -DINIPARSER 
+
+LIBS=-ldl # -liniparser
+
