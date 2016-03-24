@@ -1575,6 +1575,15 @@ BRANCH_PAREN:
                     continue;
                 }
 
+            case ficlInstructionWComma:
+                {
+                    ficlDictionary *dictionary;
+                    CHECK_STACK(1, 0);
+
+                    dictionary = ficlVmGetDictionary(vm);
+                    ficlDictionaryAppend16Bit(dictionary, *dataTop--);
+                    continue;
+                }
             case ficlInstructionCells:
                 {
                     CHECK_STACK(1, 1);

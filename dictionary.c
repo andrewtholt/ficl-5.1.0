@@ -142,6 +142,15 @@ void ficlDictionaryAppendCharacter(ficlDictionary *dictionary, char c)
     dictionary->here = FICL_POINTER_TO_CELL(here);
     return;
 }
+/**************************************************************************
+                        d i c t A p p e n d W o r d
+** ATH - Append the specified 16 bit word  to the dictionary
+**************************************************************************/
+void ficlDictionaryAppend16Bit(ficlDictionary *dictionary, uint16_t c) {
+    uint16_t *here = (uint16_t *)dictionary->here;
+    *here++ = c;
+    dictionary->here = FICL_POINTER_TO_CELL(here);
+}
 
 
 /**************************************************************************
