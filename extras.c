@@ -1266,7 +1266,14 @@ static void athStrsave(ficlVm * vm) {
 
 #ifdef DYNLIB
 #define MAX_ARGS 5
-
+// Npte the argumnets are in reverse orde to the C function.
+// i.e:
+// void func(a,b,c)
+//
+// Is called by
+//
+// c b a 0 3 <ptr to func>
+//
 // arg0 ... argn <res_count> <arg_count> <function ptr>
 // 
 static void athDlExec(ficlVm * vm) {
@@ -1289,7 +1296,7 @@ static void athDlExec(ficlVm * vm) {
     if ( 0 == argCount && 0 == resCount ) {
         (void)(*func)();
     } else {
-        if(argCount > 0 ) {
+        if(resCount > 0 ) {
             switch(argCount) {
                 case 1:
                     res=(*func)(args[0]);
