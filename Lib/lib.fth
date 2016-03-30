@@ -26,7 +26,7 @@
 \
 0x800 constant IPC_NOWAIT \ 004000 octal
 \
-\ Mask for settin, clearing and testing 16 bit values.
+\ Mask for setting, clearing and testing 16 bit values.
 \
 create mask 1 , 2 , 4 , 8 , 0x10 , 0x20 , 0x40 , 0x80 , 0x100 , 0x200 , 0x400 , 0x800 , 0x1000 , 0x2000 , 0x4000 , 0x8000 ,
 \
@@ -114,7 +114,7 @@ create bmask 0x01 c, 0x02 c, 0x04 c, 0x08 c, 0x10 c, 0x20 c, 0x40 c, 0x80 c,
 ;
 
 \ create a buffer for n chars/bytes
-\ create a buffer for n chars/bytes
+\ 
 : cbuffer ( n -- )
 create
     chars allot
@@ -209,8 +209,9 @@ create
     postpone [defined] 
     0= 
 ; immediate
-
+\
 \ Create  a counted string holding the newline sequence
+\ 
 create (newline) 1 c, 10 c,
 
 : newline (newline) count ;
@@ -218,3 +219,4 @@ create (newline) 1 c, 10 c,
 : cell 1 cells ;
 
 : char 1 chars ;
+
