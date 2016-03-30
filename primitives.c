@@ -333,11 +333,10 @@ static void ficlPrimitiveHexDot(ficlVm *vm)
 **
 ** --lch
 **/
-static void ficlPrimitiveStrlen(ficlVm *vm)
-	{
+static void ficlPrimitiveStrlen(ficlVm *vm) {
 	char *address = (char *)ficlStackPopPointer(vm->dataStack);
 	ficlStackPushInteger(vm->dataStack, strlen(address));
-	}
+}
 
 
 /**************************************************************************
