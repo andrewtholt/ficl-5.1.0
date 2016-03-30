@@ -2160,6 +2160,45 @@ static void ficlPrimitiveStringQuoteIm(ficlVm *vm)
     return;
 }
 
+/**************************************************************************
+                        n u l l  t e r m i n a t e d  s t r i n g   q u o t e
+** Interpreting: get string delimited by a quote from the input stream,
+** add a null (0x00) bytre to the end, increment the length and
+** copy to a scratch area, and put its count and address on the stack.
+** Compiling: FICL_VM_STATE_COMPILE code to push the address and count of a string
+** literal, FICL_VM_STATE_COMPILE the string from the input stream, and align the dictionary
+** pointer.
+**************************************************************************/
+static void ficlPrimitiveZStringQuoteIm(ficlVm *vm) {
+    ficlDictionary *dictionary = ficlVmGetDictionary(vm);
+
+    if (vm->state == FICL_VM_STATE_INTERPRET) {
+        ficlCountedString *counted = (ficlCountedString *)dictionary->here;
+        ficlVmGetString(vm, counted, '\"');
+
+        counted->text[counted->length] = (char)NULL;
+        counted->length++;
+        ficlStackPushPointer(vm->dataStack, counted->text);
+        ficlStackPushUnsigned(vm->dataStack, counted->length);
+    } else {
+        char *z;
+        /* FICL_VM_STATE_COMPILE state */
+
+        ficlCountedString *counted = (ficlCountedString *)dictionary->here;
+	    ficlDictionaryAppendUnsigned(dictionary, ficlInstructionStringLiteralParen);
+
+        z = ficlVmGetString(vm, (ficlCountedString *)dictionary->here, '\"');
+        counted->text[counted->length] = (char)NULL;
+        counted->length++;
+
+        dictionary->here = FICL_POINTER_TO_CELL(z);
+//        dictionary->here = FICL_POINTER_TO_CELL(ficlVmGetString(vm, (ficlCountedString *)dictionary->here, '\"'));
+        ficlDictionaryAlign(dictionary);
+    }
+
+    return;
+}
+
 
 /**************************************************************************
                         t y p e
@@ -3325,6 +3364,7 @@ void ficlSystemCompileCore(ficlSystem *system)
     ficlDictionarySetPrimitive(dictionary, "recurse",   ficlPrimitiveRecurseCoIm,    FICL_WORD_COMPILE_ONLY_IMMEDIATE);
     ficlDictionarySetPrimitive(dictionary, "repeat",    ficlPrimitiveRepeatCoIm,     FICL_WORD_COMPILE_ONLY_IMMEDIATE);
     ficlDictionarySetPrimitive(dictionary, "s\"",       ficlPrimitiveStringQuoteIm,  FICL_WORD_IMMEDIATE);
+    ficlDictionarySetPrimitive(dictionary, "z\"",       ficlPrimitiveZStringQuoteIm,  FICL_WORD_IMMEDIATE);
     ficlDictionarySetPrimitive(dictionary, "sign",      ficlPrimitiveSign,           FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "sm/rem",    ficlPrimitiveSMSlashRem, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "source",    ficlPrimitiveSource,         FICL_WORD_DEFAULT);
