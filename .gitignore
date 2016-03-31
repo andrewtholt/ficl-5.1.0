@@ -36,3 +36,5 @@ html
 latex
 profile.mk
 *.gdb
+
+*.bak
