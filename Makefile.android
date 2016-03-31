@@ -41,9 +41,6 @@ ficl: main.o $(HEADERS) libficl.a
 	$(CC) main.o -o ficl -L. -lficl -lm -lpthread # -ldl
 	$(STRIP) ficl
 
-ficldb: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficldb -L. -lficl -lm -lpthread
-
 ficls: main.o $(HEADERS) libficl.a
 #	$(CC) -static main.o libficl.a -o ficls
 	$(CC) -static main.o -o ficls -L. -lficl -lm -lpthread # -ldl
@@ -86,7 +83,7 @@ unix.o: ficlplatform/unix.c $(HEADERS)
 #       generic cleanup code
 #
 clean:
-	rm -f *.o *.a libficl.* ficl ficldb
+	rm -f *.o *.a libficl.* ficl
 
 install:
 	mkdir -p ./ipkg-arm/CONTROL
