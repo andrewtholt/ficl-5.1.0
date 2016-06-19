@@ -4317,7 +4317,9 @@ void athOpenSerialPort(ficlVm *vm) {
 
     serPort->fd = res ;
     serPort->f = fdopen(res,"r+");
-    strcpy( serPort->filename, portName );
+
+//    strcpy( serPort->filename, portName );
+    strncpy( serPort->filename, portName,sizeof(serPort->filename) );
 
     ficlStackPushInteger(vm->dataStack,serPort);
 }
