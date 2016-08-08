@@ -76,8 +76,16 @@ if [ $LIST = "YES" ]; then
     fi
     exit
 fi
+# 
+# If the basic profile does not exist create an empty one.
+#
+if [ ! -f ./basic.mk ]; then
+    touch ./basic.mk
+fi
 
-
+# 
+# If profile does not exist link to basic.
+#
 if [ ! -f profile.mk ]; then
     ln -s ./basic.mk ./profile.mk
 fi
