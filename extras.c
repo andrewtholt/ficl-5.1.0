@@ -4296,7 +4296,7 @@ void athIoctl(ficlVm *vm) {
 #endif
 
 #ifdef SERIAL
-#warning "Serial comms selected."
+// #warning "Serial comms selected."
 /*
  * Stack: PortName len speed.
  */
