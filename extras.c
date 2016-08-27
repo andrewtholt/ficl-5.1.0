@@ -2075,11 +2075,10 @@ static void athMsgRecv(ficlVm * vm) {
     msg = (char *)ficlStackPopPointer(vm->dataStack);
 
     status = msgrcv(qid, &buf, MSGSIZE, 0, flag);
-    memcpy(msg, buf.mtext, MSGSIZE);
-//    strncpy(msg, buf.mtext, MSGSIZE);
 
-    if (status > 0)
-    {
+    if (status > 0) {
+        memcpy(msg, buf.mtext, MSGSIZE);
+//      strncpy(msg, buf.mtext, MSGSIZE);
         ficlStackPushPointer(vm->dataStack, msg);
         ficlStackPushInteger(vm->dataStack, status);
         ficlStackPushInteger(vm->dataStack, 0);
