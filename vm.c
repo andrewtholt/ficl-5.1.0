@@ -194,12 +194,15 @@ RUNTIME_FIXUP:
 #if FICL_ROBUST <= 1
 /* turn off stack checking for primitives */
 #define _CHECK_STACK(stack, top, pop, push)
+#warning "HERE !!!!!"
 #else
+#warning "NOW !!!!!"
 
 #define _CHECK_STACK(stack, top, pop, push)	\
     ficlStackCheckNospill(stack, top, pop, push)
 
-FICL_PLATFORM_INLINE void ficlStackCheckNospill(ficlStack *stack, ficlCell *top, int popCells, int pushCells)
+// FICL_PLATFORM_INLINE void ficlStackCheckNospill(ficlStack *stack, ficlCell *top, int popCells, int pushCells)
+void ficlStackCheckNospill(ficlStack *stack, ficlCell *top, int popCells, int pushCells)
 {
     /*
      ** Why save and restore stack->top?
