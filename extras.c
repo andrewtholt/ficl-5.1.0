@@ -1202,6 +1202,22 @@ static void athMqttPub(ficlVm *vm) {
 }
 
 static void athMqttSub(ficlVm *vm) {
+    struct mosquitto *mosq = NULL;
+    char *topic;
+
+    int rc=0;
+
+    topic = ficlStackPopPointer(vm->dataStack);
+    mosq = ficlStackPopPointer(vm->dataStack);
+
+    rc = mosquitto_subscribe(mosq,NULL, topic, 0);
+
+    if( rc == MOSQ_ERR_SUCCESS) {
+        ficlStackPushInteger(vm->dataStack, 0);
+    } else {
+        ficlStackPushInteger(vm->dataStack, -1);
+    }
+
 }
 
 static void athMqttLoop(ficlVm *vm) {
@@ -5141,6 +5157,8 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
     ficlDictionarySetPrimitive(dictionary, "mqtt-new", athMqttNew, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "mqtt-connect", athMqttConnect, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "mqtt-connect-callback", athMqttConnectCallback, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, "mqtt-sub", athMqttSub, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef I2C
