@@ -1,5 +1,5 @@
 # 
-# No modbus, no ini file parser
+# Minimal
 # 
 TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 
 

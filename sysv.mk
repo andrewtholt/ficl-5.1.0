@@ -1,5 +1,5 @@
 # 
-# No modbus, no ini file parser
+# Minimal plus SYSV IPC
 # 
 TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSYSV_IPC
 
