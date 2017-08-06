@@ -1197,6 +1197,22 @@ static void athMqttNew(ficlVm *vm) {
 
     ficlStackPushPointer(vm->dataStack, mosq);
 }
+
+static void athMqttPub(ficlVm *vm) {
+}
+
+static void athMqttSub(ficlVm *vm) {
+}
+
+static void athMqttLoop(ficlVm *vm) {
+}
+
+static void athMqttGetTopic(ficlVm *vm) {
+}
+
+static void athMqttGetPayload(ficlVm *vm) {
+}
+
 #endif
 
 static void athSlashString(ficlVm * vm) {
