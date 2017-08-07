@@ -2175,7 +2175,8 @@ static void ficlPrimitiveZStringQuoteIm(ficlVm *vm) {
         ficlCountedString *counted = (ficlCountedString *)dictionary->here;
         ficlVmGetString(vm, counted, '\"');
 
-        counted->text[counted->length] = (char)NULL;
+//        counted->text[counted->length] = (char)NULL;
+        counted->text[counted->length] = 0;
         counted->length++;
         ficlStackPushPointer(vm->dataStack, counted->text);
         ficlStackPushUnsigned(vm->dataStack, counted->length);
@@ -2187,7 +2188,8 @@ static void ficlPrimitiveZStringQuoteIm(ficlVm *vm) {
 	    ficlDictionaryAppendUnsigned(dictionary, ficlInstructionStringLiteralParen);
 
         z = ficlVmGetString(vm, (ficlCountedString *)dictionary->here, '\"');
-        counted->text[counted->length] = (char)NULL;
+//        counted->text[counted->length] = (char)NULL;
+        counted->text[counted->length] = 0;
         counted->length++;
 
         dictionary->here = FICL_POINTER_TO_CELL(z);
