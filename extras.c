@@ -8,6 +8,7 @@
 #include <sys/time.h>
 #include <poll.h>
 #include <pwd.h>
+#include <sys/ioctl.h>
 #include "cstring.h"
 
 #ifndef EMBEDDED
@@ -1140,20 +1141,32 @@ static void athStringLength(ficlVm *vm) {
 #endif
 
 #ifdef MQTT
+struct cbMqttMessage {
+    uint8_t msgFlag;
+    char topic[64];
+    char payload[32];
+} ;
 
-void my_connect_callback(struct mosquitto *mosq, void *userdata, int result) {
-
-    fprintf(stderr,"Connect Callback\n");
+void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_message *message) { 
+    fprintf(stderr,"Message Callback\n");
+    
+    fprintf(stderr,"Rx Topic   : %s\n", (char *)message->topic);
+    fprintf (stderr,"Rx payload: %s\n", (char *)message->payload);
+    
+    strcpy(((struct cbMqttMessage *)obj)->topic,(char *)message->topic);
+    strcpy( ((struct cbMqttMessage *)obj)->payload,(char *)message->payload);
 }
 
-static void athMqttConnectCallback(ficlVm *vm) {
+
+static void athMqttMessageCallback(ficlVm *vm) {
     struct mosquitto *mosq = NULL;
 
     mosq = ficlStackPopPointer(vm->dataStack);
-    mosquitto_connect_callback_set(mosq, my_connect_callback);
+    mosquitto_message_callback_set(mosq, messageCallback);
+//    printf(">mosquitto_message_callback_set\n");
 }
 
-static void athMqttConnect(ficlVm *vm) {
+static void athMqttClient(ficlVm *vm) {
     int rc;
     struct mosquitto *mosq = NULL;
     char *host;
@@ -1161,21 +1174,37 @@ static void athMqttConnect(ficlVm *vm) {
     int port;
     int keepalive;
     
-    keepalive = ficlStackPopInteger(vm->dataStack);
+//    keepalive = ficlStackPopInteger(vm->dataStack);
     port = ficlStackPopInteger(vm->dataStack);
     len = ficlStackPopInteger(vm->dataStack);
     host = ficlStackPopPointer(vm->dataStack);
     mosq = ficlStackPopPointer(vm->dataStack);
 
-    rc=mosquitto_connect(mosq, host, port, keepalive);
+//    rc=mosquitto_connect(mosq, host, port, keepalive);
+    rc=mosquitto_connect(mosq, host, port, 10);
+//    printf("mosquitto_connect\n");
+    if( rc == MOSQ_ERR_SUCCESS ) {
+        // TODO Set callback here
+        mosquitto_message_callback_set( mosq, messageCallback);
+//        printf("mosquitto_message_callback_set\n");
+        ficlStackPushInteger(vm->dataStack,0);
+    } else {
+        ficlStackPushInteger(vm->dataStack,-1);
+    }
 
-    ficlStackPushInteger(vm->dataStack,rc);
 }
 
-static void athMqttLibInit(ficlVm *vm) {
+static void athMqttInit(ficlVm *vm) {
     int rc;
-
-    rc = mosquitto_lib_init();
+    static bool doneFlag = false;
+    
+    if( doneFlag == false ) {
+        rc = mosquitto_lib_init();
+//        printf("mosquitto_lib_init\n");
+        doneFlag = true;
+    } else {
+        rc = 0;
+    }
     ficlStackPushInteger(vm->dataStack,rc);
 }
 
@@ -1192,25 +1221,67 @@ static void athMqttLibVersion(ficlVm *vm) {
 static void athMqttNew(ficlVm *vm) {
     int rc;
     struct mosquitto *mosq = NULL;
+    char *id;
+    void *obj;
+    int len=0;
+    
+    obj=ficlStackPopPointer(vm->dataStack);
+    len = ficlStackPopInteger(vm->dataStack);
+    id=(char *)ficlStackPopPointer(vm->dataStack);
+    id[len]='\0';
 
-    mosq = mosquitto_new(NULL, true, NULL);
+    mosq = mosquitto_new(id, true, obj);
+//    printf("mosquitto_new\n");
 
-    ficlStackPushPointer(vm->dataStack, mosq);
+    if( mosq == NULL ) {
+        ficlStackPushInteger(vm->dataStack,-1);
+    } else {
+        ficlStackPushPointer(vm->dataStack, mosq);
+        ficlStackPushInteger(vm->dataStack,0);
+    }
 }
 
 static void athMqttPub(ficlVm *vm) {
+    struct mosquitto *mosq = NULL;
+    struct cbMqttMessage *msg=NULL;
+    int rc=0;
+    
+    char *topic=NULL;
+    char *payload=NULL;
+    
+    msg=(struct cbMqttMessage *)ficlStackPopPointer(vm->dataStack);
+    
+    mosq=(struct mosquitto  *)ficlStackPopPointer(vm->dataStack);
+    
+    topic=&(msg->topic);
+    payload=&(msg->payload);
+   
+    rc=mosquitto_publish(mosq,
+                         NULL,
+                         topic,
+                         strlen(payload), 
+                         payload, 
+                         0, 
+                         true);
+    
+    ficlStackPushInteger(vm->dataStack, rc);
 }
 
 static void athMqttSub(ficlVm *vm) {
     struct mosquitto *mosq = NULL;
     char *topic;
+    int len=0;
 
     int rc=0;
 
+    len = ficlStackPopInteger(vm->dataStack);
     topic = ficlStackPopPointer(vm->dataStack);
+    
+    topic[len] = '\0';
     mosq = ficlStackPopPointer(vm->dataStack);
 
     rc = mosquitto_subscribe(mosq,NULL, topic, 0);
+//    printf("mosquitto_subscribe %s\n", topic);
 
     if( rc == MOSQ_ERR_SUCCESS) {
         ficlStackPushInteger(vm->dataStack, 0);
@@ -1221,12 +1292,67 @@ static void athMqttSub(ficlVm *vm) {
 }
 
 static void athMqttLoop(ficlVm *vm) {
+    int rc; 
+    struct mosquitto *mosq ;
+    int timeout=0;
+    
+    timeout = ficlStackPopInteger( vm->dataStack);
+    mosq = (struct mosquitto *) ficlStackPopPointer( vm->dataStack);
+    
+    rc = mosquitto_loop(mosq,timeout,1);
+//    printf("mosquitto_loop\n");
+    
+    if( rc == MOSQ_ERR_SUCCESS) {
+        ficlStackPushInteger(vm->dataStack, false );
+    } else {
+        perror("mosquitto_loop");
+        ficlStackPushInteger(vm->dataStack, -1 );
+    }
 }
 
 static void athMqttGetTopic(ficlVm *vm) {
+    struct cbMqttMessage *msg;
+    
+    msg = (struct cbMqttMessage *) ficlStackPopPointer( vm->dataStack);
+    ficlStackPushPointer(vm->dataStack, (msg->topic));
+    ficlStackPushInteger(vm->dataStack, strlen((msg->topic)));
+}
+
+static void athMqttSetTopic(ficlVm *vm) {
+    struct cbMqttMessage *msg;
+    
+    char *topic;
+    int len=0;
+    
+    len=ficlStackPopInteger(vm->dataStack);
+    topic=(char *)ficlStackPopPointer(vm->dataStack);
+    topic[len] = '\0';
+    
+    msg=(struct cbMqttMessage *)ficlStackPopPointer(vm->dataStack);
+    
+    strncpy(msg->topic, topic, sizeof(msg->topic));
 }
 
 static void athMqttGetPayload(ficlVm *vm) {
+    struct cbMqttMessage *msg;
+    
+    msg = (struct cbMqttMessage *) ficlStackPopPointer( vm->dataStack);
+    ficlStackPushPointer(vm->dataStack, (msg->payload));
+    ficlStackPushInteger(vm->dataStack, strlen(msg->payload));
+}
+static void athMqttSetPayload(ficlVm *vm) {
+    struct cbMqttMessage *msg;
+    
+    char *payload;
+    int len=0;
+    
+    len=ficlStackPopInteger(vm->dataStack);
+    payload=(char *)ficlStackPopPointer(vm->dataStack);
+    payload[len] = '\0';
+    
+    msg=(struct cbMqttMessage *)ficlStackPopPointer(vm->dataStack);
+    
+    strncpy(msg->payload, payload, sizeof(msg->payload));
 }
 
 #endif
@@ -5152,13 +5278,24 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 
 #endif
 #if MQTT
-    ficlDictionarySetPrimitive(dictionary, "mqtt-lib-init", athMqttLibInit, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-init", athMqttInit, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "mqtt-lib-version", athMqttLibVersion, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, "mqtt-new", athMqttNew, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, "mqtt-connect", athMqttConnect, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, "mqtt-connect-callback", athMqttConnectCallback, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-client", athMqttClient, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-loop", athMqttLoop, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, "mqtt-message-callback", athMqttMessageCallback, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, "mqtt-sub", athMqttSub, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, "mqtt-pub", athMqttPub, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, "mqtt-topic@", athMqttGetTopic, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, "mqtt-topic!", athMqttSetTopic, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, "mqtt-payload@", athMqttGetPayload, FICL_WORD_DEFAULT);
+
+    ficlDictionarySetPrimitive(dictionary, "mqtt-payload!", athMqttSetPayload, FICL_WORD_DEFAULT);
 #endif
 
 #ifdef I2C
