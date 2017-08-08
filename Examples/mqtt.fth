@@ -27,7 +27,17 @@ s" mqtt" environment? 0= abort" No mqtt env" drop
 ;
 
 : stuff
-    client -1 mqtt-loop .
+    msg /msg erase
+    0xff msg c!
+    begin
+        client 500 mqtt-loop 
+        msg c@ 0= if
+            msg mqtt-topic@   type cr 
+            msg mqtt-payload@ type cr 
+            0xff msg c!
+        then
+
+    -1 = until
 ;
 
 : publish
@@ -44,7 +54,8 @@ s" mqtt" environment? 0= abort" No mqtt env" drop
 : test
     init
 
-    client s" /home/office/ups/#" mqtt-sub abort" mqtt-sub failed"
+\    client s" /home/office/ups/#" mqtt-sub abort" mqtt-sub failed"
+    client s" /home/office/proliant/#" mqtt-sub abort" mqtt-sub failed"
 
     stuff
 ;

@@ -1150,8 +1150,9 @@ struct cbMqttMessage {
 void messageCallback(struct mosquitto *mosq, void *obj,const struct mosquitto_message *message) { 
     fprintf(stderr,"Message Callback\n");
     
-    fprintf(stderr,"Rx Topic   : %s\n", (char *)message->topic);
-    fprintf (stderr,"Rx payload: %s\n", (char *)message->payload);
+//    fprintf(stderr,"Rx Topic   : %s\n", (char *)message->topic);
+//    fprintf (stderr,"Rx payload: %s\n", (char *)message->payload);
+    ((struct cbMqttMessage *)obj)->msgFlag=0;
     
     strcpy(((struct cbMqttMessage *)obj)->topic,(char *)message->topic);
     strcpy( ((struct cbMqttMessage *)obj)->payload,(char *)message->payload);
