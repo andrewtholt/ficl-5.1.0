@@ -3845,27 +3845,12 @@ static void athHostname(ficlVm * vm) {
     char           *dest;
     char *tmp;
 
-    /*
-       len = ficlStackPopInteger(vm->dataStack);
-       dest = ficlStackPopPointer(vm->dataStack);
-       */
-
     res = uname(&buf);
 
     tmp = (char *)strtok(buf.nodename,".");
 
-    /*
-       if (len >= strlen(buf.nodename))
-       {
-       n = strlen(buf.nodename);
-       } else
-       {
-       n = len;
-       }
-       */
-
     n = strlen(buf.nodename);
-    //	strncpy((char *) dest, (char *) buf.nodename, (size_t) n);
+
     strncpy((char *) vm->pad, (char *) buf.nodename, (size_t) n);
 #else
     n=0;
