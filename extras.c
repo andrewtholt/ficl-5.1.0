@@ -1425,7 +1425,7 @@ static void athStrsave(ficlVm * vm) {
 
 #ifdef DYNLIB
 #define MAX_ARGS 5
-// Npte the argumnets are in reverse orde to the C function.
+// Note the arguments are in reverse order to the C function.
 // i.e:
 // void func(a,b,c)
 //
@@ -1566,9 +1566,7 @@ static void athDlSym(ficlVm * vm) {
 
 }
 
-    static void
-athDlError(ficlVm *vm)
-{
+static void athDlError(ficlVm *vm) {
     perror(dlerror());
 }
 #endif
@@ -1593,7 +1591,7 @@ static void athZmove(ficlVm *vm) {
 }
 // 
 // Add an end of line char (0x0a) to a string.
-// Space must already exist for tis.
+// Space must already exist for this.
 //
 // Stack : addr len -- addr len+1
 //
@@ -1605,7 +1603,6 @@ static void athAddCr(ficlVm *vm) {
     from = ficlStackPopPointer(vm->dataStack);
 
     from[len] = (char)0x0a;
-//    *(from + len) = (char)0x0a;
 
     len++;
 
@@ -1614,24 +1611,19 @@ static void athAddCr(ficlVm *vm) {
 
 }
 
-static void athSizeofInt(ficlVm *vm)
-{
+static void athSizeofInt(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, sizeof(int));
 }
 
-static void athSizeofChar(ficlVm *vm)
-{
+static void athSizeofChar(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, sizeof(char));
 }
 
-static void athSizeofCharPtr(ficlVm *vm)
-{
+static void athSizeofCharPtr(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, sizeof(char *));
 }
 
-    static void
-ficlPrimitiveBreak(ficlVm * vm)
-{
+static void ficlPrimitiveBreak(ficlVm * vm) {
     //	vm->state = vm->state;
     return;
 }
@@ -1929,9 +1921,7 @@ athClrErrno(ficlVm * vm)
     errno = 0;
 }
 
-    static void
-athGetenv(ficlVm * vm)
-{
+static void athGetenv(ficlVm * vm) {
     char           *ptr;
     char           *env;
     char           *tmp;
@@ -1944,12 +1934,13 @@ athGetenv(ficlVm * vm)
 
     env[len] = '\0';
     tmp = getenv(env);
-    if (tmp)
-    {
+    
+    if (tmp) {
         strcpy(ptr, tmp);
         len = strlen(tmp);
-    } else
+    } else {
         len = 0;
+    }
 
     ficlStackPushPointer(vm->dataStack, ptr);
     ficlStackPushInteger(vm->dataStack, len);
@@ -4754,6 +4745,9 @@ void athWrite(ficlVm *vm) {
 }
 
 #ifdef LINUX
+
+void athTesting(ficlVm *vm) {
+}
 /**
  * inotify_init() call
  *
@@ -5247,7 +5241,6 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 #endif
 
 #ifdef SPREAD
-    //    ficlDictionarySetPrimitive(dictionary, "test", athTest, FICL_WORD_DEFAULT); 
     ficlDictionarySetPrimitive(dictionary, (char *)"sp-connect", athSPConnect, FICL_WORD_DEFAULT);   
     ficlDictionarySetPrimitive(dictionary, (char *)"sp-join", athSPJoin, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"sp-leave", athSPLeave, FICL_WORD_DEFAULT);
@@ -5308,10 +5301,12 @@ ficlDictionarySetPrimitive(dictionary, "list-display", athListDisplay, FICL_WORD
 #ifdef LINUX
     ficlDictionarySetPrimitive(dictionary, (char *)"ioctl", athIoctl, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"mmap", athMmap, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, (char *)"munmap", athMunmap, FICL_WORD_DEFAULT);
-    ficlDictionarySetPrimitive(dictionary, "ticks",      athPrimitiveTick, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"munmap",athMunmap, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"ticks", athPrimitiveTick, FICL_WORD_DEFAULT);
 
     ficlDictionarySetPrimitive(dictionary, (char *)"start-clock", athStartTimer , FICL_WORD_DEFAULT);
+    
+    ficlDictionarySetPrimitive(dictionary, (char *)"testing", athTesting , FICL_WORD_DEFAULT);
 #endif
 #ifdef SERIAL
     ficlDictionarySetPrimitive(dictionary, (char *)"open-serial", athOpenSerialPort, FICL_WORD_DEFAULT);
