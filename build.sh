@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # set -x
 
@@ -109,8 +109,32 @@ fi
 
 MAKEFILE=Makefile.${ARCH}${OPT}
 
-if [ $PROFILE_CHANGED = "YES" ]; then
-    make $MAKE_FLAGS $MAKEFILE clean
+if [ "$PROFILE_CHANGED" = "YES" ]; then
+# 
+# If Makefile exists and is a symbolic link, remove
+# and remake link.
+#
+#    if [ -L Makefile ]; then
+#        rm Makefile
+#    fi
+#    ln -s $MAKEFILE Makefile
+#    make $MAKE_FLAGS $MAKEFILE clean
+    make clean
+fi
+
+#if [ -L atlcfig.h ]; then
+#    echo "Default config exists"
+#else
+#    echo "Default config DOES NOT exist."
+#    echo "Creating ..."
+#    ln -s ./linux-atlcfig.h ./atlcfig.h
+#    echo ".. done."
+#fi
+
+if [ "$DRY_RUN" = "YES" ]; then
+    echo
+    echo "DRY RUN"
+    echo
 fi
 
 if [ -f $MAKEFILE ]; then
@@ -121,5 +145,10 @@ if [ -f $MAKEFILE ]; then
     sleep 1
     make -j 4 $MAKE_FLAGS $MAKEFILE $ARGS
 else
-	echo "$MAKEFILE does not exist."
+	echo "$MAKEFILE does not exist, falling back to default Makefile"
+    MAKEFILE=Makefile
+    make -j 4 $MAKE_FLAGS $MAKEFILE $ARGS
 fi
+
+
+
