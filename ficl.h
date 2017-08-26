@@ -1462,6 +1462,7 @@
         FICL_PLATFORM_EXTERN void        ficlDictionaryAppendCharacter(ficlDictionary *dictionary, char c);
         FICL_PLATFORM_EXTERN void        ficlDictionaryAppendUnsigned(ficlDictionary *dictionary, ficlUnsigned u);
         FICL_PLATFORM_EXTERN void       *ficlDictionaryAppendData(ficlDictionary *dictionary, void *data, ficlInteger length);
+        FICL_PLATFORM_EXTERN void ficlDictionaryAppend16Bit(ficlDictionary *dictionary, uint16_t c);
         FICL_PLATFORM_EXTERN char       *ficlDictionaryAppendString(ficlDictionary *dictionary, ficlString s);
         FICL_PLATFORM_EXTERN ficlWord   *ficlDictionaryAppendWord(ficlDictionary *dictionary, 
                 ficlString name, 

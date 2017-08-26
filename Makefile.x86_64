@@ -13,6 +13,7 @@ CFLAGS= $(SHFLAGS) -Wno-format
 INCLUDES += -I. -I/usr/local/include
 CPPFLAGS= $(TARGET) $(INCLUDES) # -I. -I/usr/local/include
 CC = cc -g -Wl,--no-as-needed
+# CC = clang -g 
 LIB = ar cr
 RANLIB = ranlib
 

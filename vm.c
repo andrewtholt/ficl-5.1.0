@@ -194,9 +194,7 @@ RUNTIME_FIXUP:
 #if FICL_ROBUST <= 1
 /* turn off stack checking for primitives */
 #define _CHECK_STACK(stack, top, pop, push)
-#warning "HERE !!!!!"
 #else
-#warning "NOW !!!!!"
 
 #define _CHECK_STACK(stack, top, pop, push)	\
     ficlStackCheckNospill(stack, top, pop, push)
@@ -1584,7 +1582,7 @@ BRANCH_PAREN:
                     CHECK_STACK(1, 0);
 
                     dictionary = ficlVmGetDictionary(vm);
-                    ficlDictionaryAppend16Bit(dictionary, *dataTop--);
+                    ficlDictionaryAppend16Bit(dictionary, dataTop--);
                     continue;
                 }
             case ficlInstructionCells:

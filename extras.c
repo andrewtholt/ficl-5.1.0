@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/time.h>
@@ -10,6 +11,7 @@
 #include <pwd.h>
 #include <sys/ioctl.h>
 #include "cstring.h"
+#include "extras.h"
 
 #ifndef EMBEDDED
 #include <termios.h>
@@ -1254,8 +1256,8 @@ static void athMqttPub(ficlVm *vm) {
     
     mosq=(struct mosquitto  *)ficlStackPopPointer(vm->dataStack);
     
-    topic=&(msg->topic);
-    payload=&(msg->payload);
+    topic=(char *)&(msg->topic);
+    payload=(char *)&(msg->payload);
    
     rc=mosquitto_publish(mosq,
                          NULL,
@@ -4416,12 +4418,13 @@ void athMunmap(ficlVm *vm) {
 void athIoctl(ficlVm *vm) {
 
     int fd=-1;
-    void *cmd = (void *)-1;
+//    void *cmd = (void *)-1;
+    unsigned long cmd = 0;
     int data = -1;
     int ret = -1;
 
     data = ficlStackPopInteger(vm->dataStack) ;
-    cmd = (void *)ficlStackPopInteger(vm->dataStack) ;
+    cmd = (unsigned long)ficlStackPopInteger(vm->dataStack) ;
     fd = ficlStackPopInteger(vm->dataStack) ;
 
     ret = ioctl(fd, cmd, data);
