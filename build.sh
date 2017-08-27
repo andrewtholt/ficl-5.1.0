@@ -5,8 +5,13 @@
 CPU=`uname -m`
 OS=`uname -s`
 
+if [ -z "$CC" ]; then
+    CC=gcc
+fi
+
 printf "\nbuilding for $CPU\n"
 echo "       OS is $OS"
+echo "Compiler  is $CC"
 
 if [ "$OS" = "Linux" ]; then
     ARCH=$CPU
