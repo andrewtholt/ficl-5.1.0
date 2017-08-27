@@ -8,6 +8,22 @@ OS=`uname -s`
 if [ -z "$CC" ]; then
     CC=gcc
 fi
+export CC
+
+case "$CC" in
+    gcc)
+        CFLAGS="-g -Wno-format -Wl,--no-as-needed"
+        ;;
+    clang)
+        CFLAGS="-g"
+        ;;
+    *)
+        echo "No compiler set, fatal error."
+        exit 1
+esac
+
+export CFLAGS
+
 
 printf "\nbuilding for $CPU\n"
 echo "       OS is $OS"

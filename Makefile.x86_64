@@ -9,13 +9,25 @@ include profile.mk
 # TARGET= -DLINUX -DDYNLIB -DFICL_WANT_LZ_SOFTCORE=0 -DSOCKET -DPOSIX_IPC # -DSYSV_IPC # -DLIBMODBUS -DINIPARSER 
 
 SHFLAGS = -fPIC
-CFLAGS= $(SHFLAGS) -Wno-format
+
+CFLAGS += $(SHFLAGS)#  -Wno-format
 INCLUDES += -I. -I/usr/local/include
 CPPFLAGS= $(TARGET) $(INCLUDES) # -I. -I/usr/local/include
-CC = cc -g -Wl,--no-as-needed
+# CC = cc -g -Wl,--no-as-needed
 # CC = clang -g 
 LIB = ar cr
 RANLIB = ranlib
+
+# ifeq ($(CC),gcc)
+# 	@echo "Compiler is gcc"
+# 	CFLAGS +="-g -Wl,--no-as-needed"
+# endif
+# 
+# ifeq ($(CC),clang)
+# 	@echo "Compiler is clang"
+# 	CFLAGS +="-g"
+# endif
+
 
 # LIBS=-L/usr/local/lib -lmodbus -liniparser
 
@@ -25,10 +37,11 @@ MINOR = 1.0
 all:	lib ficl # ficls
 
 ficl: main.o $(HEADERS) libficl.a
-	$(CC) main.o -o ficl -L. -lficl -lm -lrt -lpthread $(LIBS) # -L/usr/local/lib -lmodbus -liniparser
+	@echo $(CFLAGS)
+	$(CC) $(CFLAGS) main.o -o ficl -L. -lficl -lm -lrt -lpthread $(LIBS) # -L/usr/local/lib -lmodbus -liniparser
 
 ficls: main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
-	$(CC) --static main.o -o ficls -L. -lficl -lm -ldl
+	$(CC) $(CFLAGS) --static main.o -o ficls -L. -lficl -lm -ldl
 
 lib: libficl.so.$(MAJOR).$(MINOR)
 
@@ -39,12 +52,12 @@ libficl.a: $(OBJECTS)
 
 # shared library build
 libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
-	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
+	$(CC) $(CFLAGS) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
 	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
 #	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
 
 main: main.o ficl.h libficl.so.$(MAJOR).$(MINOR)
-	$(CC) main.o -o main -L. -lficl -lm
+	$(CC) $(CFLAGS) main.o -o main -L. -lficl -lm
 	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
 
 unix.o: ficlplatform/unix.c $(HEADERS)
