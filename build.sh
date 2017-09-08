@@ -18,8 +18,7 @@ case "$CC" in
         CFLAGS="-g"
         ;;
     *)
-        echo "None, or invlaid compiler set, fatal error."
-        echo "CC sould be empty (defaults to gcc), set to ggc or clang."
+        echo "No compiler set, fatal error."
         exit 1
 esac
 
