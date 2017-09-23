@@ -8,13 +8,13 @@ HEADERS= ficl.h ficlplatform/unix.h
 # Flags for shared library
 # TARGET= -DLINUX -DNO_FLOAT # riscos MOTO_CPU32 
 TARGET= -DLINUX -DARM
-SHFLAGS = -fPIC -mthumb
+SHFLAGS = -fPIC # -mthumb
 # CFLAGS= -c $(SHFLAGS) $(TARGET) -DMTHREAD # -DDB
 CFLAGS= -c $(SHFLAGS) $(TARGET) # -DSYSV_IPC -DSOCKET -DMTHREAD # -DSYSV_IPC -DMODBUS # -DSPREAD -I/usr/local/spread-4.0.0/include # -DVERBOSE # -DDB # -I/usr/local/include
 # CFLAGS= -O -c $(SHFLAGS) $(TARGET)
 # CC=gcc -g
-# LIB = ar cr
-# RANLIB = ranlib
+LIB = ar cr
+RANLIB = ranlib
 
 # TOOLS=/home/aholt/Poky/pinky-3.1/build/tmp/cross/arm-poky-linux-gnueabi
 # CC=$(TOOLS)/bin/cc
@@ -22,10 +22,10 @@ CFLAGS= -c $(SHFLAGS) $(TARGET) # -DSYSV_IPC -DSOCKET -DMTHREAD # -DSYSV_IPC -DM
 # PREFIX=arm-none-linux-gnueabi-
 # CC=$(PREFIX)gcc
 # LIB=$(TOOLS)/bin/ar cr
-LIB=$(PREFIX)ar cr
+# LIB=$(PREFIX)ar cr
 # RANLIB=$(TOOLS)/bin/ranlib
-RANLIB=$(PREFIX)ranlib
-STRIP=$(PREFIX)strip
+RANLIB=$(PREFIX)/ranlib
+STRIP=$(PREFIX)/strip
 
 # TOOLS=/home/aholt/CodeSourcery/Sourcery_G++_Lite
 # CC=$(TOOLS)/bin/arm-none-linux-gnueabi-gcc
