@@ -1,0 +1,92 @@
+#
+# Use the Codesourery cross compiler to build ficl for arm linux.
+#
+#
+OBJECTS= dictionary.o system.o fileaccess.o float.o double.o prefix.o search.o softcore.o stack.o tools.o vm.o primitives.o bit.o lzuncompress.o unix.o utility.o hash.o callback.o word.o extras.o
+
+HEADERS=ficl.h ficlplatform/unix.h 
+
+# INC_DIR="-I/home/andrewh/Source/Linux/linux-cortexm-1.12.0/A2F/root/usr/include"
+#
+# Flags for shared library
+TARGET= -DUCLINUX -DARM # -DEMBEDDED
+SHFLAGS = -mthumb -mcpu=cortex-m3
+LDFLAGS=-Wl,--no-as-needed
+
+CFLAGS= -c $(SHFLAGS) $(TARGET) # -DSYSV_IPC -DSOCKET -DMTHREAD # -DSYSV_IPC -DMODBUS # -DSPREAD -I/usr/local/spread-4.0.0/include # -DVERBOSE # -DDB # -I/usr/local/include
+
+PREFIX=arm-uclinuxeabi-
+CC=$(PREFIX)gcc
+LIB=$(TOOLS)/bin/ar cr
+LIB=$(PREFIX)ar cr
+RANLIB=$(PREFIX)ranlib
+STRIP=$(PREFIX)strip
+
+MAJOR = 5
+MINOR = 0.0
+
+all:	ficl
+ficl: main.o $(HEADERS) libficl.a
+	$(CC) $(LDFLAGS) main.o -o ficl -L. -lficl -lm -lpthread # -ldl
+	$(STRIP) ficl
+
+ficldb: main.o $(HEADERS) libficl.a
+	$(CC) main.o -o ficldb -L. -lficl -lm -lpthread
+
+ficls: main.o $(HEADERS) libficl.a
+#	$(CC) -static main.o libficl.a -o ficls
+	$(CC) -static main.o -o ficl -L. -lficl -lm -lpthread # -ldl
+
+lib: libficl.so.$(MAJOR).$(MINOR)
+
+# static library build
+libficl.a: $(OBJECTS)
+	$(LIB) libficl.a $(OBJECTS)
+	$(RANLIB) libficl.a
+
+# shared library build
+libficl.so.$(MAJOR).$(MINOR): $(OBJECTS)
+	$(CC) -shared -Wl,-soname,libficl.so.$(MAJOR).$(MINOR) \
+	-o libficl.so.$(MAJOR).$(MINOR) $(OBJECTS)
+	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so
+
+main: main.o ficl.h sysdep.h libficl.so.$(MAJOR).$(MINOR)
+	$(CC) $(HEADERS) main.o -o main -L. -lficl -lm
+	ln -sf libficl.so.$(MAJOR).$(MINOR) libficl.so.$(MAJOR)
+
+unix.o: ficlplatform/unix.c $(HEADERS)
+	$(CC) $(CFLAGS) -I. -c ficlplatform/unix.c
+#
+#       generic object code
+#
+.SUFFIXES: .cxx .cc .c .o
+
+.c.o:
+	$(CC) $(CFLAGS) -c $*.c # -I../sqlite
+
+.cxx.o:
+	$(CPP) $(CPFLAGS) -c $*.cxx
+
+.cc.o:
+	$(CPP) $(CPFLAGS) -c $*.cc
+#
+#       generic cleanup code
+#
+clean:
+	rm -f *.o *.a libficl.* ficl ficldb
+
+install:
+	mkdir -p ./ipkg-arm/CONTROL
+	mkdir -p ./ipkg-arm/usr/local/bin
+	mkdir -p ./ipkg-arm/usr/local/lib
+	$(TOOLS)/bin/arm-none-linux-gnueabi-strip ./ficl
+	cp ./ficl ./ipkg-arm/usr/local/bin
+
+install-ipkg:	ficl
+	echo "Ipkg"
+	cp ./ficl ipkg-arm/usr/local/bin/
+	(cd ipkg-arm; ipkg-build . /var/ftp/packages )
+	(cd /var/ftp/packages ; ~/Incoming/ipkg-make-index . > Packages)
+
+install-deb:	ficl
+	./install-deb-arm
