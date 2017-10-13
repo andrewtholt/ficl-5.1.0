@@ -121,6 +121,7 @@
 : subscribe
 \    client s" /home/office/proliant/power" mqtt-sub abort" mqtt-sub failed"
 \    client s" /home/office/proliant/state" mqtt-sub abort" mqtt-sub failed"
+\    client s" /home/office/relay1/power" mqtt-sub abort" mqtt-sub failed"
     client s" /home/environment/day"       mqtt-sub abort" mqtt-sub failed"
 ;
 
@@ -186,7 +187,7 @@
     ." logic." cr
     day invert to back-floodlight
 
-    ." Floodlight "
+    ." Floodlight " cr
     set-back-floodlight
 ;
 
@@ -201,8 +202,14 @@
             msg mqtt-payload@ type cr  
             ." ===" cr
 
-            msg mqtt-payload@ 
-            msg mqtt-topic@ evaluate
+            msg mqtt-topic@ sfind nip if
+                ." Found" cr
+
+                msg mqtt-payload@ 
+                msg mqtt-topic@ evaluate
+            else
+                ." Not found" cr
+            then
             0xff msg c!
             logic
         then
