@@ -179,7 +179,7 @@
     msg -rot mqtt-payload!
 
     msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
-\    msg s" ON" mqtt-payload!
+
     client msg mqtt-pub abort" mqtt-pub"
 ;
 
@@ -213,7 +213,6 @@
             0xff msg c!
             logic
         then
-\        depth . cr
 
     -1 = until
 ;
@@ -243,7 +242,6 @@
 ;
 
 \ mqtt-process
-\ tst
 
 
 
