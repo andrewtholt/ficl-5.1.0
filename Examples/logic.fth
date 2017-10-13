@@ -111,6 +111,9 @@
 0 value day
 0 value back-floodlight
 
+: on true ;
+: off false ;
+
 :  /home/environment/day
     evaluate to day
 
