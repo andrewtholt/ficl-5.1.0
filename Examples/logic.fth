@@ -148,7 +148,7 @@
     mqtt-init abort" mqtt-init"
     ." ... Initialised..."  cr
 
-    "FICL" msg mqtt-new abort" mqtt-new failed" to client
+    s" FICL" msg mqtt-new abort" mqtt-new failed" to client
     ." ... client created ..." cr
     client mqtt-host port mqtt-client abort" mqtt-client failed"
     ." ... connected...." cr
