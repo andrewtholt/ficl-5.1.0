@@ -17,8 +17,24 @@
 0x40 constant REDIS_MONITORING
 
 
+\ 
+\ Redis stuff
+\ 
 -1 value redis
 -1 value reply
+\
+\ MQTT Stuff
+\
+-1 value client
+0 0 2value mqtt-host
+0 value msg 
+100 constant /msg
+
+1883 constant port
+\ 
+\ General stuff
+\ 
+0 value init-run
 
 : redis-string?
     REDIS_REPLY_STRING =
@@ -89,23 +105,114 @@
 : redis-connect-local
     s" 127.0.0.1" 6379 1 redis-connect
 ;
+\ 
+\ Initialise and run
+\ 
+0 value day
+0 value back-floodlight
 
-: tst
-    s" redis" environment? if ." Redis known ..." then
+:  /home/environment/day
+    evaluate to day
 
+\    day . cr
+;
+
+: subscribe
+\    client s" /home/office/proliant/power" mqtt-sub abort" mqtt-sub failed"
+\    client s" /home/office/proliant/state" mqtt-sub abort" mqtt-sub failed"
+    client s" /home/environment/day"       mqtt-sub abort" mqtt-sub failed"
+;
+
+: init-redis
+    s" redis" environment? if ." Redis known ..." cr then
     0= abort" ... but unavailable"
-
-    ." ... and available." cr
-\    redis-connect-local
+    ." ... available...." cr
+\        redis-connect-local
     redis-connect-picobob
-    
     abort" redis-connect failed" to redis
     
     redis redis-ping abort" ping failed"
-    
-    redis s" GET foo" redis-cmd abort" cmd failed" to reply
+    ." ... and up...." cr
+;
+
+
+: init-mqtt
+    s" mqtt" environment? 0= abort" No mqtt env" drop
+    ." MQTT known ..." cr
+
+    s" 192.168.0.65" strsave to mqtt-host
+
+    /msg allocate abort" allocate failed" to msg
+    msg /msg erase
+
+    mqtt-init abort" mqtt-init"
+    ." ... Initialised..."  cr
+
+    "FICL" msg mqtt-new abort" mqtt-new failed" to client
+    ." ... client created ..." cr
+    client mqtt-host port mqtt-client abort" mqtt-client failed"
+    ." ... connected...." cr
+    subscribe
+    ." ... and subscribed." cr
+;
+
+: init
+    init-run 0= if
+        init-redis
+        init-mqtt
+
+        -1 to init-run
+    then
+;
+\ 
+\ MQTT
+\
+: logic
+    ." logic." cr
+    day invert to back-floodlight
+
+    ." Floodlight "
+    back-floodlight if 
+        ." ON"
+        msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
+        msg s" ON" mqtt-payload!
+        client msg mqtt-pub abort" mqtt-pub"
+    else
+        ." OFF"
+        msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
+        msg s" OFF" mqtt-payload!
+        client msg mqtt-pub abort" mqtt-pub"
+    then
+    cr
+;
+
+: mqtt-process
+    init
+    msg /msg erase
+    0xff msg c!
+    begin
+        client 750 mqtt-loop 
+        msg c@ 0= if
+            msg mqtt-topic@   type cr  
+
+            msg mqtt-payload@ type cr  
+
+            msg mqtt-payload@ 
+            msg mqtt-topic@ evaluate
+            0xff msg c!
+            logic
+        then
+\        depth . cr
+
+    -1 = until
+;
+
+
+: redis-tst
+    init
     
     ." GET foo" cr
+    redis s" GET foo" redis-cmd abort" cmd failed" to reply
     reply .redis-reply
     reply redis-free-reply
 
@@ -124,4 +231,10 @@
 
 ;
 
-tst
+: logic
+;
+
+\ tst
+
+
+

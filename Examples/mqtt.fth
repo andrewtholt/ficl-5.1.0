@@ -19,7 +19,7 @@ s" mqtt" environment? 0= abort" No mqtt env" drop
     
         "FICL" msg mqtt-new abort" mqtt-new failed" to client
     
-\        mosq mqtt-connect-callback
+\        client mqtt-connect-callback
         client hostname port mqtt-client abort" mqtt-client failed"
 
         -1 to init-run
@@ -27,10 +27,11 @@ s" mqtt" environment? 0= abort" No mqtt env" drop
 ;
 
 : stuff
+    init
     msg /msg erase
     0xff msg c!
     begin
-        client 500 mqtt-loop 
+        client -1 mqtt-loop 
         msg c@ 0= if
             msg mqtt-topic@   type cr 
             msg mqtt-payload@ type cr 
@@ -41,8 +42,10 @@ s" mqtt" environment? 0= abort" No mqtt env" drop
 ;
 
 : publish
+    init
     msg /msg erase
     
+    ." HERE" cr
     msg s" /home/office/proliant/testing" mqtt-topic!
     msg s" TEST" mqtt-payload!
     
