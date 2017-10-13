@@ -164,9 +164,10 @@ void fatal(char *message) {
 char *strsave( char *s ) {
     char *p = (char *)NULL;
 
-    if( (p=(char *)malloc( strlen(s) )) != 0) {
+    p = ficlMalloc(strlen(s)+1);
+//    if( (p=(char *)malloc( strlen(s) )) != 0) {
         strcpy(p,s);
-    }
+//    }
 
     return(p);
 }
