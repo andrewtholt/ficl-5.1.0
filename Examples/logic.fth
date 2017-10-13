@@ -116,8 +116,6 @@
 
 :  /home/environment/day
     evaluate to day
-
-\    day . cr
 ;
 
 : subscribe
@@ -170,23 +168,26 @@
 \ 
 \ MQTT
 \
+: set-back-floodlight \  --
+
+    back-floodlight if
+        s" ON"
+    else
+        s" OFF"
+    then
+    msg -rot mqtt-payload!
+
+    msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
+\    msg s" ON" mqtt-payload!
+    client msg mqtt-pub abort" mqtt-pub"
+;
+
 : logic
     ." logic." cr
     day invert to back-floodlight
 
     ." Floodlight "
-    back-floodlight if 
-        ." ON"
-        msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
-        msg s" ON" mqtt-payload!
-        client msg mqtt-pub abort" mqtt-pub"
-    else
-        ." OFF"
-        msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
-        msg s" OFF" mqtt-payload!
-        client msg mqtt-pub abort" mqtt-pub"
-    then
-    cr
+    set-back-floodlight
 ;
 
 : mqtt-process
@@ -197,8 +198,8 @@
         client 750 mqtt-loop 
         msg c@ 0= if
             msg mqtt-topic@   type cr  
-
             msg mqtt-payload@ type cr  
+            ." ===" cr
 
             msg mqtt-payload@ 
             msg mqtt-topic@ evaluate
@@ -234,8 +235,6 @@
 
 ;
 
-: logic
-;
 
 \ tst
 
