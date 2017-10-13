@@ -30,6 +30,8 @@
 0 value msg 
 100 constant /msg
 
+0 0 2value mqtt-buffer
+
 1883 constant port
 \ 
 \ General stuff
@@ -118,10 +120,30 @@
     evaluate to day
 ;
 
+22.0e0 fconstant hot
+
+: /home/office/environment/temperature
+    2dup type cr
+    mqtt-buffer erase
+    mqtt-buffer drop swap move
+    mqtt-buffer drop dup strlen s" e0" strcat
+
+    mqtt-buffer drop 32 dump
+
+    mqtt-buffer evaluate
+    hot f> if 
+        ." Fan on" cr
+    else
+        ." Fan off" cr
+    then
+
+;
+
 : subscribe
 \    client s" /home/office/proliant/power" mqtt-sub abort" mqtt-sub failed"
 \    client s" /home/office/proliant/state" mqtt-sub abort" mqtt-sub failed"
 \    client s" /home/office/relay1/power" mqtt-sub abort" mqtt-sub failed"
+    client s" /home/office/environment/temperature" mqtt-sub abort" mqtt-sub failed"
     client s" /home/environment/day"       mqtt-sub abort" mqtt-sub failed"
 ;
 
@@ -146,6 +168,11 @@
 
     /msg allocate abort" allocate failed" to msg
     msg /msg erase
+
+    16 allocate abort" allocat mqtt-buffer failed" 
+    16 to mqtt-buffer
+
+    mqtt-buffer erase
 
     mqtt-init abort" mqtt-init"
     ." ... Initialised..."  cr
