@@ -126,11 +126,11 @@
     2dup type cr
     mqtt-buffer erase
     mqtt-buffer drop swap move
-    mqtt-buffer drop dup strlen s" e0" strcat
+    mqtt-buffer drop dup strlen s" e0" strcat .s
 
     mqtt-buffer drop 32 dump
 
-    mqtt-buffer evaluate
+    evaluate
     hot f> if 
         ." Fan on" cr
     else
