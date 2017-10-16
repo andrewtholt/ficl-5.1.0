@@ -36,7 +36,8 @@
 \ 
 \ General stuff
 \ 
-0 value init-run
+false value init-run
+false value verbose
 
 : redis-string?
     REDIS_REPLY_STRING =
@@ -123,12 +124,10 @@ false value back-floodlight
 22.0e0 fconstant hot
 
 : /home/office/environment/temperature
-    2dup type cr
+\    2dup type cr
     mqtt-buffer erase
     mqtt-buffer drop swap move
-    mqtt-buffer drop dup strlen s" e0" strcat .s
-
-\    mqtt-buffer drop 32 dump
+    mqtt-buffer drop dup strlen s" e0" strcat 
 
     evaluate
     hot f> if 
@@ -186,11 +185,11 @@ false value back-floodlight
 ;
 
 : init
-    init-run 0= if
+    init-run false = if
         init-redis
         init-mqtt
 
-        -1 to init-run
+        true to init-run
     then
 ;
 \ 
@@ -205,7 +204,10 @@ false value back-floodlight
         s" OFF"
     then
 
-    2dup type cr
+    verbose if
+        2dup type cr
+    then
+
     msg -rot mqtt-payload!
 
     msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
@@ -222,9 +224,9 @@ false value back-floodlight
 ;
 
 : init-values
-    ." GET /home/environment/day" cr
+\    ." GET /home/environment/day" cr
     redis s" GET /home/environment/day" redis-cmd abort" cmd failed" to reply
-    reply .redis-reply
+\    reply .redis-reply
     reply redis-get-string evaluate to day
     reply redis-free-reply
 ;
@@ -238,17 +240,20 @@ false value back-floodlight
     begin
         client 750 mqtt-loop 
         msg c@ 0= if
-            msg mqtt-topic@   type cr  
-            msg mqtt-payload@ type cr  
-            ." ===" cr
+
+            verbose if
+                ." MQTT" cr
+                msg mqtt-topic@   type cr  
+                msg mqtt-payload@ type cr  
+                ." ===" cr
+            then
 
             msg mqtt-topic@ sfind nip if
-                ." Found" cr
-
                 msg mqtt-payload@ 
                 msg mqtt-topic@ evaluate
             else
-                ." Not found" cr
+                mqtt-topic@ type
+                ." : Not found" cr
             then
             0xff msg c!
             logic
