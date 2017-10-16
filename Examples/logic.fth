@@ -197,14 +197,15 @@ false value back-floodlight
 \
 : set-back-floodlight \  --
 
-    ." back-floodlight " 
     back-floodlight if
         s" ON"
     else
         s" OFF"
     then
+    cr
 
     verbose if
+        ." back-floodlight " 
         2dup type cr
     then
 
@@ -287,7 +288,7 @@ false value back-floodlight
 
 ;
 
-mqtt-process
+\ mqtt-process
 
 
 
