@@ -38,6 +38,11 @@
 \ 
 false value init-run
 false value verbose
+\ 
+\ Syslog settings
+\
+1 constant LOG_PID
+8 constant LOG_USER
 
 : redis-string?
     REDIS_REPLY_STRING =
@@ -131,9 +136,11 @@ false value back-floodlight
 
     evaluate
     hot f> if 
-        ." Fan on" cr
+        LOG_USER s" Office Fan on" syslog
+\        ." Fan on" cr
     else
-        ." Fan off" cr
+        LOG_USER s" Office Fan off" syslog
+\        ." Fan off" cr
     then
 
 ;
@@ -186,6 +193,9 @@ false value back-floodlight
 
 : init
     init-run false = if
+        s" LOGIC" LOG_PID LOG_USER openlog
+        LOG_USER s" =============" syslog
+        LOG_USER s" Logic started" syslog
         init-redis
         init-mqtt
 
@@ -198,8 +208,10 @@ false value back-floodlight
 : set-back-floodlight \  --
 
     back-floodlight if
+        LOG_USER s" Back floodlight on" syslog
         s" ON"
     else
+        LOG_USER s" Back floodlight off" syslog
         s" OFF"
     then
     cr
