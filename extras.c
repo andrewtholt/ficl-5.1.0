@@ -10,6 +10,7 @@
 #include <poll.h>
 #include <pwd.h>
 #include <sys/ioctl.h>
+#include <syslog.h>
 #include "cstring.h"
 #include "extras.h"
 
@@ -4464,6 +4465,37 @@ void athOpenSerialPort(ficlVm *vm) {
 #endif
 
 #ifdef LINUX
+
+static void athOpenlog(ficlVm *vm) {
+    char *ident;
+    int option;
+    int len;
+    int facility;
+
+    facility=ficlStackPopInteger( vm->dataStack );
+    option=ficlStackPopInteger( vm->dataStack );
+    len=ficlStackPopInteger( vm->dataStack );
+    ident=ficlStackPopPointer( vm->dataStack );
+
+    ident[len]=0;
+    void openlog(ident, option, facility);
+}
+static void athSyslog(ficlVm *vm) {
+    int priority;
+    int len;
+    char *msg;
+
+    len=ficlStackPopInteger( vm->dataStack );
+    msg=ficlStackPopPointer( vm->dataStack );
+    priority=ficlStackPopInteger( vm->dataStack );
+
+    syslog(priority, "%s", msg);
+}
+
+static void athCloselog(ficlVm *vm) {
+    closelog();
+}
+
 static void athPrimitiveTick(ficlVm *vm) {
     /*
        ficlCell *pTick;
@@ -4998,6 +5030,10 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE
 #ifdef LINUX
+    ficlDictionarySetPrimitive(dictionary, (char *)"openlog",  athOpenlog, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"syslog",  athSyslog, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"closelog",  athCloselog, FICL_WORD_DEFAULT);
+
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-init",  athInotifyInit,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-add-watch",  athInotifyAddWatch,  FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"inotify-rm-watch",  athInotifyRmWatch,  FICL_WORD_DEFAULT);
