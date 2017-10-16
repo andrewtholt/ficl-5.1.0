@@ -110,8 +110,8 @@
 \ 
 \ Initialise and run
 \ 
-0 value day
-0 value back-floodlight
+true value day
+false value back-floodlight
 
 : on true ;
 : off false ;
@@ -128,7 +128,7 @@
     mqtt-buffer drop swap move
     mqtt-buffer drop dup strlen s" e0" strcat .s
 
-    mqtt-buffer drop 32 dump
+\    mqtt-buffer drop 32 dump
 
     evaluate
     hot f> if 
@@ -198,11 +198,14 @@
 \
 : set-back-floodlight \  --
 
+    ." back-floodlight " 
     back-floodlight if
         s" ON"
     else
         s" OFF"
     then
+
+    2dup type cr
     msg -rot mqtt-payload!
 
     msg s" /home/outside/BackFloodlight/cmnd/power" mqtt-topic!
@@ -218,8 +221,18 @@
     set-back-floodlight
 ;
 
-: mqtt-process
+: init-values
+    ." GET /home/environment/day" cr
+    redis s" GET /home/environment/day" redis-cmd abort" cmd failed" to reply
+    reply .redis-reply
+    reply redis-get-string evaluate to day
+    reply redis-free-reply
+;
+
+
+: mqtt-process 
     init
+    init-values
     msg /msg erase
     0xff msg c!
     begin
@@ -248,9 +261,10 @@
 : redis-tst
     init
     
-    ." GET foo" cr
-    redis s" GET foo" redis-cmd abort" cmd failed" to reply
+    ." GET /home/environment/day" cr
+    redis s" GET /home/environment/day" redis-cmd abort" cmd failed" to reply
     reply .redis-reply
+    reply redis-get-string type cr
     reply redis-free-reply
 
     redis s" SET fred test" redis-cmd abort" cmd failed" to reply
@@ -268,7 +282,7 @@
 
 ;
 
-\ mqtt-process
+mqtt-process
 
 
 
