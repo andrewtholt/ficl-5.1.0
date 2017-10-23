@@ -1011,9 +1011,16 @@ Name:	mqtt-connect-callback
 Stack:	
 Description:
 
-Name:	
-Stack:	
+Name:	daemon
+Stack:	name len -- rc
 Description:
+    Place the running ficl task into the background.  The name is used
+    to construct a file in /var/run/ holding the pid.  If this fails, for
+    example due to a lack of permission the caller si still 'daemonized'
+Note:
+    If this is run from the command line as an immediate command ficl
+    will exit.  This is due to it reading /dev/null and getting EOF.
+
 
 Name:	
 Stack:	
