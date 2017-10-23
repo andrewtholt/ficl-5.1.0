@@ -4466,6 +4466,13 @@ void athOpenSerialPort(ficlVm *vm) {
 
 #ifdef LINUX
 
+// nothing in status out.
+static void athDaemon(ficlVm *vm) {
+    int rc = daemon(true,false);
+
+    ficlStackPushInteger(vm->dataStack, rc);
+}
+
 static void athOpenlog(ficlVm *vm) {
     char *ident;
     int option;
@@ -5030,6 +5037,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE
 #ifdef LINUX
+    ficlDictionarySetPrimitive(dictionary, (char *)"daemon",  athDaemon, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"openlog",  athOpenlog, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"syslog",  athSyslog, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"closelog",  athCloselog, FICL_WORD_DEFAULT);
