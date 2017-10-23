@@ -1632,8 +1632,7 @@ static void ficlPrimitiveBreak(ficlVm * vm) {
     return;
 }
 
-static void athGetPid(ficlVm *vm)
-{
+static void athGetPid(ficlVm *vm) {
     ficlStackPushInteger(vm->dataStack, (int) getpid() );
 }
 
@@ -4465,9 +4464,34 @@ void athOpenSerialPort(ficlVm *vm) {
 #endif
 
 #ifdef LINUX
+#define PID_PATH "/var/run/"
 
-// nothing in status out.
+// name in status out.
 static void athDaemon(ficlVm *vm) {
+
+    int nameLen = ficlStackPopInteger( vm->dataStack );
+    char *name = ficlStackPopPointer( vm->dataStack );
+    name[nameLen]=0;
+
+    int len = nameLen + strlen(PID_PATH) + 5;
+
+    // if any of the pid file stuff fails ..
+    // .. abandon it, and start the task anyway.
+    //
+    char *pidFile = malloc( len );
+    if( pidFile ) {
+        strcpy(pidFile, PID_PATH);
+        strcat(pidFile, name );
+        strcat(pidFile,".pid");
+
+        FILE *fd=fopen(pidFile, "w+") ;
+        if( NULL != fd ) {
+            int pid=getpid();
+            fprintf(fd,"%d\n", pid);
+            fclose(fd);
+        }
+    }
+
     int rc = daemon(true,false);
 
     ficlStackPushInteger(vm->dataStack, rc);
@@ -5033,7 +5057,7 @@ void ficlSystemCompileExtras(ficlSystem * system) {
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-getbool", athIniGetBoolean, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"ini-getstring", athIniGetString, FICL_WORD_DEFAULT);
 #endif
-    ficlDictionarySetPrimitive(dictionary, (char *)"get-pid", athGetPid, FICL_WORD_DEFAULT);
+    ficlDictionarySetPrimitive(dictionary, (char *)"pid", athGetPid, FICL_WORD_DEFAULT);
     ficlDictionarySetPrimitive(dictionary, (char *)"verbose?", athVerboseQ, FICL_WORD_DEFAULT);
 #ifdef FICL_WANT_FILE
 #ifdef LINUX
