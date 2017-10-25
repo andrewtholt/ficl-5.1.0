@@ -38,3 +38,4 @@ profile.mk
 *.gdb
 
 *.bak
+ficl++

@@ -1050,6 +1050,8 @@
          ** and words are (more or less) arrays of these constants.  In Ficl
          ** these constants are an enumerated type called ficlInstruction.
          */
+
+        /*
         enum ficlInstruction
         {
 #define FICL_TOKEN(token, description) token,
@@ -1063,6 +1065,21 @@
             ficlInstructionFourByteTrick = 0x10000000
         };
         typedef intptr_t ficlInstruction;
+        */
+
+        typedef enum 
+        {
+#define FICL_TOKEN(token, description) token,
+#define FICL_INSTRUCTION_TOKEN(token, description, flags) token,
+#include "ficltokens.h"
+#undef FICL_TOKEN
+#undef FICL_INSTRUCTION_TOKEN
+
+            ficlInstructionLast,
+
+            ficlInstructionFourByteTrick = 0x10000000
+        } ficlInstruction ;
+
 
 
         /* 

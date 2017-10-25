@@ -36,6 +36,12 @@ MINOR = 1.0
 
 all:	lib ficl # ficls
 
+ficl++.o:	ficl++.cpp main.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
+	g++ -g -c ficl++.cpp -o ficl++.o
+
+ficl++:	ficl++.o $(HEADERS) libficl.so.$(MAJOR).$(MINOR)
+	g++ $(CFLAGS) --static ficl++.o -o ficl++ -L. -lficl -lm -ldl
+
 ficl: main.o $(HEADERS) libficl.a
 	@echo $(CFLAGS)
 	$(CC) $(CFLAGS) main.o -o ficl -L. -lficl -lm -lrt -lpthread $(LIBS) # -L/usr/local/lib -lmodbus -liniparser
