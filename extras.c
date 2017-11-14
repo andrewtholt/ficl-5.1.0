@@ -11,6 +11,7 @@
 #include <pwd.h>
 #include <sys/ioctl.h>
 #include <syslog.h>
+#include <stdbool.h>
 #include "cstring.h"
 #include "extras.h"
 
@@ -4509,7 +4510,7 @@ static void athOpenlog(ficlVm *vm) {
     ident=ficlStackPopPointer( vm->dataStack );
 
     ident[len]=0;
-    void openlog(ident, option, facility);
+    openlog(ident, option, facility);
 }
 static void athSyslog(ficlVm *vm) {
     int priority;
