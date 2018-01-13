@@ -4573,6 +4573,8 @@ static void athStartTimer(ficlVm *vm) {
 #endif
 
 #ifdef REDIS
+
+// ipAddress ipLen port time(seconds) -- false handle|true errnum errmsg len 
 void athConnectRedis(ficlVm *vm) {
     redisContext *c;
     int delay;

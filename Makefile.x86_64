@@ -104,6 +104,17 @@ install:	ficl libficl.so.$(MAJOR).$(MINOR)
 	mkdir -p /usr/local/lib/ficl
 	cp Lib/* /usr/local/lib/ficl
 
+uninstall:
+	sudo rm -f /usr/local/bin/ficl
+	sudo rm -f /usr/local/include/ficl.h
+	sudo rm -f /usr/local/include/ficllocal.h
+	sudo rm -f /usr/local/include/ficltokens.h
+	sudo rm -f /usr/local/include/ficlplatform/unix.h
+	sudo rm -f /usr/local/lib/libficl.so.$(MAJOR).$(MINOR)
+	sudo rm -f /usr/local/lib/libficl.a
+	sudo rm -f /usr/local/lib/libficl.so.$(MAJOR)
+	sudo rm -f /usr/local/lib/libficl.so
+
 deb:	ficl
 	./install-deb-x86_64 
 
